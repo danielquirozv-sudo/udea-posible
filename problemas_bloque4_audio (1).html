@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloque 4 — Trabajo Real · Sesión 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #222222;
+    --border: #2e2e2e;
+    --accent: #f0a060;
+    --accent2: #60c8f0;
+    --text: #e8e8e0;
+    --text2: #888880;
+    --text3: #555550;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .page { max-width: 680px; margin: 0 auto; }
+
+  header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+  }
+
+  .subtitle { font-size: 13px; color: var(--text2); }
+
+  /* Section headers */
+  .seccion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 2rem 0 1rem;
+  }
+
+  .seccion-linea {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .seccion-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text3);
+    white-space: nowrap;
+  }
+
+  .seccion.prop .seccion-label { color: var(--accent); border-color: #3a2a10; background: #1a1208; }
+  .seccion.porc .seccion-label { color: var(--accent2); border-color: #0a2030; background: #081520; }
+
+  /* Global controls */
+  .global-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn-global {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-family: 'Sora', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-global:hover { border-color: var(--accent); color: var(--accent); }
+
+  .speed-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 8px;
+  }
+
+  .speed-control label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  .speed-control input[type=range] {
+    -webkit-appearance: none;
+    width: 80px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+  }
+
+  .speed-control input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 13px; height: 13px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+  }
+
+  .speed-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    min-width: 28px;
+  }
+
+  /* Difficulty pip */
+  .dif-pips {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+  }
+
+  .pip {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  .pip.on-prop { background: var(--accent); }
+  .pip.on-porc { background: var(--accent2); }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .card.playing-prop { border-color: var(--accent); }
+  .card.playing-porc { border-color: var(--accent2); }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1rem 1.25rem;
+  }
+
+  .num-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .badge-prop { background: #1e1408; color: var(--accent); }
+  .badge-porc { background: #081520; color: var(--accent2); }
+
+  .card-meta { flex: 1; }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .card-subtitle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.04em;
+  }
+
+  .expand-arrow { display: none; }
+
+  .card-body {
+    display: block;
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .enunciado {
+    font-size: 14px;
+    line-height: 1.9;
+    color: #c8c8c0;
+    padding: 1rem 0 0.75rem;
+  }
+
+  .opciones {
+    margin: 0 0 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .opcion {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    font-size: 13px;
+    color: #b8b8b0;
+    line-height: 1.5;
+  }
+
+  .opcion-letra {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: var(--border);
+    color: var(--text2);
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  .player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn-play {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'Sora', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-prop { background: var(--accent); color: #0f0f0f; }
+  .btn-prop:hover { background: #f5b070; }
+  .btn-prop.playing { background: #f06060; color: #fff; }
+
+  .btn-porc { background: var(--accent2); color: #0f0f0f; }
+  .btn-porc:hover { background: #80d8f8; }
+  .btn-porc.playing { background: #f06060; color: #fff; }
+
+  .progress-bar {
+    flex: 1;
+    min-width: 100px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill-prop { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s linear; border-radius: 2px; }
+  .progress-fill-porc { height: 100%; background: var(--accent2); width: 0%; transition: width 0.3s linear; border-radius: 2px; }
+
+  .status-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    min-width: 60px;
+    text-align: right;
+  }
+
+  .respuesta-btn {
+    margin-top: 1rem;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text3);
+    font-family: 'Sora', sans-serif;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: block;
+  }
+
+  .respuesta-btn:hover { color: var(--text2); border-color: var(--text3); }
+
+  .respuesta-box {
+    display: none;
+    margin-top: 0.75rem;
+    padding: 0.9rem 1rem;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--text2);
+  }
+
+  .respuesta-box.prop { background: #120d04; border: 1px solid #2e1e08; }
+  .respuesta-box.porc { background: #04101a; border: 1px solid #082030; }
+
+  .respuesta-box .correcta-prop { color: var(--accent); font-weight: 500; }
+  .respuesta-box .correcta-porc { color: var(--accent2); font-weight: 500; }
+
+  .nota-docente {
+    margin-top: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    background: #14140a;
+    border: 1px solid #2e2e10;
+    border-radius: 7px;
+    font-size: 11px;
+    color: #888860;
+    line-height: 1.6;
+  }
+
+  .nota-docente strong { color: #c8c860; }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text3);
+    text-align: center;
+    line-height: 1.8;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .playing-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: #f06060;
+    border-radius: 50%;
+    animation: pulse 1s ease-in-out infinite;
+    margin-right: 4px;
+  }
+
+  /* ── Responsive móvil ── */
+  @media (max-width: 600px) {
+    body { padding: 1rem 0.75rem 3rem; }
+    h1 { font-size: 19px; }
+    .label { font-size: 10px; }
+    .subtitle { font-size: 12px; }
+    .global-controls { flex-direction: column; align-items: stretch; }
+    .btn-global { min-height: 44px; justify-content: center; font-size: 13px; }
+    .speed-control { min-height: 44px; justify-content: center; }
+    .speed-control input[type=range] { width: 110px; height: 6px; }
+    .speed-control input[type=range]::-webkit-slider-thumb { width: 22px; height: 22px; }
+    .speed-control label { font-size: 12px; }
+    .speed-val { font-size: 12px; }
+    .card-header { padding: 0.85rem 1rem; gap: 10px; }
+    .card-body { padding: 0 1rem 1rem; }
+    .enunciado { font-size: 14px; }
+    .opcion { padding: 10px 12px; font-size: 14px; min-height: 44px; align-items: center; }
+    .opcion-letra { min-width: 24px; height: 24px; font-size: 12px; }
+    .player { flex-direction: column; align-items: stretch; gap: 8px; }
+    .btn-play { min-height: 44px; justify-content: center; font-size: 13px; }
+    .progress-bar { min-width: unset; width: 100%; height: 6px; }
+    .status-text { text-align: center; font-size: 11px; }
+    .respuesta-btn { min-height: 40px; font-size: 12px; padding: 8px 14px; }
+    .respuesta-box { font-size: 13px; }
+    .nota-docente { font-size: 12px; }
+    .seccion-label { font-size: 10px; }
+    footer { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="label">UdeA Posible · Bloque 4 · Sesión 1</div>
+    <h1>Trabajo real post-diagnóstico</h1>
+    <div class="subtitle">Proporcionalidad · Porcentajes · 3 problemas por tema · dificultad progresiva</div>
+  </header>
+
+  <div class="global-controls">
+    <button class="btn-global" onclick="stopAll()">
+      <svg width="13" height="13" viewBox="0 0 10 10" fill="currentColor"><rect x="1" y="1" width="8" height="8" rx="1"/></svg>
+      Detener todo
+    </button>
+    <div class="speed-control">
+      <label>Velocidad</label>
+      <input type="range" id="speedSlider" min="0.6" max="1.2" step="0.05" value="0.82"
+        oninput="document.getElementById('speedVal').textContent=parseFloat(this.value).toFixed(2)+'×'">
+      <span class="speed-val" id="speedVal">0.82×</span>
+    </div>
+  </div>
+
+  <div id="cards"></div>
+
+  <footer>
+    Usa el tema donde más se atascaron en el diagnóstico<br>
+    Abre en Chrome · Web Speech API
+  </footer>
+
+</div>
+
+<script>
+const problemas = [
+  // ── PROPORCIONALIDAD ──────────────────────────────────────────
+  {
+    tipo: "prop",
+    titulo: "Proporcionalidad directa",
+    tag: "PROP · NIVEL 1",
+    dif: 1,
+    enunciado: "Un carro recorre 120 kilómetros en 2 horas, siempre a la misma velocidad. ¿Cuántos kilómetros recorrerá en 5 horas?",
+    opciones: ["240 km", "300 km", "360 km", "600 km"],
+    correcta: "B",
+    explicacion: "Es proporcionalidad directa: más horas, más kilómetros. Si en 2 horas recorre 120, en 1 hora recorre 60. En 5 horas: 60 × 5 = 300 km.",
+    nota: "Si nadie llega a B, el problema es el concepto de razón unitaria. Trabájalo antes de seguir.",
+    tts: `Proporcionalidad. Nivel uno.
+
+Un carro recorre ciento veinte kilómetros... en dos horas... siempre a la misma velocidad.
+¿Cuántos kilómetros recorrerá... en cinco horas?
+
+Las opciones son:
+A: doscientos cuarenta kilómetros.
+B: trescientos kilómetros.
+C: trescientos sesenta kilómetros.
+D: seiscientos kilómetros.
+
+Tienen cuatro minutos.`
+  },
+  {
+    tipo: "prop",
+    titulo: "Proporcionalidad inversa",
+    tag: "PROP · NIVEL 2",
+    dif: 2,
+    enunciado: "Una fábrica tiene 6 máquinas que producen 240 piezas en un día. Si se añaden 2 máquinas más, todas trabajando igual, ¿cuántas piezas se producirán en ese mismo día?",
+    opciones: ["280 piezas", "300 piezas", "320 piezas", "480 piezas"],
+    correcta: "C",
+    explicacion: "Cada máquina produce 240 ÷ 6 = 40 piezas por día. Con 8 máquinas: 40 × 8 = 320 piezas. Opción C.",
+    nota: "Error típico: sumar 2 partes iguales de 240, obteniendo 480 (opción D). Muestra que primero hay que hallar la razón unitaria.",
+    tts: `Proporcionalidad. Nivel dos.
+
+Una fábrica tiene seis máquinas... que producen doscientas cuarenta piezas en un día.
+Si se añaden dos máquinas más... todas trabajando igual...
+¿Cuántas piezas se producirán... en ese mismo día?
+
+Las opciones son:
+A: doscientas ochenta piezas.
+B: trescientas piezas.
+C: trescientas veinte piezas.
+D: cuatrocientas ochenta piezas.
+
+Tienen cuatro minutos.`
+  },
+  {
+    tipo: "prop",
+    titulo: "Proporcionalidad con tabla",
+    tag: "PROP · NIVEL 3",
+    dif: 3,
+    enunciado: "En una receta, por cada 3 tazas de harina se usan 2 huevos. Si se quieren usar 9 tazas de harina, ¿cuántos huevos se necesitan? Y si en cambio se tienen solo 8 huevos, ¿cuántas tazas de harina se pueden usar?",
+    opciones: [
+      "6 huevos y 10 tazas",
+      "6 huevos y 12 tazas",
+      "5 huevos y 12 tazas",
+      "4 huevos y 9 tazas"
+    ],
+    correcta: "B",
+    explicacion: "Razón: 3 tazas por cada 2 huevos. Con 9 tazas (×3): 2 × 3 = 6 huevos. Con 8 huevos (÷2 × 3): 8 × (3/2) = 12 tazas. Opción B.",
+    nota: "Este problema tiene dos partes, lo que obliga a organizar la información. Ideal para ver si usan la plancha para anotar los datos intermedios.",
+    tts: `Proporcionalidad. Nivel tres. Atención, este problema tiene dos partes.
+
+En una receta... por cada tres tazas de harina... se usan dos huevos.
+
+Primera parte: si se quieren usar nueve tazas de harina... ¿cuántos huevos se necesitan?
+Segunda parte: si en cambio se tienen solo ocho huevos... ¿cuántas tazas de harina se pueden usar?
+
+Las opciones son:
+A: seis huevos... y diez tazas.
+B: seis huevos... y doce tazas.
+C: cinco huevos... y doce tazas.
+D: cuatro huevos... y nueve tazas.
+
+Tienen cinco minutos.`
+  },
+
+  // ── PORCENTAJES ───────────────────────────────────────────────
+  {
+    tipo: "porc",
+    titulo: "Porcentaje de una cantidad",
+    tag: "PORC · NIVEL 1",
+    dif: 1,
+    enunciado: "En un salón de 40 estudiantes, el 30% aprobó el examen de admisión. ¿Cuántos estudiantes aprobaron?",
+    opciones: ["10 estudiantes", "12 estudiantes", "14 estudiantes", "16 estudiantes"],
+    correcta: "B",
+    explicacion: "30% de 40 = (30 × 40) ÷ 100 = 1200 ÷ 100 = 12 estudiantes. Opción B.",
+    nota: "Si no llegan a B, el problema es el procedimiento básico del porcentaje. Trabaja primero: porcentaje = parte ÷ total × 100.",
+    tts: `Porcentajes. Nivel uno.
+
+En un salón de cuarenta estudiantes... el treinta por ciento aprobó el examen de admisión.
+¿Cuántos estudiantes aprobaron?
+
+Las opciones son:
+A: diez estudiantes.
+B: doce estudiantes.
+C: catorce estudiantes.
+D: dieciséis estudiantes.
+
+Tienen cuatro minutos.`
+  },
+  {
+    tipo: "porc",
+    titulo: "Aumento y descuento",
+    tag: "PORC · NIVEL 2",
+    dif: 2,
+    enunciado: "Una tienda sube el precio de un producto en un 20%, y luego lo baja en un 20%. ¿El precio final es igual, mayor o menor al precio original?",
+    opciones: [
+      "Igual al original",
+      "Mayor que el original",
+      "Menor que el original",
+      "Depende del precio inicial"
+    ],
+    correcta: "C",
+    explicacion: "Si el precio es 100: sube 20% → queda en 120. Baja 20% de 120 → baja 24 → queda en 96. El precio final es menor. El porcentaje se aplica sobre bases distintas.",
+    nota: "Problema conceptual, no de cálculo. La mayoría responde A por intuición. Genera buen debate en seminario.",
+    tts: `Porcentajes. Nivel dos.
+
+Una tienda sube el precio de un producto... en un veinte por ciento.
+Luego... lo baja en un veinte por ciento.
+¿El precio final es igual... mayor... o menor al precio original?
+
+Las opciones son:
+A: Igual al original.
+B: Mayor que el original.
+C: Menor que el original.
+D: Depende del precio inicial.
+
+Tienen cuatro minutos.`
+  },
+  {
+    tipo: "porc",
+    titulo: "Porcentaje inverso",
+    tag: "PORC · NIVEL 3",
+    dif: 3,
+    enunciado: "Después de un aumento del 25%, el precio de un artículo quedó en 75.000 pesos. ¿Cuál era el precio original antes del aumento?",
+    opciones: ["56.250 pesos", "60.000 pesos", "62.500 pesos", "65.000 pesos"],
+    correcta: "B",
+    explicacion: "Si el precio original es X, entonces X + 25% de X = 75.000. Es decir, 1,25X = 75.000. Entonces X = 75.000 ÷ 1,25 = 60.000 pesos. Opción B.",
+    nota: "Error clásico: restar el 25% de 75.000 directamente, dando 56.250. Muestra que el porcentaje se aplica sobre el original, no sobre el resultado.",
+    tts: `Porcentajes. Nivel tres.
+
+Después de un aumento del veinticinco por ciento...
+el precio de un artículo quedó en setenta y cinco mil pesos.
+¿Cuál era el precio original... antes del aumento?
+
+Las opciones son:
+A: cincuenta y seis mil doscientos cincuenta pesos.
+B: sesenta mil pesos.
+C: sesenta y dos mil quinientos pesos.
+D: sesenta y cinco mil pesos.
+
+Tienen cinco minutos.`
+  }
+];
+
+let currentCard = null;
+
+function getSpeed() {
+  return parseFloat(document.getElementById('speedSlider').value);
+}
+
+function pips(n, tipo) {
+  return [1,2,3].map(i =>
+    `<span class="pip ${i <= n ? 'on-'+tipo : ''}"></span>`
+  ).join('');
+}
+
+function buildCards() {
+  const container = document.getElementById('cards');
+
+  // Section: Proporcionalidad
+  container.innerHTML += `
+    <div class="seccion prop">
+      <div class="seccion-linea"></div>
+      <span class="seccion-label">Proporcionalidad</span>
+      <div class="seccion-linea"></div>
+    </div>`;
+
+  const props = problemas.filter(p => p.tipo === 'prop');
+  props.forEach((p, localIdx) => {
+    const i = problemas.indexOf(p);
+    renderCard(container, p, i, localIdx + 1, 'prop');
+  });
+
+  // Section: Porcentajes
+  container.innerHTML += `
+    <div class="seccion porc">
+      <div class="seccion-linea"></div>
+      <span class="seccion-label">Porcentajes</span>
+      <div class="seccion-linea"></div>
+    </div>`;
+
+  const porcs = problemas.filter(p => p.tipo === 'porc');
+  porcs.forEach((p, localIdx) => {
+    const i = problemas.indexOf(p);
+    renderCard(container, p, i, localIdx + 1, 'porc');
+  });
+}
+
+function renderCard(container, p, i, localNum, tipo) {
+  const opcionesHTML = p.opciones.map((o, j) => {
+    const letra = ['A','B','C','D'][j];
+    return `<div class="opcion"><span class="opcion-letra">${letra}</span><span>${o}</span></div>`;
+  }).join('');
+
+  container.innerHTML += `
+  <div class="card" id="card-${i}">
+    <div class="card-header" onclick="toggleCard(${i})">
+      <span class="num-badge badge-${tipo}">${String(localNum).padStart(2,'0')}</span>
+      <div class="card-meta">
+        <div class="card-title">${p.titulo}</div>
+        <div class="card-subtitle">
+          <span class="card-tag">${p.tag}</span>
+          <div class="dif-pips">${pips(p.dif, tipo)}</div>
+        </div>
+      </div>
+      <svg class="expand-arrow" width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2,4 6,8 10,4"/></svg>
+    </div>
+    <div class="card-body">
+      <div class="enunciado">${p.enunciado}</div>
+      <div class="opciones">${opcionesHTML}</div>
+      <div class="player">
+        <button class="btn-play btn-${tipo}" id="btn-${i}" onclick="togglePlay(${i}, '${tipo}')">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><polygon points="1,0 9,5 1,10"/></svg>
+          Reproducir
+        </button>
+        <div class="progress-bar"><div class="progress-fill-${tipo}" id="prog-${i}"></div></div>
+        <span class="status-text" id="status-${i}">listo</span>
+      </div>
+      <button class="respuesta-btn" onclick="toggleRespuesta(${i}, '${tipo}', this)">Ver respuesta y análisis</button>
+      <div class="respuesta-box ${tipo}" id="resp-${i}">
+        <span class="correcta-${tipo}">Respuesta correcta: ${p.correcta}</span><br><br>
+        ${p.explicacion}
+        <div class="nota-docente" style="margin-top:0.75rem"><strong>Para el seminario:</strong> ${p.nota}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function toggleCard(i) {
+  document.getElementById(`card-${i}`).classList.toggle('open');
+}
+
+function openCard(i) {
+  document.getElementById(`card-${i}`).classList.add('open');
+}
+
+function toggleRespuesta(i, tipo, btn) {
+  const box = document.getElementById(`resp-${i}`);
+  const showing = box.style.display === 'block';
+  box.style.display = showing ? 'none' : 'block';
+  btn.textContent = showing ? 'Ver respuesta y análisis' : 'Ocultar';
+}
+
+function setBtnPlaying(i, tipo, playing) {
+  const btn = document.getElementById(`btn-${i}`);
+  const card = document.getElementById(`card-${i}`);
+  if (playing) {
+    btn.classList.add('playing');
+    btn.innerHTML = `<span class="playing-dot"></span>Detener`;
+    card.classList.add(`playing-${tipo}`);
+  } else {
+    btn.classList.remove('playing');
+    btn.innerHTML = `<svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><polygon points="1,0 9,5 1,10"/></svg> Reproducir`;
+    card.classList.remove(`playing-${tipo}`);
+  }
+}
+
+function stopAll() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  problemas.forEach((p, i) => {
+    setBtnPlaying(i, p.tipo, false);
+    document.getElementById(`prog-${i}`).style.width = '0%';
+    document.getElementById(`status-${i}`).textContent = 'listo';
+  });
+  currentCard = null;
+}
+
+function togglePlay(i, tipo) {
+  if (currentCard === i) { stopAll(); return; }
+  stopAll();
+  playProblem(i, tipo);
+}
+
+function playProblem(i, tipo, onEnd) {
+  if (!window.speechSynthesis) { alert('Usa Chrome.'); return; }
+
+  const utter = new SpeechSynthesisUtterance(problemas[i].tts);
+  utter.lang = 'es-CO';
+  utter.rate = getSpeed();
+  utter.pitch = 1.0;
+  utter.volume = 1.0;
+
+  const voices = window.speechSynthesis.getVoices();
+  const esVoice = voices.find(v => v.lang === 'es-CO')
+    || voices.find(v => v.lang.startsWith('es'));
+  if (esVoice) utter.voice = esVoice;
+
+  currentCard = i;
+  openCard(i);
+  setBtnPlaying(i, tipo, true);
+  document.getElementById(`status-${i}`).textContent = 'reproduciendo...';
+
+  const words = problemas[i].tts.split(' ').length;
+  const secs = (words / (2.5 * getSpeed())) * 1.1;
+  let elapsed = 0;
+  const interval = setInterval(() => {
+    elapsed += 0.3;
+    document.getElementById(`prog-${i}`).style.width = Math.min((elapsed/secs)*100, 95) + '%';
+  }, 300);
+
+  utter.onend = () => {
+    clearInterval(interval);
+    setBtnPlaying(i, tipo, false);
+    document.getElementById(`prog-${i}`).style.width = '100%';
+    document.getElementById(`status-${i}`).textContent = '✓ listo';
+    currentCard = null;
+    setTimeout(() => { document.getElementById(`prog-${i}`).style.width = '0%'; }, 2000);
+    if (onEnd) onEnd();
+  };
+
+  utter.onerror = () => {
+    clearInterval(interval);
+    setBtnPlaying(i, tipo, false);
+    document.getElementById(`status-${i}`).textContent = 'error';
+    currentCard = null;
+    if (onEnd) onEnd();
+  };
+
+  window.speechSynthesis.speak(utter);
+}
+
+if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => {};
+buildCards();
+</script>
+</body>
+</html>

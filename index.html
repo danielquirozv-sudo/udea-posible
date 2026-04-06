@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UdeA Posible — Razonamiento Lógico</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --border: #2e2e2e;
+    --accent: #c8f060;
+    --text: #e8e8e0;
+    --text2: #888880;
+    --text3: #555550;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .page { max-width: 600px; margin: 0 auto; }
+
+  header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+  }
+
+  .subtitle { font-size: 13px; color: var(--text2); }
+
+  .sesiones { display: flex; flex-direction: column; gap: 10px; }
+
+  .sesion-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.15s;
+  }
+
+  .sesion-link:hover, .sesion-link:focus {
+    border-color: var(--accent);
+    outline: none;
+  }
+
+  .sesion-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    width: 32px; height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .sesion-info { flex: 1; }
+  .sesion-title { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+  .sesion-desc { font-size: 12px; color: var(--text2); }
+
+  .s1 .sesion-num { background: #1e2a0e; color: #c8f060; }
+  .s2 .sesion-num { background: #0a1520; color: #a0c8f0; }
+  .s3 .sesion-num { background: #1a1208; color: #f0a060; }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text3);
+    text-align: center;
+    line-height: 1.8;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 1rem 0.75rem 3rem; }
+    h1 { font-size: 19px; }
+    .sesion-link { padding: 0.9rem 1rem; min-height: 64px; }
+    .sesion-title { font-size: 14px; }
+    .sesion-desc { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="label">UdeA Posible · Discapacidad Visual</div>
+    <h1>Razonamiento Lógico</h1>
+    <div class="subtitle">Materiales accesibles con audio · Preparatorio examen UdeA</div>
+  </header>
+
+  <div class="sesiones">
+
+    <a href="problemas_diagnostico_audio.html" class="sesion-link s1">
+      <span class="sesion-num">01</span>
+      <div class="sesion-info">
+        <div class="sesion-title">Diagnóstico</div>
+        <div class="sesion-desc">5 problemas · Aritmética, proporcionalidad, lógica, series, probabilidad</div>
+      </div>
+    </a>
+
+    <a href="problemas_bloque4_audio%20(1).html" class="sesion-link s1">
+      <span class="sesion-num">01</span>
+      <div class="sesion-info">
+        <div class="sesion-title">Bloque 4 — Trabajo real</div>
+        <div class="sesion-desc">Proporcionalidad y porcentajes · 3 niveles cada uno</div>
+      </div>
+    </a>
+
+    <a href="sesion2_abaco_operaciones.html" class="sesion-link s2">
+      <span class="sesion-num">02</span>
+      <div class="sesion-info">
+        <div class="sesion-title">Ábaco cerrado — Las 4 operaciones</div>
+        <div class="sesion-desc">Suma, resta, multiplicación y división en ábaco Cranmer</div>
+      </div>
+    </a>
+
+    <a href="Repaso_Abaco_Clase3.html" class="sesion-link s3">
+      <span class="sesion-num">03</span>
+      <div class="sesion-info">
+        <div class="sesion-title">Repaso ábaco — Suma y resta</div>
+        <div class="sesion-desc">Posición de cuentas, 3 ejemplos resueltos, 2 ejercicios</div>
+      </div>
+    </a>
+
+    <a href="Clase3_Secuencias_.html" class="sesion-link s3">
+      <span class="sesion-num">03</span>
+      <div class="sesion-info">
+        <div class="sesion-title">Secuencias y Series Numéricas</div>
+        <div class="sesion-desc">Progresión aritmética y geométrica · 5 ejercicios tipo examen</div>
+      </div>
+    </a>
+
+  </div>
+
+  <footer>
+    UdeA Posible · Preparatorio examen de admisión UdeA<br>
+    Abrir en Chrome o Safari para audio
+  </footer>
+
+</div>
+</body>
+</html>

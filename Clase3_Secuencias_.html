@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 3 — Secuencias y Series Numéricas · Preparatorio UdeA</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #222222;
+    --border: #2e2e2e;
+    --accent-pa: #c8f060;
+    --accent-pg: #c090f0;
+    --accent-ej: #f08060;
+    --text: #e8e8e0;
+    --text2: #888880;
+    --text3: #555550;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .page { max-width: 720px; margin: 0 auto; }
+
+  header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-pa);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+  }
+
+  .subtitle { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  /* Secciones */
+  .seccion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 2.5rem 0 1rem;
+  }
+
+  .seccion-linea { flex: 1; height: 1px; background: var(--border); }
+
+  .seccion-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text3);
+    white-space: nowrap;
+  }
+
+  h2.seccion-label { margin: 0; }
+
+  h3.card-title-heading {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin: 0 0 2px 0;
+  }
+
+  .seccion[data-tipo="pa"] .seccion-label { color: var(--accent-pa); border-color: #1e2a0e; background: #0f1508; }
+  .seccion[data-tipo="pg"] .seccion-label { color: var(--accent-pg); border-color: #2a1a3a; background: #150a20; }
+  .seccion[data-tipo="ej"] .seccion-label { color: var(--accent-ej); border-color: #3a1a0a; background: #200d08; }
+
+  /* Controles globales */
+  .global-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn-global {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-family: 'Sora', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-global:hover { border-color: var(--accent-pa); color: var(--accent-pa); }
+  .btn-global:focus-visible { outline: 2px solid var(--accent-pa); outline-offset: 2px; }
+
+  .speed-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 8px;
+  }
+
+  .speed-control label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  .speed-control input[type=range] {
+    -webkit-appearance: none;
+    width: 90px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+  }
+
+  .speed-control input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--accent-pa);
+    cursor: pointer;
+  }
+
+  .speed-control input[type=range]:focus-visible {
+    outline: 2px solid var(--accent-pa);
+    outline-offset: 2px;
+  }
+
+  .speed-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-pa);
+    min-width: 32px;
+  }
+
+  /* Tarjetas */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1rem 1.25rem;
+  }
+
+  .card-header:focus-visible {
+    outline: 2px solid var(--accent-pa);
+    outline-offset: -2px;
+  }
+
+  .num-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    width: 28px; height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .badge-pa { background: #0f1508; color: var(--accent-pa); }
+  .badge-pg { background: #150a20; color: var(--accent-pg); }
+  .badge-ej { background: #200d08; color: var(--accent-ej); }
+  .badge-tutorial { font-size: 13px; }
+
+  .card-meta { flex: 1; }
+
+  .card-title, .card-title-heading {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .card-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.04em;
+  }
+
+  .tipo-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .tipo-tag.tutorial { background: #1a2a1a; color: #80c080; }
+  .tipo-tag.ejercicio { background: #2a2a1a; color: #c0c080; }
+
+  .expand-arrow { display: none; }
+
+  .card-body {
+    display: block;
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .enunciado {
+    font-size: 14px;
+    line-height: 1.9;
+    color: #c8c8c0;
+    padding: 1rem 0 0.75rem;
+  }
+
+  .opciones {
+    margin: 0 0 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .opcion {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    font-size: 13px;
+    color: #b8b8b0;
+    line-height: 1.5;
+  }
+
+  .opcion-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    min-width: 20px; height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: var(--border);
+    color: var(--text2);
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  /* Player */
+  .player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn-play {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'Sora', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-play:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+  .btn-pa { background: var(--accent-pa); color: #0f0f0f; }
+  .btn-pa:hover { filter: brightness(1.15); }
+  .btn-pg { background: var(--accent-pg); color: #0f0f0f; }
+  .btn-pg:hover { filter: brightness(1.15); }
+  .btn-ej { background: var(--accent-ej); color: #fff; }
+  .btn-ej:hover { filter: brightness(1.15); }
+
+  .btn-play.playing { background: #f06060 !important; color: #fff !important; }
+
+  .progress-bar {
+    flex: 1;
+    min-width: 100px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s linear;
+    border-radius: 2px;
+  }
+
+  .pf-pa { background: var(--accent-pa); }
+  .pf-pg { background: var(--accent-pg); }
+  .pf-ej { background: var(--accent-ej); }
+
+  .status-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    min-width: 60px;
+    text-align: right;
+  }
+
+  .card.playing-pa { border-color: var(--accent-pa); }
+  .card.playing-pg { border-color: var(--accent-pg); }
+  .card.playing-ej { border-color: var(--accent-ej); }
+
+  /* Respuesta */
+  .respuesta-btn {
+    margin-top: 1rem;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text3);
+    font-family: 'Sora', sans-serif;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: block;
+  }
+
+  .respuesta-btn:hover { color: var(--text2); border-color: var(--text3); }
+  .respuesta-btn:focus-visible { outline: 2px solid var(--accent-pa); outline-offset: 2px; }
+
+  .respuesta-box {
+    display: none;
+    margin-top: 0.75rem;
+    padding: 0.9rem 1rem;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--text2);
+  }
+
+  .rb-pa { background: #0a140a; border: 1px solid #1e3010; }
+  .rb-pg { background: #0d0a14; border: 1px solid #1e102e; }
+  .rb-ej { background: #140a04; border: 1px solid #2e1608; }
+
+  .correcta { font-weight: 500; }
+  .c-pa { color: var(--accent-pa); }
+  .c-pg { color: var(--accent-pg); }
+  .c-ej { color: var(--accent-ej); }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text3);
+    text-align: center;
+    line-height: 1.8;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .playing-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    animation: pulse 1s ease-in-out infinite;
+    margin-right: 4px;
+  }
+
+  /* Skip link */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent-pa);
+    color: #0f0f0f;
+    padding: 8px 16px;
+    z-index: 100;
+    font-size: 13px;
+    border-radius: 0 0 8px 0;
+    transition: top 0.2s;
+  }
+
+  .skip-link:focus { top: 0; }
+
+  /* Navegación de secciones */
+  .nav-secciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 2rem;
+  }
+
+  .nav-sec-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+
+  .nav-sec-btn:hover, .nav-sec-btn:focus-visible {
+    border-color: var(--accent-pa);
+    color: var(--accent-pa);
+    outline: none;
+  }
+
+  /* ── Responsive móvil ── */
+  @media (max-width: 600px) {
+    body { padding: 1rem 0.75rem 3rem; }
+    h1 { font-size: 19px; }
+    .label { font-size: 10px; }
+    .subtitle { font-size: 12px; }
+    .global-controls { flex-direction: column; align-items: stretch; }
+    .btn-global { min-height: 44px; justify-content: center; font-size: 13px; }
+    .speed-control { min-height: 44px; justify-content: center; }
+    .speed-control input[type=range] { width: 110px; height: 6px; }
+    .speed-control input[type=range]::-webkit-slider-thumb { width: 22px; height: 22px; }
+    .speed-control label { font-size: 12px; }
+    .speed-val { font-size: 12px; }
+    .card-header { padding: 0.85rem 1rem; gap: 10px; }
+    .card-body { padding: 0 1rem 1rem; }
+    .enunciado { font-size: 14px; }
+    .opcion { padding: 10px 12px; font-size: 14px; min-height: 44px; align-items: center; }
+    .opcion-num { min-width: 24px; height: 24px; font-size: 12px; }
+    .player { flex-direction: column; align-items: stretch; gap: 8px; }
+    .btn-play { min-height: 44px; justify-content: center; font-size: 13px; }
+    .progress-bar { min-width: unset; width: 100%; height: 6px; }
+    .status-text { text-align: center; font-size: 11px; }
+    .respuesta-btn { min-height: 40px; font-size: 12px; padding: 8px 14px; }
+    .respuesta-box { font-size: 13px; }
+    .nota-docente { font-size: 12px; }
+    .seccion-label { font-size: 10px; }
+    .tipo-tag { font-size: 10px; }
+    .nav-sec-btn { font-size: 11px; padding: 8px 10px; min-height: 36px; }
+    footer { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#contenido" class="skip-link">Saltar al contenido</a>
+
+<div class="page" id="contenido" role="main">
+
+  <header>
+    <div class="label">UdeA Posible · Sesión 3 · Discapacidad Visual</div>
+    <h1>Secuencias y Series Numéricas<br>Progresiones Aritméticas y Geométricas</h1>
+    <div class="subtitle">
+      Primer tema del examen de admisión · Conecta con el conteo del ábaco<br>
+      Conceptos + ejemplos resueltos + 5 ejercicios tipo examen con audio
+    </div>
+  </header>
+
+  <nav class="nav-secciones" aria-label="Navegación por secciones">
+    <a href="#sec-pa" class="nav-sec-btn">Progresión Aritmética</a>
+    <a href="#sec-pg" class="nav-sec-btn">Progresión Geométrica</a>
+    <a href="#sec-ej" class="nav-sec-btn">Ejercicios</a>
+  </nav>
+
+  <div class="global-controls">
+    <button class="btn-global" onclick="stopAll()" aria-label="Detener toda la reproducción de audio">
+      <svg width="13" height="13" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><rect x="1" y="1" width="8" height="8" rx="1"/></svg>
+      Detener todo
+    </button>
+    <div class="speed-control" role="group" aria-label="Control de velocidad de voz">
+      <label for="speedSlider">Velocidad</label>
+      <input type="range" id="speedSlider" min="0.6" max="1.2" step="0.05" value="0.82"
+        aria-valuemin="0.6" aria-valuemax="1.2" aria-valuenow="0.82"
+        oninput="updateSpeed(this.value)">
+      <span class="speed-val" id="speedVal" aria-live="polite">0.82×</span>
+    </div>
+  </div>
+
+  <div id="cards" role="region" aria-label="Contenido de la sesión"></div>
+
+  <footer>
+    UdeA Posible · Sesión 3 · 5 de abril de 2026<br>
+    Autor: Daniel Andrés Quiroz-Vallejo<br>
+    Abre en Chrome · Web Speech API · Sin conexión requerida
+  </footer>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// DATOS
+// ═══════════════════════════════════════════════════════════════
+
+const contenido = [
+
+  // ── PROGRESIÓN ARITMÉTICA ───────────────────────────────────
+  {
+    seccion: "pa",
+    seccionNombre: "Progresión Aritmética (PA)",
+    items: [
+      {
+        tipo: "pa",
+        clase: "tutorial",
+        titulo: "Definición y fórmula de la PA",
+        tag: "PA · CONCEPTO · DEFINICIÓN Y FÓRMULA",
+        enunciado: "Una Progresión Aritmética (PA) es una secuencia donde cada término se obtiene sumando una cantidad fija al anterior. Esa cantidad fija se llama diferencia común (d). La fórmula del término n-ésimo es: a(n) = a(1) + (n − 1) × d, donde a(1) es el primer término, n es la posición del término que buscamos y d es la diferencia común.",
+        tts: `Vamos a aprender qué es una Progresión Aritmética, que abreviamos como PA.
+
+Una Progresión Aritmética es una secuencia de números donde para pasar de un término al siguiente, siempre sumamos la misma cantidad. A esa cantidad fija la llamamos diferencia común, y la representamos con la letra d.
+
+Por ejemplo, la secuencia: dos, cinco, ocho, once, catorce... es una PA. ¿Por qué? Porque para pasar de dos a cinco sumamos tres. De cinco a ocho sumamos tres. De ocho a once sumamos tres. Siempre sumamos tres. Entonces la diferencia común es tres.
+
+La diferencia puede ser positiva o negativa. Si es positiva, la secuencia crece. Si es negativa, la secuencia decrece.
+
+Ahora, la fórmula. Si queremos encontrar cualquier término de la secuencia sin tener que contar uno por uno, usamos esta fórmula:
+
+El término n-ésimo, que llamamos a sub n, es igual a: a sub uno, más, paréntesis, n menos uno, cierra paréntesis, por d.
+
+Es decir: a sub n es igual a a sub uno más n menos uno por d.
+
+Donde a sub uno es el primer término de la secuencia, n es la posición del término que queremos encontrar, y d es la diferencia común.
+
+Piénsenlo así: para llegar al término número n, partimos del primero y damos n menos uno saltos de tamaño d. Esto es como avanzar en el ábaco: si empiezo en dos y doy saltos de tres, después de cuatro saltos llego a catorce.`,
+        respuesta: "PA: secuencia donde cada término = anterior + d (diferencia común). Fórmula: a(n) = a(1) + (n − 1) × d. Para encontrar d: restar dos términos consecutivos (segundo menos primero)."
+      },
+      {
+        tipo: "pa",
+        clase: "tutorial",
+        titulo: "Ejemplo PA: secuencia 3, 7, 11, 15, ...",
+        tag: "PA · EJEMPLO 1 · PA CRECIENTE",
+        enunciado: "Dada la PA: 3, 7, 11, 15, ... Encontrar la diferencia común, el término 5 y el término 10.",
+        tts: `Ejemplo número uno de Progresión Aritmética.
+
+La secuencia es: tres, siete, once, quince, y sigue.
+
+Paso uno: encontrar la diferencia común, d.
+Restamos el segundo término menos el primero: siete menos tres es cuatro.
+Verifiquemos: once menos siete también es cuatro. Quince menos once también es cuatro.
+Entonces d es igual a cuatro. Es una PA creciente porque d es positivo.
+
+Paso dos: encontrar el quinto término.
+Usamos la fórmula: a sub n es igual a a sub uno más n menos uno por d.
+a sub uno es tres. n es cinco. d es cuatro.
+a sub cinco es igual a tres más cinco menos uno por cuatro.
+Cinco menos uno es cuatro. Cuatro por cuatro es dieciséis.
+Tres más dieciséis es diecinueve.
+El quinto término es diecinueve.
+
+Verifiquemos contando: tres, siete, once, quince, diecinueve. Sí, el quinto es diecinueve.
+
+Paso tres: encontrar el décimo término.
+a sub diez es igual a tres más diez menos uno por cuatro.
+Diez menos uno es nueve. Nueve por cuatro es treinta y seis.
+Tres más treinta y seis es treinta y nueve.
+El décimo término es treinta y nueve.
+
+Si quieren verificar con el ábaco: empiecen en tres y sumen cuatro nueve veces. Llegarán a treinta y nueve.`,
+        respuesta: "PA: 3, 7, 11, 15, ... → d = 4, a(1) = 3. Término 5: a(5) = 3 + (5−1)×4 = 3 + 16 = 19. Término 10: a(10) = 3 + (10−1)×4 = 3 + 36 = 39."
+      },
+      {
+        tipo: "pa",
+        clase: "tutorial",
+        titulo: "Ejemplo PA: secuencia 50, 43, 36, 29, ...",
+        tag: "PA · EJEMPLO 2 · PA DECRECIENTE",
+        enunciado: "Dada la PA: 50, 43, 36, 29, ... Encontrar la diferencia común y el término 6.",
+        tts: `Ejemplo número dos de Progresión Aritmética. Esta vez con una PA decreciente.
+
+La secuencia es: cincuenta, cuarenta y tres, treinta y seis, veintinueve, y sigue.
+
+Paso uno: encontrar la diferencia común.
+Restamos: cuarenta y tres menos cincuenta es menos siete.
+Verifiquemos: treinta y seis menos cuarenta y tres también es menos siete.
+La diferencia común es menos siete. Como d es negativo, la secuencia va bajando.
+
+Paso dos: encontrar el sexto término.
+a sub seis es igual a cincuenta más seis menos uno por menos siete.
+Seis menos uno es cinco. Cinco por menos siete es menos treinta y cinco.
+Cincuenta más menos treinta y cinco es cincuenta menos treinta y cinco, que es quince.
+El sexto término es quince.
+
+Verifiquemos contando: cincuenta, cuarenta y tres, treinta y seis, veintinueve, veintidós, quince. Sí, el sexto es quince.
+
+En el ábaco: empiecen en cincuenta y resten siete cinco veces. Cincuenta menos siete, cuarenta y tres. Menos siete, treinta y seis. Menos siete, veintinueve. Menos siete, veintidós. Menos siete, quince.`,
+        respuesta: "PA: 50, 43, 36, 29, ... → d = −7, a(1) = 50. Término 6: a(6) = 50 + (6−1)×(−7) = 50 − 35 = 15. Verificación: 50, 43, 36, 29, 22, 15."
+      }
+    ]
+  },
+
+  // ── PROGRESIÓN GEOMÉTRICA ──────────────────────────────────
+  {
+    seccion: "pg",
+    seccionNombre: "Progresión Geométrica (PG)",
+    items: [
+      {
+        tipo: "pg",
+        clase: "tutorial",
+        titulo: "Definición y fórmula de la PG",
+        tag: "PG · CONCEPTO · DEFINICIÓN Y FÓRMULA",
+        enunciado: "Una Progresión Geométrica (PG) es una secuencia donde cada término se obtiene multiplicando el anterior por una cantidad fija. Esa cantidad se llama razón (r). La fórmula del término n-ésimo es: a(n) = a(1) × r elevado a (n − 1), donde a(1) es el primer término, n es la posición y r es la razón.",
+        tts: `Ahora vamos a aprender sobre la Progresión Geométrica, que abreviamos como PG.
+
+Una Progresión Geométrica es una secuencia de números donde para pasar de un término al siguiente, siempre multiplicamos por la misma cantidad. A esa cantidad fija la llamamos razón, y la representamos con la letra r.
+
+Por ejemplo, la secuencia: tres, seis, doce, veinticuatro, cuarenta y ocho... es una PG. ¿Por qué? Porque para pasar de tres a seis multiplicamos por dos. De seis a doce multiplicamos por dos. De doce a veinticuatro multiplicamos por dos. Siempre multiplicamos por dos. La razón es dos.
+
+La diferencia clave con la PA es esta: en la PA sumamos, en la PG multiplicamos.
+
+Para encontrar la razón, dividimos un término entre el anterior. Por ejemplo: seis dividido tres es dos. Doce dividido seis es dos.
+
+La fórmula del término n-ésimo es:
+a sub n es igual a a sub uno, multiplicado por r elevado a la potencia n menos uno.
+
+Donde a sub uno es el primer término, r es la razón, y n es la posición.
+
+Piénsenlo así: partimos del primer término y lo multiplicamos por r tantas veces como saltos necesitemos. Para llegar al término n, necesitamos n menos uno multiplicaciones.`,
+        respuesta: "PG: secuencia donde cada término = anterior × r (razón). Fórmula: a(n) = a(1) × r^(n−1). Para encontrar r: dividir un término entre el anterior."
+      },
+      {
+        tipo: "pg",
+        clase: "tutorial",
+        titulo: "Ejemplo PG: secuencia 2, 6, 18, 54, ...",
+        tag: "PG · EJEMPLO 1 · RAZÓN 3",
+        enunciado: "Dada la PG: 2, 6, 18, 54, ... Encontrar la razón y el término 5.",
+        tts: `Ejemplo número uno de Progresión Geométrica.
+
+La secuencia es: dos, seis, dieciocho, cincuenta y cuatro, y sigue.
+
+Paso uno: encontrar la razón, r.
+Dividimos el segundo término entre el primero: seis dividido dos es tres.
+Verifiquemos: dieciocho dividido seis es tres. Cincuenta y cuatro dividido dieciocho es tres.
+La razón es tres. Cada término es el triple del anterior.
+
+Paso dos: encontrar el quinto término.
+Usamos la fórmula: a sub n es igual a a sub uno por r elevado a n menos uno.
+a sub uno es dos. r es tres. n es cinco.
+a sub cinco es igual a dos por tres elevado a cinco menos uno.
+Cinco menos uno es cuatro. Tres elevado a cuatro es: tres por tres es nueve, nueve por tres es veintisiete, veintisiete por tres es ochenta y uno.
+Dos por ochenta y uno es ciento sesenta y dos.
+El quinto término es ciento sesenta y dos.
+
+Verifiquemos: dos, seis, dieciocho, cincuenta y cuatro, ciento sesenta y dos. Cada uno es el triple del anterior. Correcto.`,
+        respuesta: "PG: 2, 6, 18, 54, ... → r = 3, a(1) = 2. Término 5: a(5) = 2 × 3^4 = 2 × 81 = 162. Verificación: 2, 6, 18, 54, 162."
+      },
+      {
+        tipo: "pg",
+        clase: "tutorial",
+        titulo: "Ejemplo PG: secuencia 800, 400, 200, 100, ...",
+        tag: "PG · EJEMPLO 2 · RAZÓN FRACCIONARIA",
+        enunciado: "Dada la PG: 800, 400, 200, 100, ... Encontrar la razón y los términos 5 y 6. En esta PG la razón es una fracción, por lo que la secuencia va disminuyendo.",
+        tts: `Ejemplo número dos de Progresión Geométrica. Esta vez con una razón fraccionaria.
+
+La secuencia es: ochocientos, cuatrocientos, doscientos, cien, y sigue.
+
+Paso uno: encontrar la razón.
+Dividimos: cuatrocientos dividido ochocientos es un medio, o cero punto cinco.
+Verifiquemos: doscientos dividido cuatrocientos es un medio. Cien dividido doscientos es un medio.
+La razón es un medio. Esto significa que cada término es la mitad del anterior.
+
+Cuando la razón es una fracción entre cero y uno, la secuencia va disminuyendo, pero nunca llega a cero.
+
+Paso dos: encontrar el quinto término.
+a sub cinco es igual a ochocientos por un medio elevado a cuatro.
+Un medio elevado a cuatro es: un medio por un medio es un cuarto, por un medio es un octavo, por un medio es un dieciseisavo.
+Ochocientos dividido dieciséis es cincuenta.
+El quinto término es cincuenta.
+
+También lo podemos ver así: ochocientos, cuatrocientos, doscientos, cien, cincuenta. Cada vez dividimos entre dos.
+
+Paso tres: el sexto término.
+Cincuenta dividido dos es veinticinco.
+El sexto término es veinticinco.`,
+        respuesta: "PG: 800, 400, 200, 100, ... → r = 1/2 (0.5), a(1) = 800. Término 5: a(5) = 800 × (1/2)^4 = 800/16 = 50. Término 6: a(6) = 50 × 1/2 = 25. Cuando r está entre 0 y 1, la PG es decreciente."
+      }
+    ]
+  },
+
+  // ── EJERCICIOS DE PRÁCTICA ─────────────────────────────────
+  {
+    seccion: "ej",
+    seccionNombre: "Ejercicios de práctica",
+    items: [
+      {
+        tipo: "ej",
+        clase: "ejercicio",
+        titulo: "E1: Siguiente término de una PA",
+        tag: "EJERCICIO 1 · BÁSICO · PA",
+        enunciado: "¿Cuál es el siguiente término de la secuencia 5, 9, 13, 17, ...?",
+        opciones: ["19", "20", "21", "23"],
+        correcta: "3",
+        tts: `Ejercicio número uno. Nivel básico. Progresión Aritmética.
+
+Escuchen la secuencia: cinco, nueve, trece, diecisiete... y sigue.
+
+La pregunta es: ¿cuál es el siguiente término?
+
+Primero, identifiquen la diferencia común. ¿Cuánto se suma para pasar de un término al siguiente?
+
+Las opciones son:
+Opción uno: diecinueve.
+Opción dos: veinte.
+Opción tres: veintiuno.
+Opción cuatro: veintitrés.
+
+Piensen su respuesta y luego revelen la solución.`,
+        explicacion: "La diferencia común es: 9 − 5 = 4. Verificación: 13 − 9 = 4 y 17 − 13 = 4. El siguiente término es 17 + 4 = 21. Respuesta correcta: opción 3."
+      },
+      {
+        tipo: "ej",
+        clase: "ejercicio",
+        titulo: "E2: Término n-ésimo de una PA",
+        tag: "EJERCICIO 2 · INTERMEDIO · PA",
+        enunciado: "En la PA: 8, 14, 20, 26, ... ¿cuál es el término número 15?",
+        opciones: ["86", "90", "92", "98"],
+        correcta: "3",
+        tts: `Ejercicio número dos. Nivel intermedio. Progresión Aritmética.
+
+La secuencia es: ocho, catorce, veinte, veintiséis... y sigue.
+
+La pregunta es: ¿cuál es el término número quince de esta secuencia?
+
+Para resolverlo, necesitan usar la fórmula del término n-ésimo: a sub n es igual a a sub uno más n menos uno por d.
+
+Primero encuentren d, luego apliquen la fórmula con n igual a quince.
+
+Las opciones son:
+Opción uno: ochenta y seis.
+Opción dos: noventa.
+Opción tres: noventa y dos.
+Opción cuatro: noventa y ocho.
+
+Si tienen el ábaco, pueden usarlo para hacer la multiplicación y la suma.`,
+        explicacion: "Diferencia común: d = 14 − 8 = 6. Primer término: a(1) = 8. Aplicando la fórmula: a(15) = 8 + (15 − 1) × 6 = 8 + 14 × 6 = 8 + 84 = 92. Respuesta correcta: opción 3."
+      },
+      {
+        tipo: "ej",
+        clase: "ejercicio",
+        titulo: "E3: Razón de una PG",
+        tag: "EJERCICIO 3 · BÁSICO · PG",
+        enunciado: "¿Cuál es la razón de la PG: 4, 12, 36, 108, ...?",
+        opciones: ["2", "3", "4", "8"],
+        correcta: "2",
+        tts: `Ejercicio número tres. Nivel básico. Progresión Geométrica.
+
+La secuencia es: cuatro, doce, treinta y seis, ciento ocho... y sigue.
+
+La pregunta es: ¿cuál es la razón de esta Progresión Geométrica?
+
+Recuerden: la razón se encuentra dividiendo un término entre el anterior.
+
+Las opciones son:
+Opción uno: dos.
+Opción dos: tres.
+Opción tres: cuatro.
+Opción cuatro: ocho.`,
+        explicacion: "La razón se calcula dividiendo cualquier término entre el anterior. 12 ÷ 4 = 3. Verificación: 36 ÷ 12 = 3 y 108 ÷ 36 = 3. La razón es 3. Respuesta correcta: opción 2."
+      },
+      {
+        tipo: "ej",
+        clase: "ejercicio",
+        titulo: "E4: Término específico de una PG",
+        tag: "EJERCICIO 4 · INTERMEDIO · PG",
+        enunciado: "En la PG: 5, 10, 20, 40, ... ¿cuál es el término número 7?",
+        opciones: ["160", "240", "320", "640"],
+        correcta: "3",
+        tts: `Ejercicio número cuatro. Nivel intermedio. Progresión Geométrica.
+
+La secuencia es: cinco, diez, veinte, cuarenta... y sigue.
+
+La pregunta es: ¿cuál es el término número siete?
+
+Primero identifiquen la razón. Luego usen la fórmula: a sub n es igual a a sub uno por r elevado a n menos uno.
+
+Las opciones son:
+Opción uno: ciento sesenta.
+Opción dos: doscientos cuarenta.
+Opción tres: trescientos veinte.
+Opción cuatro: seiscientos cuarenta.
+
+Pista: pueden ir multiplicando por la razón desde el cuarto término hasta llegar al séptimo, si prefieren no usar la fórmula directamente.`,
+        explicacion: "Razón: r = 10 ÷ 5 = 2. Primer término: a(1) = 5. Con la fórmula: a(7) = 5 × 2^6 = 5 × 64 = 320. Verificación paso a paso: 5, 10, 20, 40, 80, 160, 320. Respuesta correcta: opción 3."
+      },
+      {
+        tipo: "ej",
+        clase: "ejercicio",
+        titulo: "E5: Serie de diferencias de segundo orden",
+        tag: "EJERCICIO 5 · NIVEL UDEA · SERIE MIXTA",
+        enunciado: "¿Cuál es el siguiente término de la secuencia: 2, 5, 10, 17, 26, ...? Pista: esta no es una PA ni una PG simple. Observen las diferencias entre términos consecutivos.",
+        opciones: ["33", "35", "37", "39"],
+        correcta: "3",
+        tts: `Ejercicio número cinco. Nivel examen UdeA. Serie de diferencias de segundo orden.
+
+La secuencia es: dos, cinco, diez, diecisiete, veintiséis... y sigue.
+
+La pregunta es: ¿cuál es el siguiente término?
+
+Atención: esta secuencia no es una Progresión Aritmética simple, porque las diferencias entre términos consecutivos no son iguales. Tampoco es una Progresión Geométrica.
+
+La estrategia es: calculen las diferencias entre términos consecutivos, y luego miren si esas diferencias forman un patrón.
+
+Les doy las diferencias:
+De dos a cinco: tres.
+De cinco a diez: cinco.
+De diez a diecisiete: siete.
+De diecisiete a veintiséis: nueve.
+
+Las diferencias son: tres, cinco, siete, nueve... ¿Reconocen el patrón? Esas diferencias están aumentando de dos en dos. Es una PA con diferencia dos.
+
+Entonces la siguiente diferencia sería...
+
+Las opciones para el siguiente término de la secuencia original son:
+Opción uno: treinta y tres.
+Opción dos: treinta y cinco.
+Opción tres: treinta y siete.
+Opción cuatro: treinta y nueve.`,
+        explicacion: "Las diferencias entre términos consecutivos son: 3, 5, 7, 9, ... Estas diferencias forman una PA con d = 2. La siguiente diferencia es 9 + 2 = 11. El siguiente término de la secuencia original: 26 + 11 = 37. Este tipo de secuencias se llama de diferencias de segundo orden porque las diferencias de las diferencias son constantes. Respuesta correcta: opción 3."
+      }
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════════════════════════
+// MOTOR
+// ═══════════════════════════════════════════════════════════════
+
+let currentPlaying = null;
+let currentInterval = null;
+let cardIndex = 0;
+
+function getSpeed() {
+  return parseFloat(document.getElementById('speedSlider').value);
+}
+
+function updateSpeed(val) {
+  const v = parseFloat(val).toFixed(2);
+  document.getElementById('speedVal').textContent = v + '×';
+  document.getElementById('speedSlider').setAttribute('aria-valuenow', v);
+}
+
+function buildAll() {
+  const container = document.getElementById('cards');
+  cardIndex = 0;
+
+  contenido.forEach(sec => {
+    container.innerHTML += `
+      <div class="seccion" data-tipo="${sec.seccion}" id="sec-${sec.seccion}" role="presentation">
+        <div class="seccion-linea"></div>
+        <h2 class="seccion-label">${sec.seccionNombre}</h2>
+        <div class="seccion-linea"></div>
+      </div>`;
+
+    sec.items.forEach(item => {
+      const i = cardIndex++;
+      const tipo = item.tipo;
+      const esProblema = item.opciones && item.opciones.length > 0;
+      const tipoTag = item.clase === 'tutorial'
+        ? '<span class="tipo-tag tutorial">CONCEPTO</span>'
+        : '<span class="tipo-tag ejercicio">EJERCICIO</span>';
+
+      let opcionesHTML = '';
+      if (esProblema) {
+        opcionesHTML = '<div class="opciones" role="list" aria-label="Opciones de respuesta">' + item.opciones.map((o, j) => {
+          const num = j + 1;
+          return `<div class="opcion" role="listitem"><span class="opcion-num">${num}</span><span>${o}</span></div>`;
+        }).join('') + '</div>';
+      }
+
+      const respLabel = esProblema ? 'Ver respuesta y explicación' : 'Ver respuesta';
+
+      let respContenido = '';
+      if (esProblema) {
+        respContenido = `<span class="correcta c-${tipo}">Respuesta correcta: opción ${item.correcta}</span><br><br>${item.explicacion}`;
+      } else {
+        respContenido = `<span class="correcta c-${tipo}">Respuesta:</span><br><br>${item.respuesta}`;
+      }
+
+      container.innerHTML += `
+      <div class="card" id="card-${i}" role="region" aria-label="${item.titulo}">
+        <div class="card-header" tabindex="0" role="button"
+             aria-expanded="false" aria-controls="body-${i}"
+             onclick="toggleCard(${i})"
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCard(${i})}">
+          <span class="num-badge badge-${tipo} ${item.clase === 'tutorial' ? 'badge-tutorial' : ''}">${item.clase === 'tutorial' ? '▶' : String(i+1).padStart(2,'0')}</span>
+          <div class="card-meta">
+            <h3 class="card-title-heading">${tipoTag}${item.titulo}</h3>
+            <div class="card-tag">${item.tag}</div>
+          </div>
+          <svg class="expand-arrow" width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="2,4 6,8 10,4"/></svg>
+        </div>
+        <div class="card-body" id="body-${i}">
+          <div class="enunciado">${item.enunciado}</div>
+          ${opcionesHTML}
+          <div class="player">
+            <button class="btn-play btn-${tipo}" id="btn-${i}" aria-label="Reproducir audio de ${item.titulo}"
+                    onclick="togglePlay(${i}, '${tipo}')">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><polygon points="1,0 9,5 1,10"/></svg>
+              Reproducir
+            </button>
+            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Progreso de reproducción" id="pbar-${i}">
+              <div class="progress-fill pf-${tipo}" id="prog-${i}"></div>
+            </div>
+            <span class="status-text" id="status-${i}" aria-live="polite">listo</span>
+          </div>
+          <button class="respuesta-btn" aria-expanded="false" aria-controls="resp-${i}"
+                  onclick="toggleRespuesta(${i}, this)">${respLabel}</button>
+          <div class="respuesta-box rb-${tipo}" id="resp-${i}" role="region" aria-label="Respuesta">
+            ${respContenido}
+          </div>
+        </div>
+      </div>`;
+    });
+  });
+}
+
+// Almacenar datos planos para acceso por índice
+let itemsFlat = [];
+function buildFlat() {
+  contenido.forEach(sec => {
+    sec.items.forEach(item => {
+      itemsFlat.push(item);
+    });
+  });
+}
+
+function toggleCard(i) {
+  const card = document.getElementById(`card-${i}`);
+  const header = card.querySelector('.card-header');
+  const isOpen = card.classList.toggle('open');
+  header.setAttribute('aria-expanded', isOpen);
+}
+
+function openCard(i) {
+  const card = document.getElementById(`card-${i}`);
+  const header = card.querySelector('.card-header');
+  card.classList.add('open');
+  header.setAttribute('aria-expanded', 'true');
+}
+
+function toggleRespuesta(i, btn) {
+  const box = document.getElementById(`resp-${i}`);
+  const showing = box.style.display === 'block';
+  box.style.display = showing ? 'none' : 'block';
+  btn.setAttribute('aria-expanded', !showing);
+  const item = itemsFlat[i];
+  const esProblema = item.opciones && item.opciones.length > 0;
+  btn.textContent = showing
+    ? (esProblema ? 'Ver respuesta y explicación' : 'Ver respuesta')
+    : 'Ocultar respuesta';
+}
+
+function setBtnPlaying(i, tipo, playing) {
+  const btn = document.getElementById(`btn-${i}`);
+  const card = document.getElementById(`card-${i}`);
+  if (playing) {
+    btn.classList.add('playing');
+    btn.innerHTML = `<span class="playing-dot"></span>Detener`;
+    btn.setAttribute('aria-label', `Detener audio`);
+    card.classList.add(`playing-${tipo}`);
+  } else {
+    btn.classList.remove('playing');
+    btn.innerHTML = `<svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><polygon points="1,0 9,5 1,10"/></svg> Reproducir`;
+    btn.setAttribute('aria-label', `Reproducir audio`);
+    card.classList.remove(`playing-${tipo}`);
+  }
+}
+
+function stopAll() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (currentInterval) clearInterval(currentInterval);
+  itemsFlat.forEach((item, i) => {
+    setBtnPlaying(i, item.tipo, false);
+    document.getElementById(`prog-${i}`).style.width = '0%';
+    const pb = document.getElementById(`pbar-${i}`);
+    if (pb) pb.setAttribute('aria-valuenow', '0');
+    document.getElementById(`status-${i}`).textContent = 'listo';
+  });
+  currentPlaying = null;
+  currentInterval = null;
+}
+
+function togglePlay(i, tipo) {
+  if (currentPlaying === i) { stopAll(); return; }
+  stopAll();
+  playItem(i, tipo);
+}
+
+function playItem(i, tipo, onEnd) {
+  if (!window.speechSynthesis) {
+    alert('Usa Chrome para la síntesis de voz.');
+    return;
+  }
+
+  const item = itemsFlat[i];
+  const utter = new SpeechSynthesisUtterance(item.tts);
+  utter.lang = 'es-CO';
+  utter.rate = getSpeed();
+  utter.pitch = 1.0;
+  utter.volume = 1.0;
+
+  const voices = window.speechSynthesis.getVoices();
+  const esVoice = voices.find(v => v.lang === 'es-CO')
+    || voices.find(v => v.lang.startsWith('es'));
+  if (esVoice) utter.voice = esVoice;
+
+  currentPlaying = i;
+  openCard(i);
+  setBtnPlaying(i, tipo, true);
+  document.getElementById(`status-${i}`).textContent = 'reproduciendo...';
+
+  const words = item.tts.split(' ').length;
+  const secs = (words / (2.5 * getSpeed())) * 1.1;
+  let elapsed = 0;
+  currentInterval = setInterval(() => {
+    elapsed += 0.3;
+    const pct = Math.min((elapsed/secs)*100, 95);
+    document.getElementById(`prog-${i}`).style.width = pct + '%';
+    const pbar = document.getElementById(`pbar-${i}`);
+    if (pbar) pbar.setAttribute('aria-valuenow', Math.round(pct));
+  }, 300);
+
+  utter.onend = () => {
+    clearInterval(currentInterval);
+    currentInterval = null;
+    setBtnPlaying(i, tipo, false);
+    document.getElementById(`prog-${i}`).style.width = '100%';
+    document.getElementById(`status-${i}`).textContent = 'listo';
+    currentPlaying = null;
+    setTimeout(() => { document.getElementById(`prog-${i}`).style.width = '0%'; }, 2000);
+    if (onEnd) onEnd();
+  };
+
+  utter.onerror = () => {
+    clearInterval(currentInterval);
+    currentInterval = null;
+    setBtnPlaying(i, tipo, false);
+    document.getElementById(`status-${i}`).textContent = 'error';
+    currentPlaying = null;
+    if (onEnd) onEnd();
+  };
+
+  window.speechSynthesis.speak(utter);
+}
+
+// Keyboard: Escape to stop
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') stopAll();
+});
+
+if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => {};
+buildFlat();
+buildAll();
+</script>
+</body>
+</html>

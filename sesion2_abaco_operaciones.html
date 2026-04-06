@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 2 — Ábaco Cerrado · Las 4 Operaciones</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #222222;
+    --border: #2e2e2e;
+    --accent-intro: #a0c8f0;
+    --accent-suma: #c8f060;
+    --accent-resta: #f0a060;
+    --accent-mult: #c090f0;
+    --accent-div: #60f0c8;
+    --accent-app: #f06090;
+    --text: #e8e8e0;
+    --text2: #888880;
+    --text3: #555550;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .page { max-width: 720px; margin: 0 auto; }
+
+  header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-suma);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+  }
+
+  .subtitle { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  /* Secciones */
+  .seccion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 2.5rem 0 1rem;
+  }
+
+  .seccion-linea { flex: 1; height: 1px; background: var(--border); }
+
+  .seccion-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text3);
+    white-space: nowrap;
+  }
+
+  h2.seccion-label { margin: 0; }
+
+  h3.card-title-heading {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin: 0 0 2px 0;
+  }
+
+  .seccion[data-tipo="intro"] .seccion-label { color: var(--accent-intro); border-color: #1a2a3a; background: #0a1520; }
+  .seccion[data-tipo="suma"] .seccion-label { color: var(--accent-suma); border-color: #1e2a0e; background: #0f1508; }
+  .seccion[data-tipo="resta"] .seccion-label { color: var(--accent-resta); border-color: #3a2a10; background: #1a1208; }
+  .seccion[data-tipo="mult"] .seccion-label { color: var(--accent-mult); border-color: #2a1a3a; background: #150a20; }
+  .seccion[data-tipo="div"] .seccion-label { color: var(--accent-div); border-color: #0a3a2a; background: #081a15; }
+  .seccion[data-tipo="app"] .seccion-label { color: var(--accent-app); border-color: #3a0a1e; background: #200815; }
+
+  /* Controles globales */
+  .global-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn-global {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-family: 'Sora', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-global:hover { border-color: var(--accent-suma); color: var(--accent-suma); }
+  .btn-global:focus-visible { outline: 2px solid var(--accent-suma); outline-offset: 2px; }
+
+  .speed-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 8px;
+  }
+
+  .speed-control label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  .speed-control input[type=range] {
+    -webkit-appearance: none;
+    width: 90px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+  }
+
+  .speed-control input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--accent-suma);
+    cursor: pointer;
+  }
+
+  .speed-control input[type=range]:focus-visible {
+    outline: 2px solid var(--accent-suma);
+    outline-offset: 2px;
+  }
+
+  .speed-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-suma);
+    min-width: 32px;
+  }
+
+  /* Tarjetas */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1rem 1.25rem;
+  }
+
+  .card-header:focus-visible {
+    outline: 2px solid var(--accent-suma);
+    outline-offset: -2px;
+  }
+
+  .num-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    width: 28px; height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .badge-intro { background: #0a1520; color: var(--accent-intro); }
+  .badge-suma { background: #0f1508; color: var(--accent-suma); }
+  .badge-resta { background: #1a1208; color: var(--accent-resta); }
+  .badge-mult { background: #150a20; color: var(--accent-mult); }
+  .badge-div { background: #081a15; color: var(--accent-div); }
+  .badge-app { background: #200815; color: var(--accent-app); }
+  .badge-tutorial { font-size: 13px; }
+
+  .card-meta { flex: 1; }
+
+  .card-title, .card-title-heading {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .card-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.04em;
+  }
+
+  .tipo-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .tipo-tag.tutorial { background: #1a2a1a; color: #80c080; }
+  .tipo-tag.ejercicio { background: #2a2a1a; color: #c0c080; }
+
+  .expand-arrow { display: none; }
+
+  .card-body {
+    display: block;
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .enunciado {
+    font-size: 14px;
+    line-height: 1.9;
+    color: #c8c8c0;
+    padding: 1rem 0 0.75rem;
+  }
+
+  .opciones {
+    margin: 0 0 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .opcion {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    font-size: 13px;
+    color: #b8b8b0;
+    line-height: 1.5;
+  }
+
+  .opcion-letra {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    min-width: 20px; height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: var(--border);
+    color: var(--text2);
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  /* Player */
+  .player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn-play {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'Sora', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-play:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+  .btn-intro { background: var(--accent-intro); color: #0f0f0f; }
+  .btn-intro:hover { filter: brightness(1.15); }
+  .btn-suma { background: var(--accent-suma); color: #0f0f0f; }
+  .btn-suma:hover { filter: brightness(1.15); }
+  .btn-resta { background: var(--accent-resta); color: #0f0f0f; }
+  .btn-resta:hover { filter: brightness(1.15); }
+  .btn-mult { background: var(--accent-mult); color: #0f0f0f; }
+  .btn-mult:hover { filter: brightness(1.15); }
+  .btn-div { background: var(--accent-div); color: #0f0f0f; }
+  .btn-div:hover { filter: brightness(1.15); }
+  .btn-app { background: var(--accent-app); color: #fff; }
+  .btn-app:hover { filter: brightness(1.15); }
+
+  .btn-play.playing { background: #f06060 !important; color: #fff !important; }
+
+  .progress-bar {
+    flex: 1;
+    min-width: 100px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s linear;
+    border-radius: 2px;
+  }
+
+  .pf-intro { background: var(--accent-intro); }
+  .pf-suma { background: var(--accent-suma); }
+  .pf-resta { background: var(--accent-resta); }
+  .pf-mult { background: var(--accent-mult); }
+  .pf-div { background: var(--accent-div); }
+  .pf-app { background: var(--accent-app); }
+
+  .status-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    min-width: 60px;
+    text-align: right;
+  }
+
+  .card.playing-intro { border-color: var(--accent-intro); }
+  .card.playing-suma { border-color: var(--accent-suma); }
+  .card.playing-resta { border-color: var(--accent-resta); }
+  .card.playing-mult { border-color: var(--accent-mult); }
+  .card.playing-div { border-color: var(--accent-div); }
+  .card.playing-app { border-color: var(--accent-app); }
+
+  /* Respuesta */
+  .respuesta-btn {
+    margin-top: 1rem;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text3);
+    font-family: 'Sora', sans-serif;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: block;
+  }
+
+  .respuesta-btn:hover { color: var(--text2); border-color: var(--text3); }
+  .respuesta-btn:focus-visible { outline: 2px solid var(--accent-suma); outline-offset: 2px; }
+
+  .respuesta-box {
+    display: none;
+    margin-top: 0.75rem;
+    padding: 0.9rem 1rem;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--text2);
+  }
+
+  .rb-intro { background: #04101a; border: 1px solid #0a2030; }
+  .rb-suma { background: #0a140a; border: 1px solid #1e3010; }
+  .rb-resta { background: #120d04; border: 1px solid #2e1e08; }
+  .rb-mult { background: #0d0a14; border: 1px solid #1e102e; }
+  .rb-div { background: #041a14; border: 1px solid #0a3020; }
+  .rb-app { background: #1a040d; border: 1px solid #30081a; }
+
+  .correcta { font-weight: 500; }
+  .c-intro { color: var(--accent-intro); }
+  .c-suma { color: var(--accent-suma); }
+  .c-resta { color: var(--accent-resta); }
+  .c-mult { color: var(--accent-mult); }
+  .c-div { color: var(--accent-div); }
+  .c-app { color: var(--accent-app); }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text3);
+    text-align: center;
+    line-height: 1.8;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .playing-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    animation: pulse 1s ease-in-out infinite;
+    margin-right: 4px;
+  }
+
+  /* Skip link */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent-suma);
+    color: #0f0f0f;
+    padding: 8px 16px;
+    z-index: 100;
+    font-size: 13px;
+    border-radius: 0 0 8px 0;
+    transition: top 0.2s;
+  }
+
+  .skip-link:focus { top: 0; }
+
+  /* Navegación de secciones */
+  .nav-secciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 2rem;
+  }
+
+  .nav-sec-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+
+  .nav-sec-btn:hover, .nav-sec-btn:focus-visible {
+    border-color: var(--accent-suma);
+    color: var(--accent-suma);
+    outline: none;
+  }
+
+  /* ── Responsive móvil ── */
+  @media (max-width: 600px) {
+    body { padding: 1rem 0.75rem 3rem; }
+    h1 { font-size: 19px; }
+    .label { font-size: 10px; }
+    .subtitle { font-size: 12px; }
+    .global-controls { flex-direction: column; align-items: stretch; }
+    .btn-global { min-height: 44px; justify-content: center; font-size: 13px; }
+    .speed-control { min-height: 44px; justify-content: center; }
+    .speed-control input[type=range] { width: 110px; height: 6px; }
+    .speed-control input[type=range]::-webkit-slider-thumb { width: 22px; height: 22px; }
+    .speed-control label { font-size: 12px; }
+    .speed-val { font-size: 12px; }
+    .card-header { padding: 0.85rem 1rem; gap: 10px; }
+    .card-body { padding: 0 1rem 1rem; }
+    .enunciado { font-size: 14px; }
+    .opcion { padding: 10px 12px; font-size: 14px; min-height: 44px; align-items: center; }
+    .opcion-num { min-width: 24px; height: 24px; font-size: 12px; }
+    .player { flex-direction: column; align-items: stretch; gap: 8px; }
+    .btn-play { min-height: 44px; justify-content: center; font-size: 13px; }
+    .progress-bar { min-width: unset; width: 100%; height: 6px; }
+    .status-text { text-align: center; font-size: 11px; }
+    .respuesta-btn { min-height: 40px; font-size: 12px; padding: 8px 14px; }
+    .respuesta-box { font-size: 13px; }
+    .nota-docente { font-size: 12px; }
+    .seccion-label { font-size: 10px; }
+    .tipo-tag { font-size: 10px; }
+    .nav-sec-btn { font-size: 11px; padding: 8px 10px; min-height: 36px; }
+    footer { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#contenido" class="skip-link">Saltar al contenido</a>
+
+<div class="page" id="contenido" role="main">
+
+  <header>
+    <div class="label">UdeA Posible · Sesión 2 · Discapacidad Visual</div>
+    <h1>Ábaco Cerrado (Cranmer)<br>Las 4 Operaciones Aritméticas</h1>
+    <div class="subtitle">
+      Guía paso a paso con audio · Tutoriales + 12 ejercicios + 3 problemas tipo UdeA<br>
+      Usa esta página en clase y para practicar en casa
+    </div>
+  </header>
+
+  <nav class="nav-secciones" aria-label="Navegación por secciones">
+    <a href="#sec-intro" class="nav-sec-btn">Repaso ábaco</a>
+    <a href="#sec-suma" class="nav-sec-btn">Suma</a>
+    <a href="#sec-resta" class="nav-sec-btn">Resta</a>
+    <a href="#sec-mult" class="nav-sec-btn">Multiplicación</a>
+    <a href="#sec-div" class="nav-sec-btn">División</a>
+    <a href="#sec-app" class="nav-sec-btn">Problemas UdeA</a>
+  </nav>
+
+  <div class="global-controls">
+    <button class="btn-global" onclick="stopAll()" aria-label="Detener toda la reproducción de audio">
+      <svg width="13" height="13" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><rect x="1" y="1" width="8" height="8" rx="1"/></svg>
+      Detener todo
+    </button>
+    <div class="speed-control" role="group" aria-label="Control de velocidad de voz">
+      <label for="speedSlider">Velocidad</label>
+      <input type="range" id="speedSlider" min="0.6" max="1.2" step="0.05" value="0.82"
+        aria-valuemin="0.6" aria-valuemax="1.2" aria-valuenow="0.82"
+        oninput="updateSpeed(this.value)">
+      <span class="speed-val" id="speedVal" aria-live="polite">0.82×</span>
+    </div>
+  </div>
+
+  <div id="cards" role="region" aria-label="Contenido de la sesión"></div>
+
+  <footer>
+    UdeA Posible · Sesión 2 · 24 de marzo de 2026<br>
+    Autor: Daniel Andrés Quiroz-Vallejo<br>
+    Abre en Chrome · Web Speech API · Sin conexión requerida
+  </footer>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// DATOS
+// ═══════════════════════════════════════════════════════════════
+
+const contenido = [
+
+  // ── REPASO DEL ÁBACO ──────────────────────────────────────────
+  {
+    seccion: "intro",
+    seccionNombre: "Repaso del ábaco Cranmer",
+    items: [
+      {
+        tipo: "intro",
+        clase: "tutorial",
+        titulo: "Estructura del ábaco cerrado",
+        tag: "REPASO · ESTRUCTURA",
+        enunciado: "El ábaco Cranmer tiene una barra horizontal (riel separador) que divide cada columna en dos zonas: arriba hay 1 cuenta que vale 5, abajo hay 4 cuentas que valen 1 cada una. Las columnas van de derecha a izquierda: unidades, decenas, centenas, millares. Para activar una cuenta, la empujamos hacia la barra central.",
+        tts: `Repasemos la estructura del ábaco cerrado, también llamado ábaco Cranmer.
+
+El ábaco tiene una barra horizontal en el centro, que llamamos riel separador.
+
+Cada columna del ábaco se divide en dos zonas.
+Arriba del riel hay una sola cuenta, que vale cinco.
+Abajo del riel hay cuatro cuentas, cada una vale uno.
+
+Para contar con una cuenta, la empujamos hacia el riel.
+Es decir: las de abajo las subimos, y la de arriba la bajamos.
+
+Las columnas van de derecha a izquierda.
+La primera columna a la derecha son las unidades.
+La segunda, las decenas.
+La tercera, las centenas.
+La cuarta, los millares.
+
+Practiquemos. Representen el número tres mil ochocientos cuarenta y siete en el ábaco.
+
+En la columna de millares: suban tres cuentas de abajo.
+En la columna de centenas: bajen la cuenta de arriba, que vale cinco, y suban tres cuentas de abajo. Cinco más tres, ocho.
+En la columna de decenas: suban cuatro cuentas de abajo.
+En la columna de unidades: bajen la cuenta de arriba, que vale cinco, y suban dos cuentas de abajo. Cinco más dos, siete.
+
+Verifiquen con su compañero tocando su ábaco. El número es tres mil ochocientos cuarenta y siete.`,
+        respuesta: "Recuerden: cuenta de arriba = 5, cuentas de abajo = 1 cada una. Empujar hacia la barra = activar. Verificar siempre con el compañero.",
+
+      }
+    ]
+  },
+
+  // ── SUMA ──────────────────────────────────────────────────────
+  {
+    seccion: "suma",
+    seccionNombre: "Suma en el ábaco",
+    items: [
+      {
+        tipo: "suma",
+        clase: "tutorial",
+        titulo: "Tutorial: Suma con acarreo",
+        tag: "SUMA · TUTORIAL GUIADO",
+        enunciado: "Vamos a sumar 478 + 356 en el ábaco, paso a paso. Resultado esperado: 834.",
+        tts: `Tutorial de suma. Vamos a sumar cuatrocientos setenta y ocho más trescientos cincuenta y seis.
+
+Paso uno: representen el primer número, cuatrocientos setenta y ocho, en el ábaco.
+Centenas: suban cuatro cuentas de abajo.
+Decenas: bajen la cuenta de arriba, que vale cinco, y suban dos de abajo. Cinco más dos, siete.
+Unidades: bajen la cuenta de arriba, que vale cinco, y suban tres de abajo. Cinco más tres, ocho.
+
+Ahora vamos a sumar el segundo número, trescientos cincuenta y seis, empezando por las unidades. Siempre sumamos de derecha a izquierda.
+
+Paso dos: sumemos seis a las unidades. Tenemos ocho. Ocho más seis es catorce.
+Catorce es más de nueve, así que hay acarreo.
+En unidades dejamos cuatro: bajen todas las cuentas de abajo y suban la de arriba... no, hagámoslo así.
+Primero limpien las unidades. Ahora pongan cuatro: suban cuatro cuentas de abajo.
+Y llevamos uno a las decenas. Suban una cuenta más de abajo en decenas. Ahora decenas tiene: cinco de arriba más tres de abajo, ocho.
+
+Paso tres: sumemos cinco a las decenas. Tenemos ocho. Ocho más cinco es trece.
+Hay acarreo. En decenas dejamos tres: limpien decenas y pongan tres cuentas de abajo arriba.
+Llevamos uno a centenas. Suban una cuenta más de abajo en centenas. Ahora centenas tiene cinco.
+
+Paso cuatro: sumemos tres a centenas. Tenemos cinco. Cinco más tres es ocho.
+En centenas pongan ocho: bajen la cuenta de arriba, que vale cinco, y suban tres de abajo.
+
+Resultado: lean el ábaco de izquierda a derecha.
+Centenas: ocho. Decenas: tres. Unidades: cuatro.
+El resultado es ochocientos treinta y cuatro.
+
+Repitan: cuatrocientos setenta y ocho más trescientos cincuenta y seis es igual a ochocientos treinta y cuatro.`,
+        respuesta: "478 + 356 = 834. Clave: cuando la suma en una columna pasa de 9, se deja el dígito de las unidades y se lleva 1 a la siguiente columna a la izquierda.",
+
+      },
+      {
+        tipo: "suma",
+        clase: "ejercicio",
+        titulo: "Ejercicio: 234 + 152",
+        tag: "SUMA · EJERCICIO 1 · SIN ACARREO",
+        enunciado: "Resuelvan en el ábaco: 234 + 152. Este ejercicio NO tiene acarreo.",
+        tts: `Ejercicio de suma número uno. Sin acarreo.
+
+Representen en el ábaco el número doscientos treinta y cuatro.
+Ahora sumen ciento cincuenta y dos. Recuerden: empiecen por las unidades.
+
+Unidades: cuatro más dos.
+Decenas: tres más cinco.
+Centenas: dos más uno.
+
+Tienen dos minutos para resolverlo. Cuando terminen, verifiquen con su compañero.`,
+        respuesta: "234 + 152 = 386. Unidades: 4+2=6. Decenas: 3+5=8. Centenas: 2+1=3. Resultado: 386.",
+
+      },
+      {
+        tipo: "suma",
+        clase: "ejercicio",
+        titulo: "Ejercicio: 478 + 356",
+        tag: "SUMA · EJERCICIO 2 · CON ACARREO",
+        enunciado: "Resuelvan en el ábaco: 478 + 356. Este ejercicio tiene acarreo en unidades y decenas.",
+        tts: `Ejercicio de suma número dos. Con acarreo.
+
+Representen cuatrocientos setenta y ocho en el ábaco.
+Ahora sumen trescientos cincuenta y seis.
+Empiecen por las unidades. Recuerden: si la suma pasa de nueve, dejen el dígito de las unidades y lleven uno a la siguiente columna.
+
+Tienen tres minutos.`,
+        respuesta: "478 + 356 = 834. Unidades: 8+6=14 → dejar 4, llevar 1. Decenas: 7+5+1=13 → dejar 3, llevar 1. Centenas: 4+3+1=8.",
+
+      },
+      {
+        tipo: "suma",
+        clase: "ejercicio",
+        titulo: "Ejercicio: 1.245 + 867",
+        tag: "SUMA · EJERCICIO 3 · NÚMEROS GRANDES",
+        enunciado: "Resuelvan en el ábaco: 1.245 + 867. Usen cuatro columnas y manejen los acarreos.",
+        tts: `Ejercicio de suma número tres. Números más grandes.
+
+Representen mil doscientos cuarenta y cinco en el ábaco. Necesitan cuatro columnas: millares, centenas, decenas y unidades.
+Ahora sumen ochocientos sesenta y siete.
+Empiecen por las unidades como siempre.
+
+Tienen cuatro minutos.`,
+        respuesta: "1.245 + 867 = 2.112. Unidades: 5+7=12 → 2, llevar 1. Decenas: 4+6+1=11 → 1, llevar 1. Centenas: 2+8+1=11 → 1, llevar 1. Millares: 1+0+1=2.",
+
+      }
+    ]
+  },
+
+  // ── RESTA ─────────────────────────────────────────────────────
+  {
+    seccion: "resta",
+    seccionNombre: "Resta en el ábaco",
+    items: [
+      {
+        tipo: "resta",
+        clase: "tutorial",
+        titulo: "Tutorial: Resta con préstamo",
+        tag: "RESTA · TUTORIAL GUIADO",
+        enunciado: "Vamos a restar 803 − 457 en el ábaco, paso a paso. Resultado esperado: 346.",
+        tts: `Tutorial de resta. Vamos a restar ochocientos tres menos cuatrocientos cincuenta y siete.
+
+Paso uno: representen ochocientos tres en el ábaco.
+Centenas: bajen la cuenta de arriba, que vale cinco, y suban tres de abajo. Cinco más tres, ocho.
+Decenas: no pongan nada, es cero.
+Unidades: suban tres cuentas de abajo.
+
+Ahora vamos a restar cuatrocientos cincuenta y siete. Empezamos por las unidades, de derecha a izquierda.
+
+Paso dos: restemos siete de las unidades. Tenemos tres. Tres menos siete no se puede.
+Necesitamos pedir prestado. Vamos a decenas, pero decenas tiene cero.
+Entonces vamos a centenas, que tiene ocho. Le pedimos uno a centenas.
+Centenas pasa de ocho a siete. Pongan siete en centenas.
+Ese uno que pedimos vale diez decenas. Decenas pasa de cero a diez.
+Pero necesitamos dar una de esas decenas a unidades.
+Decenas pasa de diez a nueve. Pongan nueve en decenas.
+Y unidades recibe diez: tres más diez es trece.
+
+Ahora sí: trece menos siete es seis. Pongan seis en unidades.
+
+Paso tres: restemos cinco de las decenas. Tenemos nueve. Nueve menos cinco es cuatro.
+Pongan cuatro en decenas.
+
+Paso cuatro: restemos cuatro de las centenas. Tenemos siete. Siete menos cuatro es tres.
+Pongan tres en centenas.
+
+Resultado: lean el ábaco.
+Centenas: tres. Decenas: cuatro. Unidades: seis.
+El resultado es trescientos cuarenta y seis.
+
+Repitan: ochocientos tres menos cuatrocientos cincuenta y siete es igual a trescientos cuarenta y seis.`,
+        respuesta: "803 − 457 = 346. Clave del préstamo: cuando no se puede restar en una columna, se pide 1 a la columna de la izquierda (ese 1 vale 10 en la columna actual). Si la columna vecina tiene 0, se sigue pidiendo a la siguiente.",
+
+      },
+      {
+        tipo: "resta",
+        clase: "ejercicio",
+        titulo: "Ejercicio: 567 − 234",
+        tag: "RESTA · EJERCICIO 1 · SIN PRÉSTAMO",
+        enunciado: "Resuelvan en el ábaco: 567 − 234. Este ejercicio NO tiene préstamo.",
+        tts: `Ejercicio de resta número uno. Sin préstamo.
+
+Representen quinientos sesenta y siete en el ábaco.
+Ahora resten doscientos treinta y cuatro. Empiecen por las unidades.
+
+Unidades: siete menos cuatro.
+Decenas: seis menos tres.
+Centenas: cinco menos dos.
+
+Tienen dos minutos.`,
+        respuesta: "567 − 234 = 333. Unidades: 7−4=3. Decenas: 6−3=3. Centenas: 5−2=3.",
+
+      },
+      {
+        tipo: "resta",
+        clase: "ejercicio",
+        titulo: "Ejercicio: 803 − 457",
+        tag: "RESTA · EJERCICIO 2 · CON PRÉSTAMO",
+        enunciado: "Resuelvan en el ábaco: 803 − 457. Hay préstamo en unidades y decenas.",
+        tts: `Ejercicio de resta número dos. Con préstamo.
+
+Representen ochocientos tres en el ábaco.
+Resten cuatrocientos cincuenta y siete.
+Empiecen por las unidades. Recuerden: si no pueden restar, pidan prestado a la columna de la izquierda.
+
+Tienen tres minutos.`,
+        respuesta: "803 − 457 = 346. Unidades: 3−7 no se puede → préstamo en cadena desde centenas (8→7, decenas 0→9, unidades 3→13). 13−7=6. Decenas: 9−5=4. Centenas: 7−4=3.",
+
+      },
+      {
+        tipo: "resta",
+        clase: "ejercicio",
+        titulo: "Ejercicio: 2.010 − 763",
+        tag: "RESTA · EJERCICIO 3 · NÚMEROS GRANDES",
+        enunciado: "Resuelvan en el ábaco: 2.010 − 763. Usen cuatro columnas.",
+        tts: `Ejercicio de resta número tres. Números más grandes.
+
+Representen dos mil diez en el ábaco. Millares: dos. Centenas: cero. Decenas: uno. Unidades: cero.
+Ahora resten setecientos sesenta y tres. Empiecen por las unidades.
+
+Atención: hay varias columnas con cero, así que van a necesitar préstamos.
+
+Tienen cuatro minutos.`,
+        respuesta: "2.010 − 763 = 1.247. Paso a paso: Unidades: 0−3 no se puede → pedir a decenas (1→0), unidades queda 10. 10−3=7. Decenas: 0−6 no se puede → pedir a centenas, pero centenas es 0 → pedir a millares (2→1), centenas queda 10, centenas presta a decenas (10→9), decenas queda 10. 10−6=4. Centenas: 9−7=2. Millares: 1−0=1. Resultado: 1.247.",
+
+      }
+    ]
+  },
+
+  // ── MULTIPLICACIÓN ────────────────────────────────────────────
+  {
+    seccion: "mult",
+    seccionNombre: "Multiplicación en el ábaco",
+    items: [
+      {
+        tipo: "mult",
+        clase: "tutorial",
+        titulo: "Tutorial: Multiplicación paso a paso",
+        tag: "MULTIPLICACIÓN · TUTORIAL GUIADO",
+        enunciado: "Vamos a multiplicar 126 × 4 en el ábaco. Resultado esperado: 504.",
+        tts: `Tutorial de multiplicación. Vamos a multiplicar ciento veintiséis por cuatro.
+
+El método es: multiplicamos cada dígito del primer número por el cuatro, empezando por las unidades, y vamos colocando los resultados en el ábaco.
+
+Paso uno: limpien el ábaco. Vamos a usar las columnas de la derecha para el resultado.
+
+Paso dos: empecemos por las unidades del ciento veintiséis. El dígito es seis.
+Seis por cuatro es veinticuatro.
+Pongan cuatro en la columna de unidades.
+Lleven dos a la columna de decenas. Pongan dos en decenas.
+
+Paso tres: ahora el dígito de las decenas. El dígito es dos.
+Dos por cuatro es ocho.
+Sumemos ocho a las decenas. Teníamos dos, más ocho es diez.
+Diez en decenas: dejamos cero en decenas y llevamos uno a centenas.
+Pongan cero en decenas y uno en centenas.
+
+Paso cuatro: ahora el dígito de las centenas. El dígito es uno.
+Uno por cuatro es cuatro.
+Sumemos cuatro a centenas. Teníamos uno, más cuatro es cinco.
+Pongan cinco en centenas.
+
+Resultado: lean el ábaco.
+Centenas: cinco. Decenas: cero. Unidades: cuatro.
+El resultado es quinientos cuatro.
+
+Repitan: ciento veintiséis por cuatro es igual a quinientos cuatro.`,
+        respuesta: "126 × 4 = 504. Método: multiplicar dígito a dígito de derecha a izquierda. 6×4=24 (4 en unidades, llevar 2). 2×4=8+2=10 (0 en decenas, llevar 1). 1×4=4+1=5 en centenas.",
+
+      },
+      {
+        tipo: "mult",
+        clase: "ejercicio",
+        titulo: "Ejercicio: 45 × 3",
+        tag: "MULTIPLICACIÓN · EJERCICIO 1 · BÁSICO",
+        enunciado: "Resuelvan en el ábaco: 45 × 3.",
+        tts: `Ejercicio de multiplicación número uno.
+
+Multipliquen cuarenta y cinco por tres en el ábaco.
+Recuerden: empiecen por las unidades.
+Cinco por tres... y luego cuatro por tres.
+
+Tienen dos minutos.`,
+        respuesta: "45 × 3 = 135. Unidades: 5×3=15 (5 en unidades, llevar 1). Decenas: 4×3=12+1=13 (3 en decenas, 1 en centenas). Resultado: 135.",
+
+      },
+      {
+        tipo: "mult",
+        clase: "ejercicio",
+        titulo: "Ejercicio: 126 × 4",
+        tag: "MULTIPLICACIÓN · EJERCICIO 2 · TRES DÍGITOS",
+        enunciado: "Resuelvan en el ábaco: 126 × 4. Es el mismo del tutorial, pero ahora háganlo solos.",
+        tts: `Ejercicio de multiplicación número dos.
+
+Multipliquen ciento veintiséis por cuatro.
+Es el mismo ejemplo del tutorial. Ahora háganlo solos sin ayuda.
+
+Tienen tres minutos.`,
+        respuesta: "126 × 4 = 504.",
+
+      },
+      {
+        tipo: "mult",
+        clase: "ejercicio",
+        titulo: "Ejercicio: 208 × 7",
+        tag: "MULTIPLICACIÓN · EJERCICIO 3 · CON CERO INTERMEDIO",
+        enunciado: "Resuelvan en el ábaco: 208 × 7. Atención: el dígito de las decenas es cero.",
+        tts: `Ejercicio de multiplicación número tres.
+
+Multipliquen doscientos ocho por siete.
+Atención: el número doscientos ocho tiene un cero en las decenas. Cero por siete es cero, pero no olviden sumar el acarreo si lo hay.
+
+Tienen tres minutos.`,
+        respuesta: "208 × 7 = 1.456. Unidades: 8×7=56 (6 en unidades, llevar 5). Decenas: 0×7=0+5=5 (5 en decenas). Centenas: 2×7=14 (4 en centenas, 1 en millares). Resultado: 1.456.",
+
+      }
+    ]
+  },
+
+  // ── DIVISIÓN ──────────────────────────────────────────────────
+  {
+    seccion: "div",
+    seccionNombre: "División en el ábaco",
+    items: [
+      {
+        tipo: "div",
+        clase: "tutorial",
+        titulo: "Tutorial: División paso a paso",
+        tag: "DIVISIÓN · TUTORIAL GUIADO",
+        enunciado: "Vamos a dividir 175 ÷ 5 en el ábaco. Resultado esperado: 35.",
+        tts: `Tutorial de división. Vamos a dividir ciento setenta y cinco entre cinco.
+
+Para dividir en el ábaco, usamos un lado para el dividendo y otro para ir poniendo el cociente, que es el resultado.
+
+Usemos las columnas de la izquierda para el cociente y las de la derecha para el dividendo.
+
+Paso uno: representen ciento setenta y cinco en las columnas de la derecha.
+Centenas: uno. Decenas: siete. Unidades: cinco.
+
+Paso dos: empecemos por la izquierda, por las centenas.
+¿Cuántas veces cabe el cinco en uno? Cero veces. Uno es menor que cinco.
+Entonces juntamos las centenas con las decenas: uno y siete forman diecisiete.
+
+Paso tres: ¿Cuántas veces cabe cinco en diecisiete?
+Cinco por tres es quince. Cinco por cuatro es veinte, que es demasiado.
+Entonces cabe tres veces. Pongan tres en la columna de decenas del cociente, a la izquierda.
+El residuo parcial es diecisiete menos quince, que es dos.
+Limpien las centenas y decenas del dividendo. Pongan dos en decenas.
+
+Paso cuatro: bajamos las unidades. Dos y cinco forman veinticinco.
+¿Cuántas veces cabe cinco en veinticinco? Exactamente cinco veces.
+Pongan cinco en la columna de unidades del cociente.
+El residuo es cero. Limpien el dividendo.
+
+Resultado: lean el cociente.
+Decenas: tres. Unidades: cinco.
+El resultado es treinta y cinco, sin residuo.
+
+Repitan: ciento setenta y cinco dividido entre cinco es igual a treinta y cinco.`,
+        respuesta: "175 ÷ 5 = 35 (residuo 0). Método: dividir de izquierda a derecha. 1÷5=0 (juntar con siguiente). 17÷5=3 (residuo 2). 25÷5=5 (residuo 0). Cociente: 35.",
+
+      },
+      {
+        tipo: "div",
+        clase: "ejercicio",
+        titulo: "Ejercicio: 96 ÷ 4",
+        tag: "DIVISIÓN · EJERCICIO 1 · BÁSICO",
+        enunciado: "Resuelvan en el ábaco: 96 ÷ 4.",
+        tts: `Ejercicio de división número uno.
+
+Dividan noventa y seis entre cuatro.
+Representen noventa y seis en el ábaco.
+Empiecen por la izquierda: ¿cuántas veces cabe cuatro en nueve?
+Luego continúen con lo que queda.
+
+Tienen tres minutos.`,
+        respuesta: "96 ÷ 4 = 24 (residuo 0). 9÷4=2 (residuo 1). 16÷4=4 (residuo 0). Cociente: 24.",
+
+      },
+      {
+        tipo: "div",
+        clase: "ejercicio",
+        titulo: "Ejercicio: 175 ÷ 5",
+        tag: "DIVISIÓN · EJERCICIO 2 · TUTORIAL REPETIDO",
+        enunciado: "Resuelvan en el ábaco: 175 ÷ 5. Es el mismo del tutorial, háganlo solos.",
+        tts: `Ejercicio de división número dos.
+
+Dividan ciento setenta y cinco entre cinco.
+Es el mismo ejemplo del tutorial. Háganlo solos esta vez.
+
+Tienen tres minutos.`,
+        respuesta: "175 ÷ 5 = 35.",
+
+      },
+      {
+        tipo: "div",
+        clase: "ejercicio",
+        titulo: "Ejercicio: 259 ÷ 6",
+        tag: "DIVISIÓN · EJERCICIO 3 · CON RESIDUO",
+        enunciado: "Resuelvan en el ábaco: 259 ÷ 6. Atención: esta división tiene residuo.",
+        tts: `Ejercicio de división número tres. Con residuo.
+
+Dividan doscientos cincuenta y nueve entre seis.
+Atención: esta división no es exacta. Va a sobrar algo. A eso le llamamos residuo.
+Encuentren el cociente y el residuo.
+
+Tienen cuatro minutos.`,
+        respuesta: "259 ÷ 6 = 43 con residuo 1. 25÷6=4 (residuo 1). 19÷6=3 (residuo 1). Cociente: 43, residuo: 1. Verificación: 43×6=258, y 258+1=259.",
+
+      }
+    ]
+  },
+
+  // ── PROBLEMAS APLICADOS ───────────────────────────────────────
+  {
+    seccion: "app",
+    seccionNombre: "Problemas tipo examen UdeA",
+    items: [
+      {
+        tipo: "app",
+        clase: "problema",
+        titulo: "Compras con suma y resta",
+        tag: "PROBLEMA 1 · SUMA Y RESTA",
+        enunciado: "Un estudiante tiene 45.000 pesos. Compra un libro de 18.500 pesos y un cuaderno de 7.200 pesos. ¿Cuánto dinero le queda?",
+        opciones: ["19.300 pesos", "20.300 pesos", "25.700 pesos", "26.500 pesos"],
+        correcta: "A",
+        tts: `Problema número uno. Suma y resta.
+
+Un estudiante tiene cuarenta y cinco mil pesos.
+Compra un libro de dieciocho mil quinientos pesos... y un cuaderno de siete mil doscientos pesos.
+¿Cuánto dinero le queda?
+
+Pista: pueden sumar primero lo que gastó y luego restar del total. Usen el ábaco.
+
+Las opciones son:
+A: diecinueve mil trescientos pesos.
+B: veinte mil trescientos pesos.
+C: veinticinco mil setecientos pesos.
+D: veintiséis mil quinientos pesos.
+
+Tienen cinco minutos.`,
+        explicacion: "Primero sumamos lo gastado: 18.500 + 7.200 = 25.700. Luego restamos: 45.000 − 25.700 = 19.300 pesos. Opción A.",
+
+      },
+      {
+        tipo: "app",
+        clase: "problema",
+        titulo: "Libros en estantes",
+        tag: "PROBLEMA 2 · MULTIPLICACIÓN",
+        enunciado: "En una biblioteca hay 8 estantes. Cada estante tiene 35 libros. ¿Cuántos libros hay en total en la biblioteca?",
+        opciones: ["240 libros", "260 libros", "280 libros", "315 libros"],
+        correcta: "C",
+        tts: `Problema número dos. Multiplicación.
+
+En una biblioteca hay ocho estantes.
+Cada estante tiene treinta y cinco libros.
+¿Cuántos libros hay en total en la biblioteca?
+
+Multipliquen en el ábaco: treinta y cinco por ocho.
+
+Las opciones son:
+A: doscientos cuarenta libros.
+B: doscientos sesenta libros.
+C: doscientos ochenta libros.
+D: trescientos quince libros.
+
+Tienen cuatro minutos.`,
+        explicacion: "35 × 8: unidades 5×8=40 (0, llevar 4). Decenas: 3×8=24+4=28. Resultado: 280 libros. Opción C.",
+
+      },
+      {
+        tipo: "app",
+        clase: "problema",
+        titulo: "Repartir lápices",
+        tag: "PROBLEMA 3 · DIVISIÓN",
+        enunciado: "Se reparten 156 lápices entre 12 estudiantes por igual. ¿Cuántos lápices recibe cada estudiante?",
+        opciones: ["11 lápices", "12 lápices", "13 lápices", "14 lápices"],
+        correcta: "C",
+        tts: `Problema número tres. División.
+
+Se reparten ciento cincuenta y seis lápices... entre doce estudiantes... por igual.
+¿Cuántos lápices recibe cada estudiante?
+
+Dividan en el ábaco: ciento cincuenta y seis entre doce.
+Pista: si dividir entre doce es difícil, piensen que doce por diez es ciento veinte, y doce por trece es...
+
+Las opciones son:
+A: once lápices.
+B: doce lápices.
+C: trece lápices.
+D: catorce lápices.
+
+Tienen cinco minutos.`,
+        explicacion: "156 ÷ 12 = 13. Verificación: 12 × 13 = 156. También se puede pensar: 12×10=120, faltan 36. 12×3=36. Entonces 10+3=13. Opción C.",
+
+      }
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════════════════════════
+// MOTOR
+// ═══════════════════════════════════════════════════════════════
+
+let currentPlaying = null;
+let currentInterval = null;
+let cardIndex = 0;
+
+function getSpeed() {
+  return parseFloat(document.getElementById('speedSlider').value);
+}
+
+function updateSpeed(val) {
+  const v = parseFloat(val).toFixed(2);
+  document.getElementById('speedVal').textContent = v + '×';
+  document.getElementById('speedSlider').setAttribute('aria-valuenow', v);
+}
+
+function buildAll() {
+  const container = document.getElementById('cards');
+  cardIndex = 0;
+
+  contenido.forEach(sec => {
+    // Encabezado de sección
+    container.innerHTML += `
+      <div class="seccion" data-tipo="${sec.seccion}" id="sec-${sec.seccion}" role="presentation">
+        <div class="seccion-linea"></div>
+        <h2 class="seccion-label">${sec.seccionNombre}</h2>
+        <div class="seccion-linea"></div>
+      </div>`;
+
+    sec.items.forEach(item => {
+      const i = cardIndex++;
+      const tipo = item.tipo;
+      const esProblema = item.opciones && item.opciones.length > 0;
+      const tipoTag = item.clase === 'tutorial'
+        ? '<span class="tipo-tag tutorial">TUTORIAL</span>'
+        : item.clase === 'ejercicio'
+          ? '<span class="tipo-tag ejercicio">EJERCICIO</span>'
+          : '';
+
+      let opcionesHTML = '';
+      if (esProblema) {
+        opcionesHTML = '<div class="opciones">' + item.opciones.map((o, j) => {
+          const letra = ['A','B','C','D'][j];
+          return `<div class="opcion"><span class="opcion-letra">${letra}</span><span>${o}</span></div>`;
+        }).join('') + '</div>';
+      }
+
+      const respLabel = esProblema ? 'Ver respuesta y análisis' : 'Ver respuesta';
+
+      let respContenido = '';
+      if (esProblema) {
+        respContenido = `<span class="correcta c-${tipo}">Respuesta correcta: ${item.correcta}</span><br><br>${item.explicacion}`;
+      } else {
+        respContenido = `<span class="correcta c-${tipo}">Respuesta:</span><br><br>${item.respuesta}`;
+      }
+
+      container.innerHTML += `
+      <div class="card" id="card-${i}" role="region" aria-label="${item.titulo}">
+        <div class="card-header" tabindex="0" role="button"
+             aria-expanded="false" aria-controls="body-${i}"
+             onclick="toggleCard(${i})"
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCard(${i})}">
+          <span class="num-badge badge-${tipo} ${item.clase === 'tutorial' ? 'badge-tutorial' : ''}">${item.clase === 'tutorial' ? '▶' : String(i+1).padStart(2,'0')}</span>
+          <div class="card-meta">
+            <h3 class="card-title-heading">${tipoTag}${item.titulo}</h3>
+            <div class="card-tag">${item.tag}</div>
+          </div>
+          <svg class="expand-arrow" width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="2,4 6,8 10,4"/></svg>
+        </div>
+        <div class="card-body" id="body-${i}">
+          <div class="enunciado">${item.enunciado}</div>
+          ${opcionesHTML}
+          <div class="player">
+            <button class="btn-play btn-${tipo}" id="btn-${i}" aria-label="Reproducir audio de ${item.titulo}"
+                    onclick="togglePlay(${i}, '${tipo}')">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><polygon points="1,0 9,5 1,10"/></svg>
+              Reproducir
+            </button>
+            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Progreso de reproducción" id="pbar-${i}">
+              <div class="progress-fill pf-${tipo}" id="prog-${i}"></div>
+            </div>
+            <span class="status-text" id="status-${i}" aria-live="polite">listo</span>
+          </div>
+          <button class="respuesta-btn" aria-expanded="false" aria-controls="resp-${i}"
+                  onclick="toggleRespuesta(${i}, this)">${respLabel}</button>
+          <div class="respuesta-box rb-${tipo}" id="resp-${i}" role="region" aria-label="Respuesta">
+            ${respContenido}
+          </div>
+        </div>
+      </div>`;
+    });
+  });
+}
+
+// Almacenar datos planos para acceso por índice
+let itemsFlat = [];
+function buildFlat() {
+  contenido.forEach(sec => {
+    sec.items.forEach(item => {
+      itemsFlat.push(item);
+    });
+  });
+}
+
+function toggleCard(i) {
+  const card = document.getElementById(`card-${i}`);
+  const header = card.querySelector('.card-header');
+  const isOpen = card.classList.toggle('open');
+  header.setAttribute('aria-expanded', isOpen);
+}
+
+function openCard(i) {
+  const card = document.getElementById(`card-${i}`);
+  const header = card.querySelector('.card-header');
+  card.classList.add('open');
+  header.setAttribute('aria-expanded', 'true');
+}
+
+function toggleRespuesta(i, btn) {
+  const box = document.getElementById(`resp-${i}`);
+  const showing = box.style.display === 'block';
+  box.style.display = showing ? 'none' : 'block';
+  btn.setAttribute('aria-expanded', !showing);
+  const item = itemsFlat[i];
+  const esProblema = item.opciones && item.opciones.length > 0;
+  btn.textContent = showing
+    ? (esProblema ? 'Ver respuesta y análisis' : 'Ver respuesta')
+    : 'Ocultar respuesta';
+}
+
+function setBtnPlaying(i, tipo, playing) {
+  const btn = document.getElementById(`btn-${i}`);
+  const card = document.getElementById(`card-${i}`);
+  if (playing) {
+    btn.classList.add('playing');
+    btn.innerHTML = `<span class="playing-dot"></span>Detener`;
+    btn.setAttribute('aria-label', `Detener audio`);
+    card.classList.add(`playing-${tipo}`);
+  } else {
+    btn.classList.remove('playing');
+    btn.innerHTML = `<svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><polygon points="1,0 9,5 1,10"/></svg> Reproducir`;
+    btn.setAttribute('aria-label', `Reproducir audio`);
+    card.classList.remove(`playing-${tipo}`);
+  }
+}
+
+function stopAll() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (currentInterval) clearInterval(currentInterval);
+  itemsFlat.forEach((item, i) => {
+    setBtnPlaying(i, item.tipo, false);
+    document.getElementById(`prog-${i}`).style.width = '0%';
+    const pb = document.getElementById(`pbar-${i}`);
+    if (pb) pb.setAttribute('aria-valuenow', '0');
+    document.getElementById(`status-${i}`).textContent = 'listo';
+  });
+  currentPlaying = null;
+  currentInterval = null;
+}
+
+function togglePlay(i, tipo) {
+  if (currentPlaying === i) { stopAll(); return; }
+  stopAll();
+  playItem(i, tipo);
+}
+
+function playItem(i, tipo, onEnd) {
+  if (!window.speechSynthesis) {
+    alert('Usa Chrome para la síntesis de voz.');
+    return;
+  }
+
+  const item = itemsFlat[i];
+  const utter = new SpeechSynthesisUtterance(item.tts);
+  utter.lang = 'es-CO';
+  utter.rate = getSpeed();
+  utter.pitch = 1.0;
+  utter.volume = 1.0;
+
+  const voices = window.speechSynthesis.getVoices();
+  const esVoice = voices.find(v => v.lang === 'es-CO')
+    || voices.find(v => v.lang.startsWith('es'));
+  if (esVoice) utter.voice = esVoice;
+
+  currentPlaying = i;
+  openCard(i);
+  setBtnPlaying(i, tipo, true);
+  document.getElementById(`status-${i}`).textContent = 'reproduciendo...';
+
+  const words = item.tts.split(' ').length;
+  const secs = (words / (2.5 * getSpeed())) * 1.1;
+  let elapsed = 0;
+  currentInterval = setInterval(() => {
+    elapsed += 0.3;
+    const pct = Math.min((elapsed/secs)*100, 95);
+    document.getElementById(`prog-${i}`).style.width = pct + '%';
+    const pbar = document.getElementById(`pbar-${i}`);
+    if (pbar) pbar.setAttribute('aria-valuenow', Math.round(pct));
+  }, 300);
+
+  utter.onend = () => {
+    clearInterval(currentInterval);
+    currentInterval = null;
+    setBtnPlaying(i, tipo, false);
+    document.getElementById(`prog-${i}`).style.width = '100%';
+    document.getElementById(`status-${i}`).textContent = 'listo';
+    currentPlaying = null;
+    setTimeout(() => { document.getElementById(`prog-${i}`).style.width = '0%'; }, 2000);
+    if (onEnd) onEnd();
+  };
+
+  utter.onerror = () => {
+    clearInterval(currentInterval);
+    currentInterval = null;
+    setBtnPlaying(i, tipo, false);
+    document.getElementById(`status-${i}`).textContent = 'error';
+    currentPlaying = null;
+    if (onEnd) onEnd();
+  };
+
+  window.speechSynthesis.speak(utter);
+}
+
+// Keyboard: Escape to stop
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') stopAll();
+});
+
+if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => {};
+buildFlat();
+buildAll();
+</script>
+</body>
+</html>

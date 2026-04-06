@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 3 — Repaso Ábaco Cerrado · Suma y Resta</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #222222;
+    --border: #2e2e2e;
+    --accent-repaso: #a0c8f0;
+    --accent-suma: #c8f060;
+    --accent-resta: #f0a060;
+    --accent-practica: #f06090;
+    --text: #e8e8e0;
+    --text2: #888880;
+    --text3: #555550;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .page { max-width: 720px; margin: 0 auto; }
+
+  header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-suma);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+  }
+
+  .subtitle { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  /* Secciones */
+  .seccion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 2.5rem 0 1rem;
+  }
+
+  .seccion-linea { flex: 1; height: 1px; background: var(--border); }
+
+  .seccion-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text3);
+    white-space: nowrap;
+  }
+
+  h2.seccion-label { margin: 0; }
+
+  h3.card-title-heading {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin: 0 0 2px 0;
+  }
+
+  .seccion[data-tipo="repaso"] .seccion-label { color: var(--accent-repaso); border-color: #1a2a3a; background: #0a1520; }
+  .seccion[data-tipo="suma"] .seccion-label { color: var(--accent-suma); border-color: #1e2a0e; background: #0f1508; }
+  .seccion[data-tipo="resta"] .seccion-label { color: var(--accent-resta); border-color: #3a2a10; background: #1a1208; }
+  .seccion[data-tipo="practica"] .seccion-label { color: var(--accent-practica); border-color: #3a0a1e; background: #200815; }
+
+  /* Controles globales */
+  .global-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn-global {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-family: 'Sora', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-global:hover { border-color: var(--accent-suma); color: var(--accent-suma); }
+  .btn-global:focus-visible { outline: 2px solid var(--accent-suma); outline-offset: 2px; }
+
+  .speed-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 8px;
+  }
+
+  .speed-control label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  .speed-control input[type=range] {
+    -webkit-appearance: none;
+    width: 90px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+  }
+
+  .speed-control input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--accent-suma);
+    cursor: pointer;
+  }
+
+  .speed-control input[type=range]:focus-visible {
+    outline: 2px solid var(--accent-suma);
+    outline-offset: 2px;
+  }
+
+  .speed-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-suma);
+    min-width: 32px;
+  }
+
+  /* Tarjetas */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1rem 1.25rem;
+  }
+
+  .card-header:focus-visible {
+    outline: 2px solid var(--accent-suma);
+    outline-offset: -2px;
+  }
+
+  .num-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    width: 28px; height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .badge-repaso { background: #0a1520; color: var(--accent-repaso); }
+  .badge-suma { background: #0f1508; color: var(--accent-suma); }
+  .badge-resta { background: #1a1208; color: var(--accent-resta); }
+  .badge-practica { background: #200815; color: var(--accent-practica); }
+  .badge-tutorial { font-size: 13px; }
+
+  .card-meta { flex: 1; }
+
+  .card-title, .card-title-heading {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .card-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.04em;
+  }
+
+  .tipo-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .tipo-tag.tutorial { background: #1a2a1a; color: #80c080; }
+  .tipo-tag.ejercicio { background: #2a2a1a; color: #c0c080; }
+
+  .expand-arrow { display: none; }
+
+  .card-body {
+    display: block;
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .enunciado {
+    font-size: 14px;
+    line-height: 1.9;
+    color: #c8c8c0;
+    padding: 1rem 0 0.75rem;
+  }
+
+  /* Player */
+  .player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn-play {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'Sora', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-play:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+  .btn-repaso { background: var(--accent-repaso); color: #0f0f0f; }
+  .btn-repaso:hover { filter: brightness(1.15); }
+  .btn-suma { background: var(--accent-suma); color: #0f0f0f; }
+  .btn-suma:hover { filter: brightness(1.15); }
+  .btn-resta { background: var(--accent-resta); color: #0f0f0f; }
+  .btn-resta:hover { filter: brightness(1.15); }
+  .btn-practica { background: var(--accent-practica); color: #fff; }
+  .btn-practica:hover { filter: brightness(1.15); }
+
+  .btn-play.playing { background: #f06060 !important; color: #fff !important; }
+
+  .progress-bar {
+    flex: 1;
+    min-width: 100px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s linear;
+    border-radius: 2px;
+  }
+
+  .pf-repaso { background: var(--accent-repaso); }
+  .pf-suma { background: var(--accent-suma); }
+  .pf-resta { background: var(--accent-resta); }
+  .pf-practica { background: var(--accent-practica); }
+
+  .status-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    min-width: 60px;
+    text-align: right;
+  }
+
+  .card.playing-repaso { border-color: var(--accent-repaso); }
+  .card.playing-suma { border-color: var(--accent-suma); }
+  .card.playing-resta { border-color: var(--accent-resta); }
+  .card.playing-practica { border-color: var(--accent-practica); }
+
+  /* Respuesta */
+  .respuesta-btn {
+    margin-top: 1rem;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text3);
+    font-family: 'Sora', sans-serif;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: block;
+  }
+
+  .respuesta-btn:hover { color: var(--text2); border-color: var(--text3); }
+  .respuesta-btn:focus-visible { outline: 2px solid var(--accent-suma); outline-offset: 2px; }
+
+  .respuesta-box {
+    display: none;
+    margin-top: 0.75rem;
+    padding: 0.9rem 1rem;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--text2);
+  }
+
+  .rb-repaso { background: #04101a; border: 1px solid #0a2030; }
+  .rb-suma { background: #0a140a; border: 1px solid #1e3010; }
+  .rb-resta { background: #120d04; border: 1px solid #2e1e08; }
+  .rb-practica { background: #1a040d; border: 1px solid #30081a; }
+
+  .correcta { font-weight: 500; }
+  .c-repaso { color: var(--accent-repaso); }
+  .c-suma { color: var(--accent-suma); }
+  .c-resta { color: var(--accent-resta); }
+  .c-practica { color: var(--accent-practica); }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text3);
+    text-align: center;
+    line-height: 1.8;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .playing-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    animation: pulse 1s ease-in-out infinite;
+    margin-right: 4px;
+  }
+
+  /* Skip link */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent-suma);
+    color: #0f0f0f;
+    padding: 8px 16px;
+    z-index: 100;
+    font-size: 13px;
+    border-radius: 0 0 8px 0;
+    transition: top 0.2s;
+  }
+
+  .skip-link:focus { top: 0; }
+
+  /* Navegación de secciones */
+  .nav-secciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 2rem;
+  }
+
+  .nav-sec-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+
+  .nav-sec-btn:hover, .nav-sec-btn:focus-visible {
+    border-color: var(--accent-suma);
+    color: var(--accent-suma);
+    outline: none;
+  }
+
+  /* ── Responsive móvil ── */
+  @media (max-width: 600px) {
+    body { padding: 1rem 0.75rem 3rem; }
+    h1 { font-size: 19px; }
+    .label { font-size: 10px; }
+    .subtitle { font-size: 12px; }
+    .global-controls { flex-direction: column; align-items: stretch; }
+    .btn-global { min-height: 44px; justify-content: center; font-size: 13px; }
+    .speed-control { min-height: 44px; justify-content: center; }
+    .speed-control input[type=range] { width: 110px; height: 6px; }
+    .speed-control input[type=range]::-webkit-slider-thumb { width: 22px; height: 22px; }
+    .speed-control label { font-size: 12px; }
+    .speed-val { font-size: 12px; }
+    .card-header { padding: 0.85rem 1rem; gap: 10px; }
+    .card-body { padding: 0 1rem 1rem; }
+    .enunciado { font-size: 14px; }
+    .player { flex-direction: column; align-items: stretch; gap: 8px; }
+    .btn-play { min-height: 44px; justify-content: center; font-size: 13px; }
+    .progress-bar { min-width: unset; width: 100%; height: 6px; }
+    .status-text { text-align: center; font-size: 11px; }
+    .seccion-label { font-size: 10px; }
+    .tipo-tag { font-size: 10px; }
+    .nav-sec-btn { font-size: 11px; padding: 8px 10px; min-height: 36px; }
+    footer { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#contenido" class="skip-link">Saltar al contenido</a>
+
+<div class="page" id="contenido" role="main">
+
+  <header>
+    <div class="label">UdeA Posible · Sesión 3 · Discapacidad Visual</div>
+    <h1>Repaso del Ábaco Cerrado<br>Suma y Resta paso a paso</h1>
+    <div class="subtitle">
+      Repaso interactivo con audio · 3 ejemplos resueltos + 2 ejercicios de práctica<br>
+      Usa esta página en clase y para practicar en casa
+    </div>
+  </header>
+
+  <nav class="nav-secciones" aria-label="Navegación por secciones">
+    <a href="#sec-repaso" class="nav-sec-btn">Posición de cuentas</a>
+    <a href="#sec-suma" class="nav-sec-btn">Suma</a>
+    <a href="#sec-resta" class="nav-sec-btn">Resta</a>
+    <a href="#sec-practica" class="nav-sec-btn">Práctica</a>
+  </nav>
+
+  <div class="global-controls">
+    <button class="btn-global" onclick="stopAll()" aria-label="Detener toda la reproducción de audio">
+      <svg width="13" height="13" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><rect x="1" y="1" width="8" height="8" rx="1"/></svg>
+      Detener todo
+    </button>
+    <div class="speed-control" role="group" aria-label="Control de velocidad de voz">
+      <label for="speedSlider">Velocidad</label>
+      <input type="range" id="speedSlider" min="0.6" max="1.2" step="0.05" value="0.82"
+        aria-valuemin="0.6" aria-valuemax="1.2" aria-valuenow="0.82"
+        oninput="updateSpeed(this.value)">
+      <span class="speed-val" id="speedVal" aria-live="polite">0.82×</span>
+    </div>
+  </div>
+
+  <div id="cards" role="region" aria-label="Contenido de la sesión"></div>
+
+  <footer>
+    UdeA Posible · Sesión 3 · 5 de abril de 2026<br>
+    Autor: Daniel Andrés Quiroz-Vallejo<br>
+    Abre en Chrome · Web Speech API · Sin conexión requerida
+  </footer>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// DATOS
+// ═══════════════════════════════════════════════════════════════
+
+const contenido = [
+
+  // ── POSICIÓN DE CUENTAS ─────────────────────────────────────
+  {
+    seccion: "repaso",
+    seccionNombre: "Posición de cuentas",
+    items: [
+      {
+        tipo: "repaso",
+        clase: "tutorial",
+        titulo: "Valor posicional en el ábaco Cranmer",
+        tag: "REPASO · ESTRUCTURA Y VALOR POSICIONAL",
+        enunciado: "Recordemos cómo funciona el ábaco cerrado. Cada columna tiene una cuenta superior que vale 5 y cuatro cuentas inferiores que valen 1 cada una. Las columnas de derecha a izquierda representan: unidades, decenas, centenas y millares. Para activar una cuenta, la empujamos hacia la barra central.",
+        tts: `Empecemos con un repaso rápido de la estructura del ábaco cerrado, también llamado ábaco Cranmer.
+
+El ábaco tiene una barra horizontal en el centro, el riel separador.
+
+Cada columna se divide en dos zonas.
+Arriba del riel hay una sola cuenta, que vale cinco.
+Abajo del riel hay cuatro cuentas, cada una vale uno.
+
+Para activar una cuenta, la empujamos hacia el riel central.
+Las de abajo las subimos. La de arriba la bajamos.
+
+Las columnas van de derecha a izquierda.
+Primera columna: unidades. Puede representar del cero al nueve.
+Segunda columna: decenas. Cada unidad aquí vale diez.
+Tercera columna: centenas. Cada unidad aquí vale cien.
+Cuarta columna: millares. Cada unidad aquí vale mil.
+
+Practiquemos. Representen el número quinientos sesenta y tres en el ábaco.
+
+En la columna de centenas: bajen la cuenta de arriba, que vale cinco.
+En la columna de decenas: bajen la cuenta de arriba, que vale cinco, y suban una cuenta de abajo. Cinco más uno, seis.
+En la columna de unidades: suban tres cuentas de abajo.
+
+Ahora representen el número dos mil cuatrocientos nueve.
+
+En millares: suban dos cuentas de abajo.
+En centenas: suban cuatro cuentas de abajo.
+En decenas: no pongan nada, es cero.
+En unidades: bajen la cuenta de arriba, que vale cinco, y suban cuatro de abajo. Cinco más cuatro, nueve.
+
+Verifiquen con su compañero. El primer número es quinientos sesenta y tres. El segundo es dos mil cuatrocientos nueve.`,
+        respuesta: "Cuenta de arriba = 5. Cuentas de abajo = 1 cada una. Máximo por columna: 5 + 4 = 9. Columnas de derecha a izquierda: unidades, decenas, centenas, millares. Empujar hacia la barra = activar."
+      }
+    ]
+  },
+
+  // ── SUMA EN EL ÁBACO ────────────────────────────────────────
+  {
+    seccion: "suma",
+    seccionNombre: "Suma en el ábaco — Ejemplos resueltos",
+    items: [
+      {
+        tipo: "suma",
+        clase: "tutorial",
+        titulo: "Ejemplo resuelto 1: 234 + 152 (sin acarreo)",
+        tag: "SUMA · EJEMPLO 1 · SIN ACARREO",
+        enunciado: "Vamos a sumar 234 + 152 en el ábaco, paso a paso. En esta suma no hay acarreo porque ninguna columna pasa de 9. Resultado esperado: 386.",
+        tts: `Ejemplo resuelto de suma número uno. Sin acarreo.
+
+Vamos a sumar doscientos treinta y cuatro más ciento cincuenta y dos.
+
+Paso uno: representen el primer número, doscientos treinta y cuatro, en el ábaco.
+Centenas: suban dos cuentas de abajo.
+Decenas: suban tres cuentas de abajo.
+Unidades: suban cuatro cuentas de abajo.
+
+Ahora sumamos el segundo número, ciento cincuenta y dos. Siempre empezamos por las unidades, de derecha a izquierda.
+
+Paso dos: sumemos dos a las unidades.
+Teníamos cuatro. Cuatro más dos es seis.
+Suban dos cuentas más de abajo en unidades. Ahora hay seis: la cuenta de arriba, que vale cinco, más una de abajo... no, esperen. Cuatro cuentas de abajo más dos: seis. Pero solo hay cuatro cuentas abajo. Entonces: bajen la cuenta de arriba, que vale cinco, y dejen una de abajo arriba. Cinco más uno, seis.
+
+Paso tres: sumemos cinco a las decenas.
+Teníamos tres. Tres más cinco es ocho.
+Bajen la cuenta de arriba en decenas, que vale cinco. Ahora hay tres de abajo más cinco de arriba, ocho.
+
+Paso cuatro: sumemos uno a las centenas.
+Teníamos dos. Dos más uno es tres.
+Suban una cuenta más de abajo en centenas. Ahora hay tres.
+
+Resultado: lean el ábaco de izquierda a derecha.
+Centenas: tres. Decenas: ocho. Unidades: seis.
+El resultado es trescientos ochenta y seis.
+
+Repitan: doscientos treinta y cuatro más ciento cincuenta y dos es igual a trescientos ochenta y seis.`,
+        respuesta: "234 + 152 = 386. Paso a paso: Unidades: 4 + 2 = 6. Decenas: 3 + 5 = 8. Centenas: 2 + 1 = 3. No hubo acarreo porque ninguna columna superó 9."
+      },
+      {
+        tipo: "suma",
+        clase: "tutorial",
+        titulo: "Ejemplo resuelto 2: 567 + 385 (con acarreo)",
+        tag: "SUMA · EJEMPLO 2 · CON ACARREO",
+        enunciado: "Vamos a sumar 567 + 385 en el ábaco, paso a paso. Hay acarreo en unidades y en decenas. Resultado esperado: 952.",
+        tts: `Ejemplo resuelto de suma número dos. Con acarreo.
+
+Vamos a sumar quinientos sesenta y siete más trescientos ochenta y cinco.
+
+Paso uno: representen quinientos sesenta y siete en el ábaco.
+Centenas: bajen la cuenta de arriba, que vale cinco.
+Decenas: bajen la cuenta de arriba, que vale cinco, y suban una de abajo. Cinco más uno, seis.
+Unidades: bajen la cuenta de arriba, que vale cinco, y suban dos de abajo. Cinco más dos, siete.
+
+Ahora sumamos trescientos ochenta y cinco. Empezamos por las unidades.
+
+Paso dos: sumemos cinco a las unidades.
+Teníamos siete. Siete más cinco es doce.
+Doce es más de nueve, así que hay acarreo.
+En unidades dejamos dos: limpien las unidades y pongan dos cuentas de abajo arriba.
+Y llevamos uno a las decenas. Suban una cuenta más de abajo en decenas.
+Decenas ahora tiene: cinco de arriba más dos de abajo, siete.
+
+Paso tres: sumemos ocho a las decenas.
+Teníamos siete. Siete más ocho es quince.
+Hay acarreo. En decenas dejamos cinco: limpien decenas y bajen la cuenta de arriba, que vale cinco.
+Llevamos uno a centenas. En centenas teníamos cinco, ahora es seis.
+
+Paso cuatro: sumemos tres a las centenas.
+Teníamos seis. Seis más tres es nueve.
+Pongan nueve en centenas: bajen la cuenta de arriba, que vale cinco, y suban cuatro de abajo. Cinco más cuatro, nueve.
+
+Resultado: lean el ábaco.
+Centenas: nueve. Decenas: cinco. Unidades: dos.
+El resultado es novecientos cincuenta y dos.
+
+Repitan: quinientos sesenta y siete más trescientos ochenta y cinco es igual a novecientos cincuenta y dos.`,
+        respuesta: "567 + 385 = 952. Paso a paso: Unidades: 7 + 5 = 12 → dejar 2, llevar 1. Decenas: 6 + 8 + 1 = 15 → dejar 5, llevar 1. Centenas: 5 + 3 + 1 = 9. Clave: cuando la suma en una columna pasa de 9, se deja el dígito de las unidades y se lleva 1 a la siguiente columna."
+      }
+    ]
+  },
+
+  // ── RESTA EN EL ÁBACO ───────────────────────────────────────
+  {
+    seccion: "resta",
+    seccionNombre: "Resta en el ábaco — Ejemplo resuelto",
+    items: [
+      {
+        tipo: "resta",
+        clase: "tutorial",
+        titulo: "Ejemplo resuelto 3: 702 − 358 (con préstamo)",
+        tag: "RESTA · EJEMPLO 3 · CON PRÉSTAMO",
+        enunciado: "Vamos a restar 702 − 358 en el ábaco, paso a paso. Hay préstamo en unidades (la columna de decenas tiene cero). Resultado esperado: 344.",
+        tts: `Ejemplo resuelto de resta. Con préstamo.
+
+Vamos a restar setecientos dos menos trescientos cincuenta y ocho.
+
+Paso uno: representen setecientos dos en el ábaco.
+Centenas: bajen la cuenta de arriba, que vale cinco, y suban dos de abajo. Cinco más dos, siete.
+Decenas: no pongan nada, es cero.
+Unidades: suban dos cuentas de abajo.
+
+Ahora restamos trescientos cincuenta y ocho. Empezamos por las unidades, de derecha a izquierda.
+
+Paso dos: restemos ocho de las unidades.
+Teníamos dos. Dos menos ocho no se puede, porque dos es menor que ocho.
+Necesitamos pedir prestado a las decenas. Pero decenas tiene cero.
+Entonces pedimos prestado a centenas.
+Centenas pasa de siete a seis. Pongan seis en centenas.
+Ese uno que pedimos vale diez decenas. Decenas pasa de cero a diez.
+Pero lo que necesitamos es dar una de esas decenas a unidades.
+Decenas pasa de diez a nueve. Pongan nueve en decenas.
+Unidades recibe diez: dos más diez es doce.
+Ahora sí: doce menos ocho es cuatro. Pongan cuatro en unidades.
+
+Paso tres: restemos cinco de las decenas.
+Teníamos nueve. Nueve menos cinco es cuatro.
+Pongan cuatro en decenas.
+
+Paso cuatro: restemos tres de las centenas.
+Teníamos seis. Seis menos tres es tres.
+Pongan tres en centenas.
+
+Resultado: lean el ábaco.
+Centenas: tres. Decenas: cuatro. Unidades: cuatro.
+El resultado es trescientos cuarenta y cuatro.
+
+Repitan: setecientos dos menos trescientos cincuenta y ocho es igual a trescientos cuarenta y cuatro.`,
+        respuesta: "702 − 358 = 344. Paso a paso: Unidades: 2 − 8 no se puede → préstamo en cadena: centenas 7 → 6, decenas 0 → 9, unidades 2 → 12. Luego 12 − 8 = 4. Decenas: 9 − 5 = 4. Centenas: 6 − 3 = 3. Clave: cuando no se puede restar, se pide 1 a la columna izquierda. Si esa columna tiene 0, se sigue pidiendo a la siguiente."
+      }
+    ]
+  },
+
+  // ── PRÁCTICA ────────────────────────────────────────────────
+  {
+    seccion: "practica",
+    seccionNombre: "Ejercicios de práctica",
+    items: [
+      {
+        tipo: "practica",
+        clase: "ejercicio",
+        titulo: "Práctica 1: 689 + 247",
+        tag: "PRÁCTICA 1 · SUMA CON ACARREO",
+        enunciado: "Resuelvan en el ábaco: 689 + 247. Este ejercicio tiene acarreo. Cuando terminen, revelen la respuesta para verificar.",
+        tts: `Ejercicio de práctica número uno. Suma con acarreo.
+
+Representen en el ábaco el número seiscientos ochenta y nueve.
+Ahora sumen doscientos cuarenta y siete. Recuerden: empiecen por las unidades.
+
+Unidades: nueve más siete. ¿Hay acarreo?
+Decenas: ocho más cuatro, más lo que hayan llevado. ¿Hay acarreo otra vez?
+Centenas: seis más dos, más lo que hayan llevado.
+
+Tómense el tiempo que necesiten. Cuando terminen, verifiquen con su compañero y luego revelen la respuesta.`,
+        respuesta: "689 + 247 = 936. Unidades: 9 + 7 = 16 → dejar 6, llevar 1. Decenas: 8 + 4 + 1 = 13 → dejar 3, llevar 1. Centenas: 6 + 2 + 1 = 9. Resultado: 936."
+      },
+      {
+        tipo: "practica",
+        clase: "ejercicio",
+        titulo: "Práctica 2: 1.005 − 467",
+        tag: "PRÁCTICA 2 · RESTA CON PRÉSTAMO",
+        enunciado: "Resuelvan en el ábaco: 1.005 − 467. Atención: hay varias columnas con cero, así que necesitarán préstamos en cadena. Cuando terminen, revelen la respuesta.",
+        tts: `Ejercicio de práctica número dos. Resta con préstamo.
+
+Representen en el ábaco el número mil cinco. Necesitan cuatro columnas.
+Millares: uno. Centenas: cero. Decenas: cero. Unidades: cinco.
+
+Ahora resten cuatrocientos sesenta y siete. Empiecen por las unidades.
+
+Unidades: cinco menos siete. ¿Se puede? Si no se puede, pidan prestado. Pero las decenas tienen cero, y las centenas también. Van a necesitar pedir prestado en cadena desde los millares.
+
+Este ejercicio es un reto. Tómense el tiempo que necesiten. Verifiquen con su compañero y luego revelen la respuesta.`,
+        respuesta: "1.005 − 467 = 538. Paso a paso: Unidades: 5 − 7 no se puede → préstamo en cadena: millares 1 → 0, centenas 0 → 9, decenas 0 → 9, pero necesitamos prestar de decenas a unidades: decenas 9 → pasa a 10, presta 1 a unidades... Recalculemos: millares 1→0, centenas 0→10, centenas presta a decenas: centenas 10→9, decenas 0→10, decenas presta a unidades: decenas 10→9, unidades 5→15. Ahora: 15 − 7 = 8. Decenas: 9 − 6 = 3. Centenas: 9 − 4 = 5. Millares: 0. Resultado: 538."
+      }
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════════════════════════
+// MOTOR
+// ═══════════════════════════════════════════════════════════════
+
+let currentPlaying = null;
+let currentInterval = null;
+let cardIndex = 0;
+
+function getSpeed() {
+  return parseFloat(document.getElementById('speedSlider').value);
+}
+
+function updateSpeed(val) {
+  const v = parseFloat(val).toFixed(2);
+  document.getElementById('speedVal').textContent = v + '×';
+  document.getElementById('speedSlider').setAttribute('aria-valuenow', v);
+}
+
+function buildAll() {
+  const container = document.getElementById('cards');
+  cardIndex = 0;
+
+  contenido.forEach(sec => {
+    container.innerHTML += `
+      <div class="seccion" data-tipo="${sec.seccion}" id="sec-${sec.seccion}" role="presentation">
+        <div class="seccion-linea"></div>
+        <h2 class="seccion-label">${sec.seccionNombre}</h2>
+        <div class="seccion-linea"></div>
+      </div>`;
+
+    sec.items.forEach(item => {
+      const i = cardIndex++;
+      const tipo = item.tipo;
+      const tipoTag = item.clase === 'tutorial'
+        ? '<span class="tipo-tag tutorial">TUTORIAL</span>'
+        : '<span class="tipo-tag ejercicio">EJERCICIO</span>';
+
+      container.innerHTML += `
+      <div class="card" id="card-${i}" role="region" aria-label="${item.titulo}">
+        <div class="card-header" tabindex="0" role="button"
+             aria-expanded="false" aria-controls="body-${i}"
+             onclick="toggleCard(${i})"
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCard(${i})}">
+          <span class="num-badge badge-${tipo} ${item.clase === 'tutorial' ? 'badge-tutorial' : ''}">${item.clase === 'tutorial' ? '▶' : String(i+1).padStart(2,'0')}</span>
+          <div class="card-meta">
+            <h3 class="card-title-heading">${tipoTag}${item.titulo}</h3>
+            <div class="card-tag">${item.tag}</div>
+          </div>
+          <svg class="expand-arrow" width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="2,4 6,8 10,4"/></svg>
+        </div>
+        <div class="card-body" id="body-${i}">
+          <div class="enunciado">${item.enunciado}</div>
+          <div class="player">
+            <button class="btn-play btn-${tipo}" id="btn-${i}" aria-label="Reproducir audio de ${item.titulo}"
+                    onclick="togglePlay(${i}, '${tipo}')">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><polygon points="1,0 9,5 1,10"/></svg>
+              Reproducir
+            </button>
+            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Progreso de reproducción" id="pbar-${i}">
+              <div class="progress-fill pf-${tipo}" id="prog-${i}"></div>
+            </div>
+            <span class="status-text" id="status-${i}" aria-live="polite">listo</span>
+          </div>
+          <button class="respuesta-btn" aria-expanded="false" aria-controls="resp-${i}"
+                  onclick="toggleRespuesta(${i}, this)">Ver respuesta</button>
+          <div class="respuesta-box rb-${tipo}" id="resp-${i}" role="region" aria-label="Respuesta">
+            <span class="correcta c-${tipo}">Respuesta:</span><br><br>${item.respuesta}
+          </div>
+        </div>
+      </div>`;
+    });
+  });
+}
+
+// Almacenar datos planos para acceso por índice
+let itemsFlat = [];
+function buildFlat() {
+  contenido.forEach(sec => {
+    sec.items.forEach(item => {
+      itemsFlat.push(item);
+    });
+  });
+}
+
+function toggleCard(i) {
+  const card = document.getElementById(`card-${i}`);
+  const header = card.querySelector('.card-header');
+  const isOpen = card.classList.toggle('open');
+  header.setAttribute('aria-expanded', isOpen);
+}
+
+function openCard(i) {
+  const card = document.getElementById(`card-${i}`);
+  const header = card.querySelector('.card-header');
+  card.classList.add('open');
+  header.setAttribute('aria-expanded', 'true');
+}
+
+function toggleRespuesta(i, btn) {
+  const box = document.getElementById(`resp-${i}`);
+  const showing = box.style.display === 'block';
+  box.style.display = showing ? 'none' : 'block';
+  btn.setAttribute('aria-expanded', !showing);
+  btn.textContent = showing ? 'Ver respuesta' : 'Ocultar respuesta';
+}
+
+function setBtnPlaying(i, tipo, playing) {
+  const btn = document.getElementById(`btn-${i}`);
+  const card = document.getElementById(`card-${i}`);
+  if (playing) {
+    btn.classList.add('playing');
+    btn.innerHTML = `<span class="playing-dot"></span>Detener`;
+    btn.setAttribute('aria-label', `Detener audio`);
+    card.classList.add(`playing-${tipo}`);
+  } else {
+    btn.classList.remove('playing');
+    btn.innerHTML = `<svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><polygon points="1,0 9,5 1,10"/></svg> Reproducir`;
+    btn.setAttribute('aria-label', `Reproducir audio`);
+    card.classList.remove(`playing-${tipo}`);
+  }
+}
+
+function stopAll() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (currentInterval) clearInterval(currentInterval);
+  itemsFlat.forEach((item, i) => {
+    setBtnPlaying(i, item.tipo, false);
+    document.getElementById(`prog-${i}`).style.width = '0%';
+    const pb = document.getElementById(`pbar-${i}`);
+    if (pb) pb.setAttribute('aria-valuenow', '0');
+    document.getElementById(`status-${i}`).textContent = 'listo';
+  });
+  currentPlaying = null;
+  currentInterval = null;
+}
+
+function togglePlay(i, tipo) {
+  if (currentPlaying === i) { stopAll(); return; }
+  stopAll();
+  playItem(i, tipo);
+}
+
+function playItem(i, tipo, onEnd) {
+  if (!window.speechSynthesis) {
+    alert('Usa Chrome para la síntesis de voz.');
+    return;
+  }
+
+  const item = itemsFlat[i];
+  const utter = new SpeechSynthesisUtterance(item.tts);
+  utter.lang = 'es-CO';
+  utter.rate = getSpeed();
+  utter.pitch = 1.0;
+  utter.volume = 1.0;
+
+  const voices = window.speechSynthesis.getVoices();
+  const esVoice = voices.find(v => v.lang === 'es-CO')
+    || voices.find(v => v.lang.startsWith('es'));
+  if (esVoice) utter.voice = esVoice;
+
+  currentPlaying = i;
+  openCard(i);
+  setBtnPlaying(i, tipo, true);
+  document.getElementById(`status-${i}`).textContent = 'reproduciendo...';
+
+  const words = item.tts.split(' ').length;
+  const secs = (words / (2.5 * getSpeed())) * 1.1;
+  let elapsed = 0;
+  currentInterval = setInterval(() => {
+    elapsed += 0.3;
+    const pct = Math.min((elapsed/secs)*100, 95);
+    document.getElementById(`prog-${i}`).style.width = pct + '%';
+    const pbar = document.getElementById(`pbar-${i}`);
+    if (pbar) pbar.setAttribute('aria-valuenow', Math.round(pct));
+  }, 300);
+
+  utter.onend = () => {
+    clearInterval(currentInterval);
+    currentInterval = null;
+    setBtnPlaying(i, tipo, false);
+    document.getElementById(`prog-${i}`).style.width = '100%';
+    document.getElementById(`status-${i}`).textContent = 'listo';
+    currentPlaying = null;
+    setTimeout(() => { document.getElementById(`prog-${i}`).style.width = '0%'; }, 2000);
+    if (onEnd) onEnd();
+  };
+
+  utter.onerror = () => {
+    clearInterval(currentInterval);
+    currentInterval = null;
+    setBtnPlaying(i, tipo, false);
+    document.getElementById(`status-${i}`).textContent = 'error';
+    currentPlaying = null;
+    if (onEnd) onEnd();
+  };
+
+  window.speechSynthesis.speak(utter);
+}
+
+// Keyboard: Escape to stop
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') stopAll();
+});
+
+if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => {};
+buildFlat();
+buildAll();
+</script>
+</body>
+</html>
