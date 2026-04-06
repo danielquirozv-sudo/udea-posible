@@ -3,174 +3,776 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UdeA Posible — Razonamiento Lógico</title>
+<title>UdeA Posible — Razonamiento Lógico · Todas las sesiones</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0f0f0f;
-    --surface: #1a1a1a;
-    --border: #2e2e2e;
-    --accent: #c8f060;
-    --text: #e8e8e0;
-    --text2: #888880;
-    --text3: #555550;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Sora', sans-serif;
-    font-size: 15px;
-    line-height: 1.6;
-    min-height: 100vh;
-    padding: 2rem 1rem 4rem;
-  }
-
-  .page { max-width: 600px; margin: 0 auto; }
-
-  header {
-    margin-bottom: 2.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
-
-  h1 {
-    font-size: 22px;
-    font-weight: 600;
-    line-height: 1.3;
-    margin-bottom: 0.4rem;
-  }
-
-  .subtitle { font-size: 13px; color: var(--text2); }
-
-  .sesiones { display: flex; flex-direction: column; gap: 10px; }
-
-  .sesion-link {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 1rem 1.25rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    text-decoration: none;
-    color: var(--text);
-    transition: border-color 0.15s;
-  }
-
-  .sesion-link:hover, .sesion-link:focus {
-    border-color: var(--accent);
-    outline: none;
-  }
-
-  .sesion-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    font-weight: 500;
-    width: 32px; height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    flex-shrink: 0;
-  }
-
-  .sesion-info { flex: 1; }
-  .sesion-title { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
-  .sesion-desc { font-size: 12px; color: var(--text2); }
-
-  .s1 .sesion-num { background: #1e2a0e; color: #c8f060; }
-  .s2 .sesion-num { background: #0a1520; color: #a0c8f0; }
-  .s3 .sesion-num { background: #1a1208; color: #f0a060; }
-
-  footer {
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
-    font-size: 11px;
-    color: var(--text3);
-    text-align: center;
-    line-height: 1.8;
-  }
-
-  @media (max-width: 600px) {
-    body { padding: 1rem 0.75rem 3rem; }
-    h1 { font-size: 19px; }
-    .sesion-link { padding: 0.9rem 1rem; min-height: 64px; }
-    .sesion-title { font-size: 14px; }
-    .sesion-desc { font-size: 12px; }
-  }
+:root{--bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;--border:#2e2e2e;--accent:#c8f060;--accent2:#f0a060;--accent3:#a0c8f0;--accent4:#c090f0;--accent5:#60f0c8;--accent6:#f06090;--text:#e8e8e0;--text2:#888880;--text3:#555550;--radius:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-size:15px;line-height:1.7;min-height:100vh;padding:2rem 1rem 4rem}
+.page{max-width:740px;margin:0 auto}
+header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+h1{font-size:22px;font-weight:600;line-height:1.3;margin-bottom:.4rem}
+.subtitle{font-size:13px;color:var(--text2)}
+h2{font-size:18px;font-weight:600;margin:2.5rem 0 .5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+h3{font-size:15px;font-weight:500;margin:1.5rem 0 .3rem;color:var(--text)}
+.sesion-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid var(--border);margin-bottom:.5rem}
+.tag-s1{color:var(--accent);border-color:#1e2a0e;background:#0f1508}
+.tag-s2{color:var(--accent3);border-color:#1a2a3a;background:#0a1520}
+.tag-s3{color:var(--accent2);border-color:#3a2a10;background:#1a1208}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:.75rem;padding:1.25rem;overflow:hidden}
+.card-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.04em;margin-bottom:.5rem}
+.card h3{margin:0 0 .5rem}
+.enunciado{font-size:14px;line-height:1.9;color:#c8c8c0;margin-bottom:.75rem}
+.opciones{display:flex;flex-direction:column;gap:6px;margin-bottom:1rem}
+.opcion{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);font-size:14px;color:#b8b8b0;line-height:1.5}
+.opcion-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:4px;background:var(--border);color:var(--text2);flex-shrink:0}
+.respuesta{margin-top:.75rem;padding:.9rem 1rem;border-radius:8px;font-size:13px;line-height:1.8;color:var(--text2);background:#0a140a;border:1px solid #1e3010}
+.respuesta strong{color:var(--accent);font-weight:500}
+.nota-docente{margin-top:.5rem;padding:.6rem .75rem;background:#14140a;border:1px solid #2e2e10;border-radius:7px;font-size:12px;color:#888860;line-height:1.6}
+.nota-docente strong{color:#c8c860}
+.btn-play{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:8px;border:none;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;background:var(--accent);color:#0f0f0f;margin-bottom:.5rem;min-height:44px;transition:all .15s}
+.btn-play:hover{background:#d4f570}
+.btn-play.playing{background:#f06060;color:#fff}
+.speed-control{display:inline-flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);padding:8px 14px;border-radius:8px;margin-bottom:1rem}
+.speed-control label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);white-space:nowrap}
+.speed-control input[type=range]{-webkit-appearance:none;width:110px;height:6px;background:var(--border);border-radius:3px;outline:none}
+.speed-control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer}
+.speed-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:32px}
+.toc{margin-bottom:2rem}
+.toc a{display:block;color:var(--accent3);font-size:13px;text-decoration:none;padding:4px 0;border-bottom:1px solid var(--border)}
+.toc a:hover{color:var(--accent)}
+.seccion-sep{display:flex;align-items:center;gap:12px;margin:2rem 0 1rem}
+.seccion-sep span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:20px;border:1px solid var(--border);color:var(--text3);white-space:nowrap}
+.seccion-sep hr{flex:1;border:none;height:1px;background:var(--border)}
+footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:12px;color:var(--text3);text-align:center;line-height:1.8}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.playing-dot{display:inline-block;width:6px;height:6px;background:#f06060;border-radius:50%;animation:pulse 1s ease-in-out infinite;margin-right:4px}
+@media(max-width:600px){
+  body{padding:1rem .75rem 3rem}
+  h1{font-size:19px}
+  h2{font-size:16px}
+  .card{padding:1rem}
+  .enunciado{font-size:14px}
+  .opcion{padding:10px 12px;font-size:14px;min-height:44px}
+  .btn-play{width:100%;justify-content:center}
+  .toc a{font-size:14px;padding:8px 0}
+  footer{font-size:12px}
+}
 </style>
 </head>
 <body>
 <div class="page">
 
-  <header>
-    <div class="label">UdeA Posible · Discapacidad Visual</div>
-    <h1>Razonamiento Lógico</h1>
-    <div class="subtitle">Materiales accesibles con audio · Preparatorio examen UdeA</div>
-  </header>
+<header>
+  <div class="label">UdeA Posible · Discapacidad Visual</div>
+  <h1>Razonamiento Lógico<br>Todas las sesiones</h1>
+  <div class="subtitle">Materiales accesibles con audio · Preparatorio examen de admisión UdeA</div>
+</header>
 
-  <div class="sesiones">
-
-    <a href="problemas_diagnostico_audio.html" class="sesion-link s1">
-      <span class="sesion-num">01</span>
-      <div class="sesion-info">
-        <div class="sesion-title">Diagnóstico</div>
-        <div class="sesion-desc">5 problemas · Aritmética, proporcionalidad, lógica, series, probabilidad</div>
-      </div>
-    </a>
-
-    <a href="problemas_bloque4_audio%20(1).html" class="sesion-link s1">
-      <span class="sesion-num">01</span>
-      <div class="sesion-info">
-        <div class="sesion-title">Bloque 4 — Trabajo real</div>
-        <div class="sesion-desc">Proporcionalidad y porcentajes · 3 niveles cada uno</div>
-      </div>
-    </a>
-
-    <a href="sesion2_abaco_operaciones.html" class="sesion-link s2">
-      <span class="sesion-num">02</span>
-      <div class="sesion-info">
-        <div class="sesion-title">Ábaco cerrado — Las 4 operaciones</div>
-        <div class="sesion-desc">Suma, resta, multiplicación y división en ábaco Cranmer</div>
-      </div>
-    </a>
-
-    <a href="Repaso_Abaco_Clase3.html" class="sesion-link s3">
-      <span class="sesion-num">03</span>
-      <div class="sesion-info">
-        <div class="sesion-title">Repaso ábaco — Suma y resta</div>
-        <div class="sesion-desc">Posición de cuentas, 3 ejemplos resueltos, 2 ejercicios</div>
-      </div>
-    </a>
-
-    <a href="Clase3_Secuencias_.html" class="sesion-link s3">
-      <span class="sesion-num">03</span>
-      <div class="sesion-info">
-        <div class="sesion-title">Secuencias y Series Numéricas</div>
-        <div class="sesion-desc">Progresión aritmética y geométrica · 5 ejercicios tipo examen</div>
-      </div>
-    </a>
-
-  </div>
-
-  <footer>
-    UdeA Posible · Preparatorio examen de admisión UdeA<br>
-    Abrir en Chrome o Safari para audio
-  </footer>
-
+<div class="speed-control">
+  <label>Velocidad de voz</label>
+  <input type="range" id="speedSlider" min="0.6" max="1.2" step="0.05" value="0.82" oninput="document.getElementById('speedVal').textContent=parseFloat(this.value).toFixed(2)+'×'">
+  <span class="speed-val" id="speedVal">0.82×</span>
 </div>
+
+<nav class="toc" aria-label="Tabla de contenido">
+  <strong style="color:var(--text2);font-size:12px">Contenido</strong>
+  <a href="#s1-diag">Sesión 1 — Diagnóstico (5 problemas)</a>
+  <a href="#s1-prop">Sesión 1 — Proporcionalidad (3 niveles)</a>
+  <a href="#s1-porc">Sesión 1 — Porcentajes (3 niveles)</a>
+  <a href="#s2-intro">Sesión 2 — Ábaco: Estructura</a>
+  <a href="#s2-suma">Sesión 2 — Ábaco: Suma</a>
+  <a href="#s2-resta">Sesión 2 — Ábaco: Resta</a>
+  <a href="#s2-mult">Sesión 2 — Ábaco: Multiplicación</a>
+  <a href="#s2-div">Sesión 2 — Ábaco: División</a>
+  <a href="#s2-app">Sesión 2 — Problemas tipo examen</a>
+  <a href="#s3-repaso">Sesión 3 — Repaso ábaco</a>
+  <a href="#s3-pa">Sesión 3 — Progresión Aritmética</a>
+  <a href="#s3-pg">Sesión 3 — Progresión Geométrica</a>
+  <a href="#s3-ej">Sesión 3 — Ejercicios tipo examen</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--                  SESIÓN 1 — DIAGNÓSTICO                -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<h2 id="s1-diag"><span class="sesion-tag tag-s1">Sesión 1</span><br>Diagnóstico — 5 problemas</h2>
+
+<div class="card">
+  <div class="card-tag">PROBLEMA 01 · ARITMÉTICA Y PORCENTAJES</div>
+  <h3>Aritmética y porcentajes</h3>
+  <button class="btn-play" onclick="playTTS(0)">▶ Reproducir</button>
+  <div class="enunciado">En una tienda, un par de zapatos cuesta 80.000 pesos. El dueño decide aumentar el precio en un 25%. ¿Cuánto cuesta el par de zapatos después del aumento?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>20.000 pesos</div>
+    <div class="opcion"><span class="opcion-num">2</span>85.000 pesos</div>
+    <div class="opcion"><span class="opcion-num">3</span>100.000 pesos</div>
+    <div class="opcion"><span class="opcion-num">4</span>105.000 pesos</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 3</strong><br>El 25% de 80.000 es 20.000. Entonces 80.000 + 20.000 = 100.000 pesos. Si alguien responde 1, solo calculó el porcentaje pero no lo sumó.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PROBLEMA 02 · PROPORCIONALIDAD</div>
+  <h3>Proporcionalidad</h3>
+  <button class="btn-play" onclick="playTTS(1)">▶ Reproducir</button>
+  <div class="enunciado">Si 4 obreros construyen una pared en 6 días, ¿cuántos días tardarán 8 obreros en construir la misma pared, si todos trabajan al mismo ritmo?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>12 días</div>
+    <div class="opcion"><span class="opcion-num">2</span>8 días</div>
+    <div class="opcion"><span class="opcion-num">3</span>4 días</div>
+    <div class="opcion"><span class="opcion-num">4</span>3 días</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 4</strong><br>Es proporcionalidad inversa: al doble de obreros, la mitad del tiempo. 6 ÷ 2 = 3 días.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PROBLEMA 03 · LÓGICA PROPOSICIONAL</div>
+  <h3>Lógica proposicional</h3>
+  <button class="btn-play" onclick="playTTS(2)">▶ Reproducir</button>
+  <div class="enunciado">Se sabe que: «Si un estudiante estudia, entonces aprueba el examen.» Un estudiante no aprobó el examen. ¿Qué se puede concluir con certeza?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>El estudiante estudió</div>
+    <div class="opcion"><span class="opcion-num">2</span>El estudiante no estudió</div>
+    <div class="opcion"><span class="opcion-num">3</span>El estudiante estudió, pero no le fue bien</div>
+    <div class="opcion"><span class="opcion-num">4</span>No se puede concluir nada sobre si estudió</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 2</strong><br>Por contrarrecíproco: si «estudia → aprueba», entonces «no aprueba → no estudió».</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PROBLEMA 04 · SERIES NUMÉRICAS</div>
+  <h3>Series numéricas</h3>
+  <button class="btn-play" onclick="playTTS(3)">▶ Reproducir</button>
+  <div class="enunciado">Observa la siguiente serie: 2, 5, 11, 23, 47, ___ ¿Cuál es el número que sigue?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>71</div>
+    <div class="opcion"><span class="opcion-num">2</span>89</div>
+    <div class="opcion"><span class="opcion-num">3</span>95</div>
+    <div class="opcion"><span class="opcion-num">4</span>94</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 3</strong><br>La regla es multiplicar por 2 y sumar 1. 47 × 2 + 1 = 95.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PROBLEMA 05 · CONTEO Y PROBABILIDAD</div>
+  <h3>Conteo y probabilidad</h3>
+  <button class="btn-play" onclick="playTTS(4)">▶ Reproducir</button>
+  <div class="enunciado">En una bolsa hay 3 bolas rojas, 2 bolas azules y 1 bola verde. Se saca una bola al azar. ¿Cuál es la probabilidad de que la bola NO sea roja?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>1/6</div>
+    <div class="opcion"><span class="opcion-num">2</span>3/6</div>
+    <div class="opcion"><span class="opcion-num">3</span>2/6</div>
+    <div class="opcion"><span class="opcion-num">4</span>4/6</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 2</strong><br>Total: 6 bolas. No rojas: 2 azules + 1 verde = 3. Probabilidad = 3/6.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--             SESIÓN 1 — PROPORCIONALIDAD                -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<h2 id="s1-prop"><span class="sesion-tag tag-s1">Sesión 1 · Bloque 4</span><br>Proporcionalidad — 3 niveles</h2>
+
+<div class="card">
+  <div class="card-tag">PROP · NIVEL 1</div>
+  <h3>Proporcionalidad directa</h3>
+  <button class="btn-play" onclick="playTTS(5)">▶ Reproducir</button>
+  <div class="enunciado">Un carro recorre 120 kilómetros en 2 horas, siempre a la misma velocidad. ¿Cuántos kilómetros recorrerá en 5 horas?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>240 km</div>
+    <div class="opcion"><span class="opcion-num">2</span>300 km</div>
+    <div class="opcion"><span class="opcion-num">3</span>360 km</div>
+    <div class="opcion"><span class="opcion-num">4</span>600 km</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 2</strong><br>Proporcionalidad directa: si en 2 horas recorre 120, en 1 hora recorre 60. En 5 horas: 60 × 5 = 300 km.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PROP · NIVEL 2</div>
+  <h3>Proporcionalidad inversa</h3>
+  <button class="btn-play" onclick="playTTS(6)">▶ Reproducir</button>
+  <div class="enunciado">Una fábrica tiene 6 máquinas que producen 240 piezas en un día. Si se añaden 2 máquinas más, todas trabajando igual, ¿cuántas piezas se producirán en ese mismo día?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>280 piezas</div>
+    <div class="opcion"><span class="opcion-num">2</span>300 piezas</div>
+    <div class="opcion"><span class="opcion-num">3</span>320 piezas</div>
+    <div class="opcion"><span class="opcion-num">4</span>480 piezas</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 3</strong><br>Cada máquina produce 240 ÷ 6 = 40 piezas por día. Con 8 máquinas: 40 × 8 = 320 piezas.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PROP · NIVEL 3</div>
+  <h3>Proporcionalidad con tabla</h3>
+  <button class="btn-play" onclick="playTTS(7)">▶ Reproducir</button>
+  <div class="enunciado">En una receta, por cada 3 tazas de harina se usan 2 huevos. Si se quieren usar 9 tazas de harina, ¿cuántos huevos se necesitan? Y si en cambio se tienen solo 8 huevos, ¿cuántas tazas de harina se pueden usar?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>6 huevos y 10 tazas</div>
+    <div class="opcion"><span class="opcion-num">2</span>6 huevos y 12 tazas</div>
+    <div class="opcion"><span class="opcion-num">3</span>5 huevos y 12 tazas</div>
+    <div class="opcion"><span class="opcion-num">4</span>4 huevos y 9 tazas</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 2</strong><br>Razón: 3 tazas por cada 2 huevos. Con 9 tazas (×3): 2 × 3 = 6 huevos. Con 8 huevos: 8 × (3/2) = 12 tazas.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--               SESIÓN 1 — PORCENTAJES                  -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<h2 id="s1-porc"><span class="sesion-tag tag-s1">Sesión 1 · Bloque 4</span><br>Porcentajes — 3 niveles</h2>
+
+<div class="card">
+  <div class="card-tag">PORC · NIVEL 1</div>
+  <h3>Porcentaje de una cantidad</h3>
+  <button class="btn-play" onclick="playTTS(8)">▶ Reproducir</button>
+  <div class="enunciado">En un salón de 40 estudiantes, el 30% aprobó el examen de admisión. ¿Cuántos estudiantes aprobaron?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>10 estudiantes</div>
+    <div class="opcion"><span class="opcion-num">2</span>12 estudiantes</div>
+    <div class="opcion"><span class="opcion-num">3</span>14 estudiantes</div>
+    <div class="opcion"><span class="opcion-num">4</span>16 estudiantes</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 2</strong><br>30% de 40 = (30 × 40) ÷ 100 = 1200 ÷ 100 = 12 estudiantes.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PORC · NIVEL 2</div>
+  <h3>Aumento y descuento</h3>
+  <button class="btn-play" onclick="playTTS(9)">▶ Reproducir</button>
+  <div class="enunciado">Una tienda sube el precio de un producto en un 20%, y luego lo baja en un 20%. ¿El precio final es igual, mayor o menor al precio original?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>Igual al original</div>
+    <div class="opcion"><span class="opcion-num">2</span>Mayor que el original</div>
+    <div class="opcion"><span class="opcion-num">3</span>Menor que el original</div>
+    <div class="opcion"><span class="opcion-num">4</span>Depende del precio inicial</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 3</strong><br>Si el precio es 100: sube 20% → 120. Baja 20% de 120 → baja 24 → queda en 96. El porcentaje se aplica sobre bases distintas.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PORC · NIVEL 3</div>
+  <h3>Porcentaje inverso</h3>
+  <button class="btn-play" onclick="playTTS(10)">▶ Reproducir</button>
+  <div class="enunciado">Después de un aumento del 25%, el precio de un artículo quedó en 75.000 pesos. ¿Cuál era el precio original antes del aumento?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>56.250 pesos</div>
+    <div class="opcion"><span class="opcion-num">2</span>60.000 pesos</div>
+    <div class="opcion"><span class="opcion-num">3</span>62.500 pesos</div>
+    <div class="opcion"><span class="opcion-num">4</span>65.000 pesos</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 2</strong><br>Si el precio original es X, entonces 1,25X = 75.000. X = 75.000 ÷ 1,25 = 60.000 pesos.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--         SESIÓN 2 — ÁBACO: ESTRUCTURA                  -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<h2 id="s2-intro"><span class="sesion-tag tag-s2">Sesión 2</span><br>Ábaco cerrado — Estructura</h2>
+
+<div class="card">
+  <div class="card-tag">REPASO · ESTRUCTURA</div>
+  <h3>Estructura del ábaco Cranmer</h3>
+  <button class="btn-play" onclick="playTTS(11)">▶ Reproducir</button>
+  <div class="enunciado">El ábaco Cranmer tiene una barra horizontal (riel separador) que divide cada columna en dos zonas: arriba hay 1 cuenta que vale 5, abajo hay 4 cuentas que valen 1 cada una. Las columnas van de derecha a izquierda: unidades, decenas, centenas, millares. Para activar una cuenta, la empujamos hacia la barra central.</div>
+  <div class="respuesta">Recuerden: cuenta de arriba = 5, cuentas de abajo = 1 cada una. Empujar hacia la barra = activar. Verificar siempre con el compañero.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--            SESIÓN 2 — ÁBACO: SUMA                     -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<h2 id="s2-suma"><span class="sesion-tag tag-s2">Sesión 2</span><br>Suma en el ábaco</h2>
+
+<div class="card">
+  <div class="card-tag">SUMA · TUTORIAL GUIADO</div>
+  <h3>Tutorial: Suma con acarreo — 478 + 356</h3>
+  <button class="btn-play" onclick="playTTS(12)">▶ Reproducir</button>
+  <div class="enunciado">Vamos a sumar 478 + 356 en el ábaco, paso a paso. Resultado esperado: 834.</div>
+  <div class="respuesta">478 + 356 = 834. Clave: cuando la suma en una columna pasa de 9, se deja el dígito de las unidades y se lleva 1 a la siguiente columna a la izquierda.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">SUMA · EJERCICIO 1 · SIN ACARREO</div>
+  <h3>Ejercicio: 234 + 152</h3>
+  <button class="btn-play" onclick="playTTS(13)">▶ Reproducir</button>
+  <div class="enunciado">Resuelvan en el ábaco: 234 + 152. Este ejercicio NO tiene acarreo.</div>
+  <div class="respuesta">234 + 152 = 386. Unidades: 4+2=6. Decenas: 3+5=8. Centenas: 2+1=3.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">SUMA · EJERCICIO 2 · CON ACARREO</div>
+  <h3>Ejercicio: 478 + 356</h3>
+  <button class="btn-play" onclick="playTTS(14)">▶ Reproducir</button>
+  <div class="enunciado">Resuelvan en el ábaco: 478 + 356. Este ejercicio tiene acarreo en unidades y decenas.</div>
+  <div class="respuesta">478 + 356 = 834. Unidades: 8+6=14 → dejar 4, llevar 1. Decenas: 7+5+1=13 → dejar 3, llevar 1. Centenas: 4+3+1=8.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">SUMA · EJERCICIO 3 · NÚMEROS GRANDES</div>
+  <h3>Ejercicio: 1.245 + 867</h3>
+  <button class="btn-play" onclick="playTTS(15)">▶ Reproducir</button>
+  <div class="enunciado">Resuelvan en el ábaco: 1.245 + 867. Usen cuatro columnas y manejen los acarreos.</div>
+  <div class="respuesta">1.245 + 867 = 2.112. Unidades: 5+7=12 → 2, llevar 1. Decenas: 4+6+1=11 → 1, llevar 1. Centenas: 2+8+1=11 → 1, llevar 1. Millares: 1+0+1=2.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--            SESIÓN 2 — ÁBACO: RESTA                    -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<h2 id="s2-resta"><span class="sesion-tag tag-s2">Sesión 2</span><br>Resta en el ábaco</h2>
+
+<div class="card">
+  <div class="card-tag">RESTA · TUTORIAL GUIADO</div>
+  <h3>Tutorial: Resta con préstamo — 803 − 457</h3>
+  <button class="btn-play" onclick="playTTS(16)">▶ Reproducir</button>
+  <div class="enunciado">Vamos a restar 803 − 457 en el ábaco, paso a paso. Resultado esperado: 346.</div>
+  <div class="respuesta">803 − 457 = 346. Clave del préstamo: cuando no se puede restar en una columna, se pide 1 a la columna de la izquierda (ese 1 vale 10 en la columna actual).</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">RESTA · EJERCICIO 1 · SIN PRÉSTAMO</div>
+  <h3>Ejercicio: 567 − 234</h3>
+  <button class="btn-play" onclick="playTTS(17)">▶ Reproducir</button>
+  <div class="enunciado">Resuelvan en el ábaco: 567 − 234. Este ejercicio NO tiene préstamo.</div>
+  <div class="respuesta">567 − 234 = 333. Unidades: 7−4=3. Decenas: 6−3=3. Centenas: 5−2=3.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">RESTA · EJERCICIO 2 · CON PRÉSTAMO</div>
+  <h3>Ejercicio: 803 − 457</h3>
+  <button class="btn-play" onclick="playTTS(18)">▶ Reproducir</button>
+  <div class="enunciado">Resuelvan en el ábaco: 803 − 457. Hay préstamo en unidades y decenas.</div>
+  <div class="respuesta">803 − 457 = 346. Unidades: 3−7 no se puede → préstamo en cadena desde centenas. 13−7=6. Decenas: 9−5=4. Centenas: 7−4=3.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">RESTA · EJERCICIO 3 · NÚMEROS GRANDES</div>
+  <h3>Ejercicio: 2.010 − 763</h3>
+  <button class="btn-play" onclick="playTTS(19)">▶ Reproducir</button>
+  <div class="enunciado">Resuelvan en el ábaco: 2.010 − 763. Usen cuatro columnas.</div>
+  <div class="respuesta">2.010 − 763 = 1.247. Varias columnas con cero requieren préstamos en cadena.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--         SESIÓN 2 — ÁBACO: MULTIPLICACIÓN              -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<h2 id="s2-mult"><span class="sesion-tag tag-s2">Sesión 2</span><br>Multiplicación en el ábaco</h2>
+
+<div class="card">
+  <div class="card-tag">MULTIPLICACIÓN · TUTORIAL GUIADO</div>
+  <h3>Tutorial: Multiplicación — 126 × 4</h3>
+  <button class="btn-play" onclick="playTTS(20)">▶ Reproducir</button>
+  <div class="enunciado">Vamos a multiplicar 126 × 4 en el ábaco. Resultado esperado: 504. Método: multiplicamos cada dígito por 4, empezando por las unidades.</div>
+  <div class="respuesta">126 × 4 = 504. 6×4=24 (4 en unidades, llevar 2). 2×4=8+2=10 (0 en decenas, llevar 1). 1×4=4+1=5 en centenas.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">MULTIPLICACIÓN · EJERCICIO 1 · BÁSICO</div>
+  <h3>Ejercicio: 45 × 3</h3>
+  <button class="btn-play" onclick="playTTS(21)">▶ Reproducir</button>
+  <div class="enunciado">Resuelvan en el ábaco: 45 × 3.</div>
+  <div class="respuesta">45 × 3 = 135. Unidades: 5×3=15 (5, llevar 1). Decenas: 4×3=12+1=13. Resultado: 135.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">MULTIPLICACIÓN · EJERCICIO 2 · TRES DÍGITOS</div>
+  <h3>Ejercicio: 126 × 4</h3>
+  <button class="btn-play" onclick="playTTS(22)">▶ Reproducir</button>
+  <div class="enunciado">Resuelvan en el ábaco: 126 × 4. Es el mismo del tutorial, pero ahora háganlo solos.</div>
+  <div class="respuesta">126 × 4 = 504.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">MULTIPLICACIÓN · EJERCICIO 3 · CON CERO INTERMEDIO</div>
+  <h3>Ejercicio: 208 × 7</h3>
+  <button class="btn-play" onclick="playTTS(23)">▶ Reproducir</button>
+  <div class="enunciado">Resuelvan en el ábaco: 208 × 7. Atención: el dígito de las decenas es cero.</div>
+  <div class="respuesta">208 × 7 = 1.456. 8×7=56 (6, llevar 5). 0×7=0+5=5. 2×7=14 (4 en centenas, 1 en millares).</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--           SESIÓN 2 — ÁBACO: DIVISIÓN                  -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<h2 id="s2-div"><span class="sesion-tag tag-s2">Sesión 2</span><br>División en el ábaco</h2>
+
+<div class="card">
+  <div class="card-tag">DIVISIÓN · TUTORIAL GUIADO</div>
+  <h3>Tutorial: División — 175 ÷ 5</h3>
+  <button class="btn-play" onclick="playTTS(24)">▶ Reproducir</button>
+  <div class="enunciado">Vamos a dividir 175 ÷ 5 en el ábaco. Resultado esperado: 35. Método: dividir de izquierda a derecha.</div>
+  <div class="respuesta">175 ÷ 5 = 35 (residuo 0). 1÷5=0 (juntar con siguiente). 17÷5=3 (residuo 2). 25÷5=5. Cociente: 35.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">DIVISIÓN · EJERCICIO 1 · BÁSICO</div>
+  <h3>Ejercicio: 96 ÷ 4</h3>
+  <button class="btn-play" onclick="playTTS(25)">▶ Reproducir</button>
+  <div class="enunciado">Resuelvan en el ábaco: 96 ÷ 4.</div>
+  <div class="respuesta">96 ÷ 4 = 24. 9÷4=2 (residuo 1). 16÷4=4. Cociente: 24.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">DIVISIÓN · EJERCICIO 2</div>
+  <h3>Ejercicio: 175 ÷ 5</h3>
+  <button class="btn-play" onclick="playTTS(26)">▶ Reproducir</button>
+  <div class="enunciado">Resuelvan en el ábaco: 175 ÷ 5. Es el mismo del tutorial, háganlo solos.</div>
+  <div class="respuesta">175 ÷ 5 = 35.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">DIVISIÓN · EJERCICIO 3 · CON RESIDUO</div>
+  <h3>Ejercicio: 259 ÷ 6</h3>
+  <button class="btn-play" onclick="playTTS(27)">▶ Reproducir</button>
+  <div class="enunciado">Resuelvan en el ábaco: 259 ÷ 6. Atención: esta división tiene residuo.</div>
+  <div class="respuesta">259 ÷ 6 = 43 con residuo 1. Verificación: 43×6=258, y 258+1=259.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--       SESIÓN 2 — PROBLEMAS TIPO EXAMEN                -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<h2 id="s2-app"><span class="sesion-tag tag-s2">Sesión 2</span><br>Problemas tipo examen UdeA</h2>
+
+<div class="card">
+  <div class="card-tag">PROBLEMA 1 · SUMA Y RESTA</div>
+  <h3>Compras con suma y resta</h3>
+  <button class="btn-play" onclick="playTTS(28)">▶ Reproducir</button>
+  <div class="enunciado">Un estudiante tiene 45.000 pesos. Compra un libro de 18.500 pesos y un cuaderno de 7.200 pesos. ¿Cuánto dinero le queda?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>19.300 pesos</div>
+    <div class="opcion"><span class="opcion-num">2</span>20.300 pesos</div>
+    <div class="opcion"><span class="opcion-num">3</span>25.700 pesos</div>
+    <div class="opcion"><span class="opcion-num">4</span>26.500 pesos</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 1</strong><br>Sumamos lo gastado: 18.500 + 7.200 = 25.700. Restamos: 45.000 − 25.700 = 19.300 pesos.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PROBLEMA 2 · MULTIPLICACIÓN</div>
+  <h3>Libros en estantes</h3>
+  <button class="btn-play" onclick="playTTS(29)">▶ Reproducir</button>
+  <div class="enunciado">En una biblioteca hay 8 estantes. Cada estante tiene 35 libros. ¿Cuántos libros hay en total?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>240 libros</div>
+    <div class="opcion"><span class="opcion-num">2</span>260 libros</div>
+    <div class="opcion"><span class="opcion-num">3</span>280 libros</div>
+    <div class="opcion"><span class="opcion-num">4</span>315 libros</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 3</strong><br>35 × 8 = 280 libros.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PROBLEMA 3 · DIVISIÓN</div>
+  <h3>Repartir lápices</h3>
+  <button class="btn-play" onclick="playTTS(30)">▶ Reproducir</button>
+  <div class="enunciado">Se reparten 156 lápices entre 12 estudiantes por igual. ¿Cuántos lápices recibe cada estudiante?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>11 lápices</div>
+    <div class="opcion"><span class="opcion-num">2</span>12 lápices</div>
+    <div class="opcion"><span class="opcion-num">3</span>13 lápices</div>
+    <div class="opcion"><span class="opcion-num">4</span>14 lápices</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 3</strong><br>156 ÷ 12 = 13. Verificación: 12 × 13 = 156.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--           SESIÓN 3 — REPASO ÁBACO                     -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<h2 id="s3-repaso"><span class="sesion-tag tag-s3">Sesión 3</span><br>Repaso del ábaco — Suma y resta</h2>
+
+<div class="card">
+  <div class="card-tag">REPASO · ESTRUCTURA Y VALOR POSICIONAL</div>
+  <h3>Valor posicional en el ábaco Cranmer</h3>
+  <button class="btn-play" onclick="playTTS(31)">▶ Reproducir</button>
+  <div class="enunciado">Recordemos cómo funciona el ábaco cerrado. Cada columna tiene una cuenta superior que vale 5 y cuatro cuentas inferiores que valen 1 cada una. Las columnas de derecha a izquierda representan: unidades, decenas, centenas y millares. Para activar una cuenta, la empujamos hacia la barra central.</div>
+  <div class="respuesta">Cuenta de arriba = 5. Cuentas de abajo = 1 cada una. Máximo por columna: 5 + 4 = 9. Empujar hacia la barra = activar.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">SUMA · EJEMPLO 1 · SIN ACARREO</div>
+  <h3>Ejemplo resuelto: 234 + 152 (sin acarreo)</h3>
+  <button class="btn-play" onclick="playTTS(32)">▶ Reproducir</button>
+  <div class="enunciado">Vamos a sumar 234 + 152 en el ábaco, paso a paso. En esta suma no hay acarreo porque ninguna columna pasa de 9. Resultado esperado: 386.</div>
+  <div class="respuesta">234 + 152 = 386. Unidades: 4+2=6. Decenas: 3+5=8. Centenas: 2+1=3. No hubo acarreo.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">SUMA · EJEMPLO 2 · CON ACARREO</div>
+  <h3>Ejemplo resuelto: 567 + 385 (con acarreo)</h3>
+  <button class="btn-play" onclick="playTTS(33)">▶ Reproducir</button>
+  <div class="enunciado">Vamos a sumar 567 + 385 en el ábaco, paso a paso. Hay acarreo en unidades y en decenas. Resultado esperado: 952.</div>
+  <div class="respuesta">567 + 385 = 952. Unidades: 7+5=12 → dejar 2, llevar 1. Decenas: 6+8+1=15 → dejar 5, llevar 1. Centenas: 5+3+1=9.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">RESTA · EJEMPLO 3 · CON PRÉSTAMO</div>
+  <h3>Ejemplo resuelto: 702 − 358 (con préstamo)</h3>
+  <button class="btn-play" onclick="playTTS(34)">▶ Reproducir</button>
+  <div class="enunciado">Vamos a restar 702 − 358 en el ábaco, paso a paso. Hay préstamo en unidades (la columna de decenas tiene cero). Resultado esperado: 344.</div>
+  <div class="respuesta">702 − 358 = 344. Unidades: 2−8 no se puede → préstamo en cadena: centenas 7→6, decenas 0→9, unidades 2→12. 12−8=4. Decenas: 9−5=4. Centenas: 6−3=3.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PRÁCTICA 1 · SUMA CON ACARREO</div>
+  <h3>Práctica: 689 + 247</h3>
+  <button class="btn-play" onclick="playTTS(35)">▶ Reproducir</button>
+  <div class="enunciado">Resuelvan en el ábaco: 689 + 247. Este ejercicio tiene acarreo.</div>
+  <div class="respuesta">689 + 247 = 936. Unidades: 9+7=16 → dejar 6, llevar 1. Decenas: 8+4+1=13 → dejar 3, llevar 1. Centenas: 6+2+1=9.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PRÁCTICA 2 · RESTA CON PRÉSTAMO</div>
+  <h3>Práctica: 1.005 − 467</h3>
+  <button class="btn-play" onclick="playTTS(36)">▶ Reproducir</button>
+  <div class="enunciado">Resuelvan en el ábaco: 1.005 − 467. Atención: hay varias columnas con cero, así que necesitarán préstamos en cadena.</div>
+  <div class="respuesta">1.005 − 467 = 538. Préstamo en cadena desde millares: millares 1→0, centenas 0→10→9, decenas 0→10→9, unidades 5→15. 15−7=8. Decenas: 9−6=3. Centenas: 9−4=5.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--       SESIÓN 3 — PROGRESIÓN ARITMÉTICA                -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<h2 id="s3-pa"><span class="sesion-tag tag-s3">Sesión 3</span><br>Progresión Aritmética (PA)</h2>
+
+<div class="card">
+  <div class="card-tag">PA · CONCEPTO · DEFINICIÓN Y FÓRMULA</div>
+  <h3>Definición y fórmula de la PA</h3>
+  <button class="btn-play" onclick="playTTS(37)">▶ Reproducir</button>
+  <div class="enunciado">Una Progresión Aritmética (PA) es una secuencia donde cada término se obtiene sumando una cantidad fija al anterior. Esa cantidad fija se llama diferencia común (d). La fórmula del término n-ésimo es: a(n) = a(1) + (n − 1) × d, donde a(1) es el primer término, n es la posición del término que buscamos y d es la diferencia común.</div>
+  <div class="respuesta">PA: secuencia donde cada término = anterior + d. Fórmula: a(n) = a(1) + (n − 1) × d. Para encontrar d: restar dos términos consecutivos.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PA · EJEMPLO 1 · PA CRECIENTE</div>
+  <h3>Ejemplo: secuencia 3, 7, 11, 15, ...</h3>
+  <button class="btn-play" onclick="playTTS(38)">▶ Reproducir</button>
+  <div class="enunciado">Dada la PA: 3, 7, 11, 15, ... Encontrar la diferencia común, el término 5 y el término 10.</div>
+  <div class="respuesta">d = 7 − 3 = 4. Término 5: a(5) = 3 + (5−1)×4 = 3 + 16 = 19. Término 10: a(10) = 3 + (10−1)×4 = 3 + 36 = 39.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PA · EJEMPLO 2 · PA DECRECIENTE</div>
+  <h3>Ejemplo: secuencia 50, 43, 36, 29, ...</h3>
+  <button class="btn-play" onclick="playTTS(39)">▶ Reproducir</button>
+  <div class="enunciado">Dada la PA: 50, 43, 36, 29, ... Encontrar la diferencia común y el término 6.</div>
+  <div class="respuesta">d = 43 − 50 = −7 (PA decreciente). Término 6: a(6) = 50 + (6−1)×(−7) = 50 − 35 = 15. Verificación: 50, 43, 36, 29, 22, 15.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--       SESIÓN 3 — PROGRESIÓN GEOMÉTRICA                -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<h2 id="s3-pg"><span class="sesion-tag tag-s3">Sesión 3</span><br>Progresión Geométrica (PG)</h2>
+
+<div class="card">
+  <div class="card-tag">PG · CONCEPTO · DEFINICIÓN Y FÓRMULA</div>
+  <h3>Definición y fórmula de la PG</h3>
+  <button class="btn-play" onclick="playTTS(40)">▶ Reproducir</button>
+  <div class="enunciado">Una Progresión Geométrica (PG) es una secuencia donde cada término se obtiene multiplicando el anterior por una cantidad fija. Esa cantidad se llama razón (r). La fórmula del término n-ésimo es: a(n) = a(1) × r elevado a (n − 1). Diferencia clave: en la PA sumamos, en la PG multiplicamos.</div>
+  <div class="respuesta">PG: secuencia donde cada término = anterior × r. Fórmula: a(n) = a(1) × r^(n−1). Para encontrar r: dividir un término entre el anterior.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PG · EJEMPLO 1 · RAZÓN 3</div>
+  <h3>Ejemplo: secuencia 2, 6, 18, 54, ...</h3>
+  <button class="btn-play" onclick="playTTS(41)">▶ Reproducir</button>
+  <div class="enunciado">Dada la PG: 2, 6, 18, 54, ... Encontrar la razón y el término 5.</div>
+  <div class="respuesta">r = 6 ÷ 2 = 3. Término 5: a(5) = 2 × 3⁴ = 2 × 81 = 162. Verificación: 2, 6, 18, 54, 162.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">PG · EJEMPLO 2 · RAZÓN FRACCIONARIA</div>
+  <h3>Ejemplo: secuencia 800, 400, 200, 100, ...</h3>
+  <button class="btn-play" onclick="playTTS(42)">▶ Reproducir</button>
+  <div class="enunciado">Dada la PG: 800, 400, 200, 100, ... Encontrar la razón y los términos 5 y 6. En esta PG la razón es una fracción, por lo que la secuencia va disminuyendo.</div>
+  <div class="respuesta">r = 400 ÷ 800 = 1/2. Término 5: 800 × (1/2)⁴ = 800 ÷ 16 = 50. Término 6: 50 ÷ 2 = 25. Cuando r está entre 0 y 1, la PG es decreciente.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--     SESIÓN 3 — EJERCICIOS TIPO EXAMEN                 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<h2 id="s3-ej"><span class="sesion-tag tag-s3">Sesión 3</span><br>Ejercicios tipo examen UdeA</h2>
+
+<div class="card">
+  <div class="card-tag">EJERCICIO 1 · BÁSICO · PA</div>
+  <h3>Siguiente término de una PA</h3>
+  <button class="btn-play" onclick="playTTS(43)">▶ Reproducir</button>
+  <div class="enunciado">¿Cuál es el siguiente término de la secuencia 5, 9, 13, 17, ...?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>19</div>
+    <div class="opcion"><span class="opcion-num">2</span>20</div>
+    <div class="opcion"><span class="opcion-num">3</span>21</div>
+    <div class="opcion"><span class="opcion-num">4</span>23</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 3</strong><br>La diferencia común es 9 − 5 = 4. El siguiente término es 17 + 4 = 21.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">EJERCICIO 2 · INTERMEDIO · PA</div>
+  <h3>Término n-ésimo de una PA</h3>
+  <button class="btn-play" onclick="playTTS(44)">▶ Reproducir</button>
+  <div class="enunciado">En la PA: 8, 14, 20, 26, ... ¿cuál es el término número 15?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>86</div>
+    <div class="opcion"><span class="opcion-num">2</span>90</div>
+    <div class="opcion"><span class="opcion-num">3</span>92</div>
+    <div class="opcion"><span class="opcion-num">4</span>98</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 3</strong><br>d = 14 − 8 = 6. a(15) = 8 + (15−1) × 6 = 8 + 84 = 92.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">EJERCICIO 3 · BÁSICO · PG</div>
+  <h3>Razón de una PG</h3>
+  <button class="btn-play" onclick="playTTS(45)">▶ Reproducir</button>
+  <div class="enunciado">¿Cuál es la razón de la PG: 4, 12, 36, 108, ...?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>2</div>
+    <div class="opcion"><span class="opcion-num">2</span>3</div>
+    <div class="opcion"><span class="opcion-num">3</span>4</div>
+    <div class="opcion"><span class="opcion-num">4</span>8</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 2</strong><br>12 ÷ 4 = 3. Verificación: 36 ÷ 12 = 3 y 108 ÷ 36 = 3. La razón es 3.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">EJERCICIO 4 · INTERMEDIO · PG</div>
+  <h3>Término específico de una PG</h3>
+  <button class="btn-play" onclick="playTTS(46)">▶ Reproducir</button>
+  <div class="enunciado">En la PG: 5, 10, 20, 40, ... ¿cuál es el término número 7?</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>160</div>
+    <div class="opcion"><span class="opcion-num">2</span>240</div>
+    <div class="opcion"><span class="opcion-num">3</span>320</div>
+    <div class="opcion"><span class="opcion-num">4</span>640</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 3</strong><br>r = 10 ÷ 5 = 2. a(7) = 5 × 2⁶ = 5 × 64 = 320. Verificación: 5, 10, 20, 40, 80, 160, 320.</div>
+</div>
+
+<div class="card">
+  <div class="card-tag">EJERCICIO 5 · NIVEL UDEA · SERIE MIXTA</div>
+  <h3>Serie de diferencias de segundo orden</h3>
+  <button class="btn-play" onclick="playTTS(47)">▶ Reproducir</button>
+  <div class="enunciado">¿Cuál es el siguiente término de la secuencia: 2, 5, 10, 17, 26, ...? Pista: esta no es una PA ni una PG simple. Observen las diferencias entre términos consecutivos.</div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>33</div>
+    <div class="opcion"><span class="opcion-num">2</span>35</div>
+    <div class="opcion"><span class="opcion-num">3</span>37</div>
+    <div class="opcion"><span class="opcion-num">4</span>39</div>
+  </div>
+  <div class="respuesta"><strong>Respuesta correcta: 3</strong><br>Las diferencias entre términos consecutivos son: 3, 5, 7, 9 → forman una PA con d = 2. La siguiente diferencia es 9 + 2 = 11. Entonces: 26 + 11 = 37.</div>
+</div>
+
+<footer>
+  UdeA Posible · Preparatorio examen de admisión UdeA<br>
+  Abrir en Chrome o Safari para audio · 2026
+</footer>
+
+</div><!-- .page -->
+
+<script>
+const TTS = [
+/*0*/ `Problema número uno. Aritmética y porcentajes.\n\nEn una tienda... un par de zapatos cuesta ochenta mil pesos.\nEl dueño decide aumentar el precio... en un veinticinco por ciento.\n¿Cuánto cuesta el par de zapatos... después del aumento?\n\nLas opciones son:\n1: veinte mil pesos.\n2: ochenta y cinco mil pesos.\n3: cien mil pesos.\n4: ciento cinco mil pesos.\n\nTienen cuatro minutos para responder.`,
+/*1*/ `Problema número dos. Proporcionalidad.\n\nSi cuatro obreros construyen una pared... en seis días...\n¿Cuántos días tardarán ocho obreros... en construir la misma pared... si todos trabajan al mismo ritmo?\n\nLas opciones son:\n1: doce días.\n2: ocho días.\n3: cuatro días.\n4: tres días.\n\nTienen cuatro minutos para responder.`,
+/*2*/ `Problema número tres. Lógica proposicional.\n\nSe sabe que: "Si un estudiante estudia... entonces aprueba el examen."\nUn estudiante... no aprobó el examen.\n¿Qué se puede concluir con certeza?\n\nLas opciones son:\n1: El estudiante estudió.\n2: El estudiante no estudió.\n3: El estudiante estudió... pero no le fue bien.\n4: No se puede concluir nada... sobre si estudió.\n\nTienen cuatro minutos para responder.`,
+/*3*/ `Problema número cuatro. Series y secuencias.\n\nObserva la siguiente serie de números:\nDos...... cinco...... once...... veintitrés...... cuarenta y siete...... y un espacio en blanco.\n¿Cuál es el número que sigue?\n\nLas opciones son:\n1: setenta y uno.\n2: ochenta y nueve.\n3: noventa y cinco.\n4: noventa y cuatro.\n\nTienen cuatro minutos para responder.`,
+/*4*/ `Problema número cinco. Conteo y probabilidad.\n\nEn una bolsa hay... tres bolas rojas... dos bolas azules... y una bola verde.\nSe saca una bola al azar.\n¿Cuál es la probabilidad... de que la bola NO sea roja?\n\nLas opciones son:\n1: uno sobre seis.\n2: tres sobre seis.\n3: dos sobre seis.\n4: cuatro sobre seis.\n\nTienen cuatro minutos para responder.`,
+/*5*/ `Proporcionalidad. Nivel uno.\n\nUn carro recorre ciento veinte kilómetros... en dos horas... siempre a la misma velocidad.\n¿Cuántos kilómetros recorrerá... en cinco horas?\n\nLas opciones son:\n1: doscientos cuarenta kilómetros.\n2: trescientos kilómetros.\n3: trescientos sesenta kilómetros.\n4: seiscientos kilómetros.\n\nTienen cuatro minutos.`,
+/*6*/ `Proporcionalidad. Nivel dos.\n\nUna fábrica tiene seis máquinas... que producen doscientas cuarenta piezas en un día.\nSi se añaden dos máquinas más... todas trabajando igual...\n¿Cuántas piezas se producirán... en ese mismo día?\n\nLas opciones son:\n1: doscientas ochenta piezas.\n2: trescientas piezas.\n3: trescientas veinte piezas.\n4: cuatrocientas ochenta piezas.\n\nTienen cuatro minutos.`,
+/*7*/ `Proporcionalidad. Nivel tres. Atención, este problema tiene dos partes.\n\nEn una receta... por cada tres tazas de harina... se usan dos huevos.\n\nPrimera parte: si se quieren usar nueve tazas de harina... ¿cuántos huevos se necesitan?\nSegunda parte: si en cambio se tienen solo ocho huevos... ¿cuántas tazas de harina se pueden usar?\n\nLas opciones son:\n1: seis huevos... y diez tazas.\n2: seis huevos... y doce tazas.\n3: cinco huevos... y doce tazas.\n4: cuatro huevos... y nueve tazas.\n\nTienen cinco minutos.`,
+/*8*/ `Porcentajes. Nivel uno.\n\nEn un salón de cuarenta estudiantes... el treinta por ciento aprobó el examen de admisión.\n¿Cuántos estudiantes aprobaron?\n\nLas opciones son:\n1: diez estudiantes.\n2: doce estudiantes.\n3: catorce estudiantes.\n4: dieciséis estudiantes.\n\nTienen cuatro minutos.`,
+/*9*/ `Porcentajes. Nivel dos.\n\nUna tienda sube el precio de un producto... en un veinte por ciento.\nLuego... lo baja en un veinte por ciento.\n¿El precio final es igual... mayor... o menor al precio original?\n\nLas opciones son:\n1: Igual al original.\n2: Mayor que el original.\n3: Menor que el original.\n4: Depende del precio inicial.\n\nTienen cuatro minutos.`,
+/*10*/ `Porcentajes. Nivel tres.\n\nDespués de un aumento del veinticinco por ciento...\nel precio de un artículo quedó en setenta y cinco mil pesos.\n¿Cuál era el precio original... antes del aumento?\n\nLas opciones son:\n1: cincuenta y seis mil doscientos cincuenta pesos.\n2: sesenta mil pesos.\n3: sesenta y dos mil quinientos pesos.\n4: sesenta y cinco mil pesos.\n\nTienen cinco minutos.`,
+/*11*/ `Repasemos la estructura del ábaco cerrado, también llamado ábaco Cranmer.\n\nEl ábaco tiene una barra horizontal en el centro, que llamamos riel separador.\nCada columna del ábaco se divide en dos zonas.\nArriba del riel hay una sola cuenta, que vale cinco.\nAbajo del riel hay cuatro cuentas, cada una vale uno.\n\nPara contar con una cuenta, la empujamos hacia el riel.\nEs decir: las de abajo las subimos, y la de arriba la bajamos.\n\nLas columnas van de derecha a izquierda.\nLa primera columna a la derecha son las unidades.\nLa segunda, las decenas.\nLa tercera, las centenas.\nLa cuarta, los millares.\n\nPractiquemos. Representen el número tres mil ochocientos cuarenta y siete en el ábaco.`,
+/*12*/ `Tutorial de suma. Vamos a sumar cuatrocientos setenta y ocho más trescientos cincuenta y seis.\n\nPaso uno: representen el primer número, cuatrocientos setenta y ocho, en el ábaco.\n\nAhora vamos a sumar el segundo número, trescientos cincuenta y seis, empezando por las unidades. Siempre sumamos de derecha a izquierda.\n\nPaso dos: sumemos seis a las unidades. Tenemos ocho. Ocho más seis es catorce. Hay acarreo. En unidades dejamos cuatro y llevamos uno a las decenas.\n\nPaso tres: sumemos cinco a las decenas. Tenemos ocho. Ocho más cinco es trece. Hay acarreo. En decenas dejamos tres y llevamos uno a centenas.\n\nPaso cuatro: sumemos tres a centenas. Tenemos cinco. Cinco más tres es ocho.\n\nResultado: ochocientos treinta y cuatro.`,
+/*13*/ `Ejercicio de suma número uno. Sin acarreo.\n\nRepresenten en el ábaco el número doscientos treinta y cuatro.\nAhora sumen ciento cincuenta y dos.\nRecuerden: empiecen por las unidades.\n\nUnidades: cuatro más dos.\nDecenas: tres más cinco.\nCentenas: dos más uno.\n\nTienen dos minutos para resolverlo.`,
+/*14*/ `Ejercicio de suma número dos. Con acarreo.\n\nRepresenten cuatrocientos setenta y ocho en el ábaco.\nAhora sumen trescientos cincuenta y seis.\nEmpiecen por las unidades.\nRecuerden: si la suma pasa de nueve, dejen el dígito de las unidades y lleven uno a la siguiente columna.\n\nTienen tres minutos.`,
+/*15*/ `Ejercicio de suma número tres. Números más grandes.\n\nRepresenten mil doscientos cuarenta y cinco en el ábaco.\nNecesitan cuatro columnas: millares, centenas, decenas y unidades.\nAhora sumen ochocientos sesenta y siete.\nEmpiecen por las unidades como siempre.\n\nTienen cuatro minutos.`,
+/*16*/ `Tutorial de resta. Vamos a restar ochocientos tres menos cuatrocientos cincuenta y siete.\n\nPaso uno: representen ochocientos tres en el ábaco.\n\nPaso dos: restemos siete de las unidades. Tenemos tres. Tres menos siete no se puede. Necesitamos pedir prestado.\nVamos a decenas, pero decenas tiene cero. Entonces vamos a centenas.\nCentenas pasa de ocho a siete. Decenas pasa de cero a diez, luego a nueve.\nUnidades recibe diez: tres más diez es trece. Trece menos siete es seis.\n\nPaso tres: restemos cinco de las decenas. Nueve menos cinco es cuatro.\n\nPaso cuatro: restemos cuatro de las centenas. Siete menos cuatro es tres.\n\nResultado: trescientos cuarenta y seis.`,
+/*17*/ `Ejercicio de resta número uno. Sin préstamo.\n\nRepresenten quinientos sesenta y siete en el ábaco.\nAhora resten doscientos treinta y cuatro.\nEmpiecen por las unidades.\n\nTienen dos minutos.`,
+/*18*/ `Ejercicio de resta número dos. Con préstamo.\n\nRepresenten ochocientos tres en el ábaco.\nResten cuatrocientos cincuenta y siete.\nEmpiecen por las unidades.\nRecuerden: si no pueden restar, pidan prestado a la columna de la izquierda.\n\nTienen tres minutos.`,
+/*19*/ `Ejercicio de resta número tres. Números más grandes.\n\nRepresenten dos mil diez en el ábaco.\nMillares: dos. Centenas: cero. Decenas: uno. Unidades: cero.\nAhora resten setecientos sesenta y tres.\nAtención: hay varias columnas con cero.\n\nTienen cuatro minutos.`,
+/*20*/ `Tutorial de multiplicación. Vamos a multiplicar ciento veintiséis por cuatro.\n\nEl método es: multiplicamos cada dígito por cuatro, empezando por las unidades.\n\nPaso uno: seis por cuatro es veinticuatro. Pongan cuatro en unidades. Lleven dos a decenas.\n\nPaso dos: dos por cuatro es ocho. Más dos del acarreo, diez. Dejen cero en decenas y lleven uno a centenas.\n\nPaso tres: uno por cuatro es cuatro. Más uno del acarreo, cinco. Pongan cinco en centenas.\n\nResultado: quinientos cuatro.`,
+/*21*/ `Ejercicio de multiplicación número uno.\n\nMultipliquen cuarenta y cinco por tres en el ábaco.\nRecuerden: empiecen por las unidades.\nCinco por tres... y luego cuatro por tres.\n\nTienen dos minutos.`,
+/*22*/ `Ejercicio de multiplicación número dos.\n\nMultipliquen ciento veintiséis por cuatro.\nEs el mismo ejemplo del tutorial. Ahora háganlo solos sin ayuda.\n\nTienen tres minutos.`,
+/*23*/ `Ejercicio de multiplicación número tres.\n\nMultipliquen doscientos ocho por siete.\nAtención: el número doscientos ocho tiene un cero en las decenas.\nCero por siete es cero, pero no olviden sumar el acarreo si lo hay.\n\nTienen tres minutos.`,
+/*24*/ `Tutorial de división. Vamos a dividir ciento setenta y cinco entre cinco.\n\nPaso uno: representen ciento setenta y cinco en el ábaco.\n\nPaso dos: empecemos por la izquierda. ¿Cuántas veces cabe cinco en uno? Cero. Juntamos con la siguiente: diecisiete.\n\nPaso tres: ¿Cuántas veces cabe cinco en diecisiete? Tres veces. Residuo: dos.\n\nPaso cuatro: bajamos las unidades. Dos y cinco forman veinticinco. ¿Cuántas veces cabe cinco en veinticinco? Exactamente cinco.\n\nResultado: treinta y cinco, sin residuo.`,
+/*25*/ `Ejercicio de división número uno.\n\nDividan noventa y seis entre cuatro.\nEmpiecen por la izquierda: ¿cuántas veces cabe cuatro en nueve?\n\nTienen tres minutos.`,
+/*26*/ `Ejercicio de división número dos.\n\nDividan ciento setenta y cinco entre cinco.\nEs el mismo ejemplo del tutorial. Háganlo solos esta vez.\n\nTienen tres minutos.`,
+/*27*/ `Ejercicio de división número tres. Con residuo.\n\nDividan doscientos cincuenta y nueve entre seis.\nAtención: esta división no es exacta. Va a sobrar algo.\nEncuentren el cociente y el residuo.\n\nTienen cuatro minutos.`,
+/*28*/ `Problema número uno. Suma y resta.\n\nUn estudiante tiene cuarenta y cinco mil pesos.\nCompra un libro de dieciocho mil quinientos pesos... y un cuaderno de siete mil doscientos pesos.\n¿Cuánto dinero le queda?\n\nPista: pueden sumar primero lo que gastó y luego restar del total. Usen el ábaco.\n\nLas opciones son:\n1: diecinueve mil trescientos pesos.\n2: veinte mil trescientos pesos.\n3: veinticinco mil setecientos pesos.\n4: veintiséis mil quinientos pesos.\n\nTienen cinco minutos.`,
+/*29*/ `Problema número dos. Multiplicación.\n\nEn una biblioteca hay ocho estantes. Cada estante tiene treinta y cinco libros.\n¿Cuántos libros hay en total en la biblioteca?\n\nMultipliquen en el ábaco: treinta y cinco por ocho.\n\nLas opciones son:\n1: doscientos cuarenta libros.\n2: doscientos sesenta libros.\n3: doscientos ochenta libros.\n4: trescientos quince libros.\n\nTienen cuatro minutos.`,
+/*30*/ `Problema número tres. División.\n\nSe reparten ciento cincuenta y seis lápices... entre doce estudiantes... por igual.\n¿Cuántos lápices recibe cada estudiante?\n\nLas opciones son:\n1: once lápices.\n2: doce lápices.\n3: trece lápices.\n4: catorce lápices.\n\nTienen cinco minutos.`,
+/*31*/ `Empecemos con un repaso rápido de la estructura del ábaco cerrado.\n\nEl ábaco tiene una barra horizontal en el centro, el riel separador.\nCada columna se divide en dos zonas.\nArriba del riel hay una sola cuenta, que vale cinco.\nAbajo del riel hay cuatro cuentas, cada una vale uno.\n\nPara activar una cuenta, la empujamos hacia el riel central.\nLas de abajo las subimos. La de arriba la bajamos.\n\nLas columnas van de derecha a izquierda.\nPrimera columna: unidades.\nSegunda columna: decenas.\nTercera columna: centenas.\nCuarta columna: millares.\n\nPractiquemos. Representen el número quinientos sesenta y tres en el ábaco.`,
+/*32*/ `Ejemplo resuelto de suma número uno. Sin acarreo.\n\nVamos a sumar doscientos treinta y cuatro más ciento cincuenta y dos.\n\nPaso uno: representen doscientos treinta y cuatro en el ábaco.\n\nPaso dos: sumemos dos a las unidades. Cuatro más dos es seis.\n\nPaso tres: sumemos cinco a las decenas. Tres más cinco es ocho.\n\nPaso cuatro: sumemos uno a las centenas. Dos más uno es tres.\n\nResultado: trescientos ochenta y seis.`,
+/*33*/ `Ejemplo resuelto de suma número dos. Con acarreo.\n\nVamos a sumar quinientos sesenta y siete más trescientos ochenta y cinco.\n\nPaso uno: representen quinientos sesenta y siete en el ábaco.\n\nPaso dos: sumemos cinco a las unidades. Siete más cinco es doce. Hay acarreo. Dejamos dos, llevamos uno a decenas.\n\nPaso tres: sumemos ocho a las decenas. Seis más uno más ocho es quince. Hay acarreo. Dejamos cinco, llevamos uno a centenas.\n\nPaso cuatro: sumemos tres a centenas. Cinco más uno más tres es nueve.\n\nResultado: novecientos cincuenta y dos.`,
+/*34*/ `Ejemplo resuelto de resta. Con préstamo.\n\nVamos a restar setecientos dos menos trescientos cincuenta y ocho.\n\nPaso uno: representen setecientos dos en el ábaco.\n\nPaso dos: restemos ocho de las unidades. Dos menos ocho no se puede. Préstamo en cadena: centenas siete pasa a seis, decenas cero pasa a nueve, unidades dos pasa a doce. Doce menos ocho es cuatro.\n\nPaso tres: restemos cinco de las decenas. Nueve menos cinco es cuatro.\n\nPaso cuatro: restemos tres de las centenas. Seis menos tres es tres.\n\nResultado: trescientos cuarenta y cuatro.`,
+/*35*/ `Ejercicio de práctica número uno. Suma con acarreo.\n\nRepresenten en el ábaco el número seiscientos ochenta y nueve.\nAhora sumen doscientos cuarenta y siete.\nRecuerden: empiecen por las unidades.\n\nTómense el tiempo que necesiten.`,
+/*36*/ `Ejercicio de práctica número dos. Resta con préstamo.\n\nRepresenten en el ábaco el número mil cinco.\nMillares: uno. Centenas: cero. Decenas: cero. Unidades: cinco.\nAhora resten cuatrocientos sesenta y siete.\n\nAtención: hay varias columnas con cero. Van a necesitar préstamos en cadena.\n\nTómense el tiempo que necesiten.`,
+/*37*/ `Progresión Aritmética. Definición y fórmula.\n\nUna Progresión Aritmética es una secuencia de números donde siempre se suma lo mismo para pasar de un número al siguiente.\n\nA eso que se suma le llamamos diferencia común, y le decimos d.\n\nPor ejemplo: dos, cinco, ocho, once, catorce. Acá siempre se suma tres. Entonces d es igual a tres.\n\nLa fórmula para encontrar cualquier término es:\na de n es igual a a de uno más, n menos uno, por d.\n\nDonde a de uno es el primer término, n es la posición que buscamos, y d es la diferencia común.`,
+/*38*/ `Ejemplo de Progresión Aritmética. Secuencia: tres, siete, once, quince.\n\nPrimero encontremos la diferencia común: siete menos tres es cuatro. Verificamos: once menos siete es cuatro. Quince menos once es cuatro. Confirmado: d es igual a cuatro.\n\nTérmino cinco: a de cinco es igual a tres más cuatro por cuatro, que es tres más dieciséis, que es diecinueve.\n\nTérmino diez: a de diez es igual a tres más nueve por cuatro, que es tres más treinta y seis, que es treinta y nueve.`,
+/*39*/ `Ejemplo de Progresión Aritmética decreciente. Secuencia: cincuenta, cuarenta y tres, treinta y seis, veintinueve.\n\nDiferencia común: cuarenta y tres menos cincuenta es igual a menos siete. Es una PA decreciente.\n\nTérmino seis: a de seis es igual a cincuenta más cinco por menos siete, que es cincuenta menos treinta y cinco, que es quince.\n\nVerificación contando: cincuenta, cuarenta y tres, treinta y seis, veintinueve, veintidós, quince.`,
+/*40*/ `Progresión Geométrica. Definición y fórmula.\n\nUna Progresión Geométrica es una secuencia donde cada término se obtiene multiplicando el anterior por una cantidad fija.\n\nA esa cantidad la llamamos razón, y le decimos r.\n\nPor ejemplo: tres, seis, doce, veinticuatro, cuarenta y ocho. Acá siempre se multiplica por dos. Entonces r es igual a dos.\n\nDiferencia clave: en la PA sumamos, en la PG multiplicamos.\n\nPara encontrar r, dividimos un término entre el anterior.\n\nLa fórmula es: a de n es igual a a de uno, por r elevado a n menos uno.`,
+/*41*/ `Ejemplo de Progresión Geométrica. Secuencia: dos, seis, dieciocho, cincuenta y cuatro.\n\nRazón: seis dividido dos es igual a tres. Verificamos: dieciocho dividido seis es tres.\n\nTérmino cinco: a de cinco es igual a dos por tres elevado a la cuarta, que es dos por ochenta y uno, que es ciento sesenta y dos.\n\nVerificación: dos, seis, dieciocho, cincuenta y cuatro, ciento sesenta y dos.`,
+/*42*/ `Ejemplo de Progresión Geométrica con razón fraccionaria. Secuencia: ochocientos, cuatrocientos, doscientos, cien.\n\nRazón: cuatrocientos dividido ochocientos es igual a un medio.\n\nCuando la razón está entre cero y uno, la secuencia va disminuyendo pero nunca llega a cero.\n\nTérmino cinco: ochocientos dividido dieciséis es igual a cincuenta.\nTérmino seis: cincuenta dividido dos es igual a veinticinco.\n\nVerificación: ochocientos, cuatrocientos, doscientos, cien, cincuenta, veinticinco.`,
+/*43*/ `Ejercicio uno. Progresión Aritmética.\n\n¿Cuál es el siguiente término de la secuencia: cinco, nueve, trece, diecisiete?\n\nIdentifiquen la diferencia común.\n\nLas opciones son:\n1: diecinueve.\n2: veinte.\n3: veintiuno.\n4: veintitrés.`,
+/*44*/ `Ejercicio dos. Progresión Aritmética.\n\nEn la PA: ocho, catorce, veinte, veintiséis... ¿cuál es el término número quince?\n\nUsen la fórmula: a de n es igual a a de uno más n menos uno por d.\nPrimero encuentren d, luego apliquen con n igual a quince.\n\nLas opciones son:\n1: ochenta y seis.\n2: noventa.\n3: noventa y dos.\n4: noventa y ocho.`,
+/*45*/ `Ejercicio tres. Progresión Geométrica.\n\n¿Cuál es la razón de la PG: cuatro, doce, treinta y seis, ciento ocho?\n\nRecuerden: la razón se encuentra dividiendo un término entre el anterior.\n\nLas opciones son:\n1: dos.\n2: tres.\n3: cuatro.\n4: ocho.`,
+/*46*/ `Ejercicio cuatro. Progresión Geométrica.\n\nEn la PG: cinco, diez, veinte, cuarenta... ¿cuál es el término número siete?\n\nPrimero encuentren la razón. Luego usen la fórmula.\nPista: también pueden multiplicar por la razón desde el cuarto término hasta el séptimo.\n\nLas opciones son:\n1: ciento sesenta.\n2: doscientos cuarenta.\n3: trescientos veinte.\n4: seiscientos cuarenta.`,
+/*47*/ `Ejercicio cinco. Nivel UdeA. Serie mixta.\n\n¿Cuál es el siguiente término de la secuencia: dos, cinco, diez, diecisiete, veintiséis?\n\nEsta no es una PA ni una PG simple.\nEstrategia: calculen las diferencias entre términos consecutivos.\nLas diferencias son: tres, cinco, siete, nueve.\nEsas diferencias forman una PA con d igual a dos.\n\nLas opciones son:\n1: treinta y tres.\n2: treinta y cinco.\n3: treinta y siete.\n4: treinta y nueve.`
+];
+
+let currentUtter = null;
+let currentBtn = null;
+
+function getSpeed() {
+  return parseFloat(document.getElementById('speedSlider').value);
+}
+
+function stopCurrent() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (currentBtn) {
+    currentBtn.classList.remove('playing');
+    currentBtn.innerHTML = '▶ Reproducir';
+  }
+  currentUtter = null;
+  currentBtn = null;
+}
+
+function playTTS(i) {
+  const btn = event.target.closest('.btn-play');
+  if (currentBtn === btn) { stopCurrent(); return; }
+  stopCurrent();
+  if (!window.speechSynthesis) { alert('Abrí esta página en Chrome o Safari para escuchar el audio.'); return; }
+
+  const utter = new SpeechSynthesisUtterance(TTS[i]);
+  utter.lang = 'es-CO';
+  utter.rate = getSpeed();
+  utter.pitch = 1.0;
+  utter.volume = 1.0;
+
+  const voices = window.speechSynthesis.getVoices();
+  const v = voices.find(v => v.lang === 'es-CO') || voices.find(v => v.lang.startsWith('es'));
+  if (v) utter.voice = v;
+
+  currentBtn = btn;
+  btn.classList.add('playing');
+  btn.innerHTML = '<span class="playing-dot"></span> Detener';
+
+  utter.onend = () => { stopCurrent(); };
+  utter.onerror = () => { stopCurrent(); };
+
+  currentUtter = utter;
+  window.speechSynthesis.speak(utter);
+}
+
+if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => {};
+</script>
 </body>
 </html>
