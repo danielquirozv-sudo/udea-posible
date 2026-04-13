@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soroban Virtual — UdeA Posible</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;--border:#2e2e2e;
+  --text:#e8e8e0;--text2:#888880;--text3:#555550;
+  --c-sum:#a0c8f0;--c-res:#f0a0a0;--c-mul:#c090f0;--c-div:#c8f060;
+  --accent:var(--c-mul);
+  --wood:#5a3e2a;--wood2:#2a1e14;
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-size:15px;line-height:1.7;min-height:100vh;padding:2rem 1rem 4rem}
+.page{max-width:920px;margin:0 auto}
+header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+h1{font-size:24px;font-weight:600;line-height:1.3;margin-bottom:.4rem}
+.subtitle{font-size:14px;color:var(--text2)}
+h2{font-size:17px;font-weight:600;margin:2rem 0 .8rem;color:var(--text)}
+.back{display:inline-block;color:var(--c-sum);font-size:13px;text-decoration:none;margin-bottom:1rem;font-family:'JetBrains Mono',monospace}
+.back:hover{color:var(--accent)}
+.intro{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem;font-size:14px;line-height:1.8;color:#c8c8c0}
+.intro strong{color:var(--accent)}
+
+/* === Panel de entrada === */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:1rem}
+.row:last-child{margin-bottom:0}
+.ops{display:flex;flex-wrap:wrap;gap:8px}
+.op-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:8px;border:2px solid var(--border);background:var(--surface2);color:var(--text);font-family:'Sora',sans-serif;font-size:15px;cursor:pointer;min-height:44px;min-width:64px;justify-content:center;transition:all .15s}
+.op-btn:hover{border-color:var(--text2)}
+.op-btn[aria-pressed="true"]{border-color:var(--accent);background:#201a28;color:var(--accent)}
+.op-btn:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+.num-input{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:16px;padding:10px 12px;border-radius:8px;width:150px;min-height:44px}
+.num-input:focus{outline:3px solid #ffeb3b;outline-offset:2px;border-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:8px;border:none;font-family:'Sora',sans-serif;font-size:14px;font-weight:500;cursor:pointer;min-height:44px;transition:all .15s}
+.btn-primary{background:var(--accent);color:#0f0f0f}
+.btn-primary:hover{filter:brightness(1.1)}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--text2)}
+.btn-danger{background:#f06060;color:#fff}
+.btn-danger:hover{background:#ff7070}
+.btn:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+.speed-control{display:inline-flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);padding:8px 14px;border-radius:8px}
+.speed-control label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);white-space:nowrap}
+.speed-control input[type=range]{-webkit-appearance:none;width:110px;height:6px;background:var(--border);border-radius:3px;outline:none}
+.speed-control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer}
+.speed-control input[type=range]:focus{outline:3px solid #ffeb3b;outline-offset:4px}
+.speed-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:38px}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);cursor:pointer;user-select:none}
+.toggle input{width:18px;height:18px;accent-color:var(--accent);cursor:pointer}
+
+/* === Display del valor === */
+.display{background:var(--wood2);border:2px solid var(--wood);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1rem;font-family:'JetBrains Mono',monospace}
+.display-label{font-size:11px;color:var(--text2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem}
+.display-value{font-size:28px;color:var(--accent);font-weight:500;letter-spacing:.1em}
+
+/* === Soroban === */
+.soroban{background:var(--wood2);border:4px solid var(--wood);border-radius:var(--radius);padding:1rem .75rem;margin-bottom:1.5rem;overflow-x:auto}
+.soroban-inner{display:flex;gap:4px;min-width:min-content;justify-content:center}
+.col{display:flex;flex-direction:column;align-items:center;min-width:48px;padding:4px 2px;border-radius:6px;position:relative}
+.col:focus-within{background:#3a2e20}
+.col-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;height:24px;display:flex;align-items:center;text-align:center;line-height:1.1}
+.col-digit{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--accent);margin-top:6px;height:18px;font-weight:500}
+.rod{background:var(--wood);width:4px;position:absolute;top:34px;bottom:32px;left:50%;transform:translateX(-50%);z-index:0;border-radius:2px}
+.upper,.lower{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;width:100%}
+.upper{height:80px;justify-content:flex-start;padding-top:4px}
+.divider{height:6px;width:100%;background:var(--wood);margin:4px 0;border-radius:2px}
+.lower{height:180px;justify-content:flex-start;padding-top:4px}
+.bead{width:34px;height:22px;border-radius:50%;border:2px solid #666;background:var(--surface2);cursor:pointer;padding:0;display:block;margin:2px 0;transition:transform 250ms ease, background-color 200ms, border-color 200ms, box-shadow 200ms}
+.bead:focus-visible{outline:3px solid #ffeb3b;outline-offset:3px;z-index:5}
+.bead[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);box-shadow:0 0 8px rgba(192,144,240,.4)}
+.upper .bead[aria-pressed="true"]{transform:translateY(42px)}
+.lower .bead[aria-pressed="true"]{transform:translateY(-6px)}
+.bead.highlight{box-shadow:0 0 0 4px #ffeb3b,0 0 12px #ffeb3b}
+@media (prefers-reduced-motion: reduce){
+  .bead{transition:background-color 100ms,border-color 100ms}
+  .upper .bead[aria-pressed="true"],.lower .bead[aria-pressed="true"]{transform:none}
+}
+
+/* === Panel de pasos === */
+.steps{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem;min-height:120px}
+.steps-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem}
+.steps-log{font-size:14px;line-height:1.9;color:#c8c8c0;max-height:240px;overflow-y:auto}
+.step-item{padding:8px 10px;border-left:3px solid var(--border);margin-bottom:6px;background:#0a0a0a;border-radius:0 6px 6px 0}
+.step-item.current{border-left-color:var(--accent);background:#1a1220;color:var(--text)}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);margin-right:8px}
+.result-box{background:#0a140a;border:2px solid var(--c-div);border-radius:8px;padding:1rem;margin-top:1rem;text-align:center}
+.result-label{font-size:11px;color:var(--text2);font-family:'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.3rem}
+.result-value{font-family:'JetBrains Mono',monospace;font-size:28px;color:var(--c-div);font-weight:500}
+.error-box{background:#200a0a;border:2px solid #f06060;border-radius:8px;padding:1rem;margin-top:1rem;color:#ffb0b0;font-size:14px}
+
+/* === Ayuda === */
+.help{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;font-size:13px;color:var(--text2);line-height:1.9}
+.help strong{color:var(--text)}
+.help kbd{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:1px 6px;color:var(--accent)}
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:12px;color:var(--text3);text-align:center;line-height:1.8}
+
+@media(max-width:700px){
+  body{padding:1rem .75rem 3rem}
+  h1{font-size:20px}
+  .num-input{width:110px}
+  .col{min-width:40px}
+  .bead{width:28px;height:20px}
+  .display-value{font-size:22px}
+  .result-value{font-size:22px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<a href="index.html" class="back">← Volver al índice</a>
+
+<header>
+  <div class="label">UdeA Posible · Herramienta interactiva</div>
+  <h1>Soroban virtual<br>con narración paso a paso</h1>
+  <div class="subtitle">Ábaco japonés accesible · Suma, resta, multiplicación y división</div>
+</header>
+
+<section class="intro" aria-labelledby="que-es">
+  <h2 id="que-es" style="margin:0 0 .6rem;font-size:16px">¿Qué es el soroban?</h2>
+  El <strong>soroban</strong> es el ábaco japonés. Tiene varias columnas y en cada columna hay <strong>una cuenta arriba que vale 5</strong> y <strong>cuatro cuentas abajo que valen 1 cada una</strong>. Se "activa" una cuenta cuando se acerca a la barra horizontal del medio. Así, el valor de una columna va de 0 a 9. Este soroban virtual tiene <strong>9 columnas</strong>, desde unidades hasta centenas de millón.
+</section>
+
+<!-- ═══════════════ PANEL DE ENTRADA ═══════════════ -->
+<section class="panel" aria-labelledby="entrada-titulo">
+  <h2 id="entrada-titulo" style="margin-top:0">Operación</h2>
+
+  <div class="row" role="group" aria-label="Seleccionar operación">
+    <div class="ops">
+      <button class="op-btn" data-op="suma" aria-pressed="false" aria-label="Suma">＋ Suma</button>
+      <button class="op-btn" data-op="resta" aria-pressed="false" aria-label="Resta">− Resta</button>
+      <button class="op-btn" data-op="mult" aria-pressed="true" aria-label="Multiplicación">× Multiplicación</button>
+      <button class="op-btn" data-op="div" aria-pressed="false" aria-label="División">÷ División</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <label for="inA" class="sr-only">Primer operando</label>
+    <input type="number" id="inA" class="num-input" placeholder="Número A" aria-label="Primer operando" value="23" min="0" max="999999999">
+    <span id="opSymbol" aria-hidden="true" style="font-size:22px;color:var(--accent);font-family:'JetBrains Mono',monospace">×</span>
+    <label for="inB" class="sr-only">Segundo operando</label>
+    <input type="number" id="inB" class="num-input" placeholder="Número B" aria-label="Segundo operando" value="45" min="0" max="999999999">
+  </div>
+
+  <div class="row">
+    <button class="btn btn-primary" id="btnRun" aria-label="Ejecutar operación paso a paso con narración">▶ Ejecutar paso a paso</button>
+    <button class="btn btn-danger" id="btnStop" aria-label="Detener narración y ejecución">■ Detener</button>
+    <button class="btn btn-secondary" id="btnReset" aria-label="Reiniciar el soroban a cero">↻ Reiniciar</button>
+    <button class="btn btn-secondary" id="btnRead" aria-label="Leer el valor actual del soroban">🔊 Leer valor</button>
+  </div>
+
+  <div class="row">
+    <div class="speed-control">
+      <label for="speedSlider">Velocidad de voz</label>
+      <input type="range" id="speedSlider" min="0.7" max="1.2" step="0.05" value="0.9" aria-valuemin="0.7" aria-valuemax="1.2" aria-valuenow="0.9">
+      <span class="speed-val" id="speedVal">0.90x</span>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="manualToggle">
+      <span>Modo manual (mover cuentas a mano)</span>
+    </label>
+  </div>
+</section>
+
+<!-- ═══════════════ DISPLAY ═══════════════ -->
+<div class="display" role="status" aria-live="polite" aria-atomic="true">
+  <div class="display-label">Valor actual del soroban</div>
+  <div class="display-value" id="displayValue">0</div>
+</div>
+
+<!-- ═══════════════ SOROBAN ═══════════════ -->
+<section class="soroban" role="application" aria-label="Soroban virtual de 9 columnas">
+  <div class="soroban-inner" id="sorobanInner"></div>
+</section>
+
+<!-- ═══════════════ PANEL DE PASOS ═══════════════ -->
+<section class="steps" aria-labelledby="pasos-titulo">
+  <div class="steps-label" id="pasos-titulo">Procedimiento paso a paso</div>
+  <div class="steps-log" id="stepsLog" role="log" aria-live="polite" aria-atomic="false">
+    <div class="step-item">Ingresa dos números y pulsa <strong>Ejecutar paso a paso</strong>. Aquí se mostrará cada paso del procedimiento.</div>
+  </div>
+  <div id="resultContainer"></div>
+</section>
+
+<!-- ═══════════════ AYUDA ═══════════════ -->
+<section class="help" aria-labelledby="ayuda-titulo">
+  <h2 id="ayuda-titulo" style="margin-top:0;font-size:15px">Cómo usar</h2>
+  <p><strong>Modo guiado:</strong> elige la operación, escribe los dos números y pulsa <em>Ejecutar paso a paso</em>. El soroban mostrará el procedimiento con narración de voz.</p>
+  <p><strong>Modo manual:</strong> activa la casilla <em>Modo manual</em> y haz clic sobre las cuentas (o usa <kbd>Tab</kbd> y <kbd>Enter</kbd>) para moverlas libremente. Al cambiar una columna, se narra su nuevo valor.</p>
+  <p><strong>Atajos de teclado:</strong> <kbd>Tab</kbd> recorre los controles y cuentas. <kbd>Enter</kbd> o <kbd>Espacio</kbd> activa. <kbd>Esc</kbd> detiene la narración.</p>
+</section>
+
+<footer>
+  UdeA Posible · Razonamiento lógico para aspirantes con discapacidad visual<br>
+  Soroban virtual — herramienta accesible compatible con lectores de pantalla
+</footer>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   SOROBAN VIRTUAL — LÓGICA
+   ═══════════════════════════════════════════════════════════════ */
+
+const NUM_COLS = 9;
+const COL_NAMES = [
+  'unidades','decenas','centenas',
+  'unidades de mil','decenas de mil','centenas de mil',
+  'unidades de millón','decenas de millón','centenas de millón'
+];
+const COL_LABELS_SHORT = ['U','D','C','UM','DM','CM','UMM','DMM','CMM'];
+
+const state = {
+  columns: Array.from({length: NUM_COLS}, () => ({top:false, bottom:0})),
+  speed: 0.9,
+  manualMode: false,
+  running: false,
+  op: 'mult'
+};
+
+/* ---------- DOM refs ---------- */
+const sorobanInner = document.getElementById('sorobanInner');
+const displayValue = document.getElementById('displayValue');
+const stepsLog = document.getElementById('stepsLog');
+const resultContainer = document.getElementById('resultContainer');
+const inA = document.getElementById('inA');
+const inB = document.getElementById('inB');
+const opSymbol = document.getElementById('opSymbol');
+const speedSlider = document.getElementById('speedSlider');
+const speedVal = document.getElementById('speedVal');
+const manualToggle = document.getElementById('manualToggle');
+
+/* ---------- Construir soroban ---------- */
+function buildSoroban(){
+  sorobanInner.innerHTML = '';
+  // Render desde columna 8 (izquierda) a 0 (derecha)
+  for(let i = NUM_COLS - 1; i >= 0; i--){
+    const col = document.createElement('div');
+    col.className = 'col';
+    col.setAttribute('role','group');
+    col.setAttribute('data-col', i);
+    col.id = 'col-' + i;
+    updateColAria(col, i);
+
+    const label = document.createElement('div');
+    label.className = 'col-label';
+    label.textContent = COL_LABELS_SHORT[i];
+    label.setAttribute('aria-hidden','true');
+    col.appendChild(label);
+
+    const rod = document.createElement('div');
+    rod.className = 'rod';
+    rod.setAttribute('aria-hidden','true');
+    col.appendChild(rod);
+
+    // Cuenta superior (valor 5)
+    const upper = document.createElement('div');
+    upper.className = 'upper';
+    const topBead = document.createElement('button');
+    topBead.className = 'bead bead-top';
+    topBead.setAttribute('aria-pressed','false');
+    topBead.setAttribute('aria-label', `Columna ${COL_NAMES[i]}, cuenta superior (valor 5), inactiva`);
+    topBead.setAttribute('data-col', i);
+    topBead.setAttribute('data-type','top');
+    topBead.addEventListener('click', () => onBeadClick(i, 'top'));
+    upper.appendChild(topBead);
+    col.appendChild(upper);
+
+    const divider = document.createElement('div');
+    divider.className = 'divider';
+    divider.setAttribute('aria-hidden','true');
+    col.appendChild(divider);
+
+    // 4 cuentas inferiores
+    const lower = document.createElement('div');
+    lower.className = 'lower';
+    for(let k = 0; k < 4; k++){
+      const b = document.createElement('button');
+      b.className = 'bead bead-bottom';
+      b.setAttribute('aria-pressed','false');
+      b.setAttribute('aria-label', `Columna ${COL_NAMES[i]}, cuenta inferior ${k+1} de 4, inactiva`);
+      b.setAttribute('data-col', i);
+      b.setAttribute('data-type','bottom');
+      b.setAttribute('data-pos', k);
+      b.addEventListener('click', () => onBeadClick(i, 'bottom', k));
+      lower.appendChild(b);
+    }
+    col.appendChild(lower);
+
+    // Dígito actual
+    const digit = document.createElement('div');
+    digit.className = 'col-digit';
+    digit.id = 'digit-' + i;
+    digit.textContent = '0';
+    digit.setAttribute('aria-hidden','true');
+    col.appendChild(digit);
+
+    sorobanInner.appendChild(col);
+  }
+}
+
+/* ---------- Estado → DOM ---------- */
+function renderColumn(i){
+  const c = state.columns[i];
+  const colEl = document.getElementById('col-' + i);
+  if(!colEl) return;
+  const topBead = colEl.querySelector('.bead-top');
+  const bottomBeads = colEl.querySelectorAll('.bead-bottom');
+  topBead.setAttribute('aria-pressed', c.top ? 'true' : 'false');
+  topBead.setAttribute('aria-label',
+    `Columna ${COL_NAMES[i]}, cuenta superior (valor 5), ${c.top ? 'activa' : 'inactiva'}`);
+  bottomBeads.forEach((b, k) => {
+    // Las primeras c.bottom cuentas (desde arriba) están activas
+    const active = k < c.bottom;
+    b.setAttribute('aria-pressed', active ? 'true' : 'false');
+    b.setAttribute('aria-label',
+      `Columna ${COL_NAMES[i]}, cuenta inferior ${k+1} de 4, ${active ? 'activa' : 'inactiva'}`);
+  });
+  document.getElementById('digit-' + i).textContent = colDigit(i);
+  updateColAria(colEl, i);
+}
+
+function updateColAria(colEl, i){
+  colEl.setAttribute('aria-label', `Columna ${COL_NAMES[i]}: valor ${colDigit(i)}`);
+}
+
+function colDigit(i){
+  const c = state.columns[i];
+  return (c.top ? 5 : 0) + c.bottom;
+}
+
+function readSoroban(){
+  let n = 0;
+  for(let i = 0; i < NUM_COLS; i++){
+    n += colDigit(i) * Math.pow(10, i);
+  }
+  return n;
+}
+
+function renderAll(){
+  for(let i = 0; i < NUM_COLS; i++) renderColumn(i);
+  displayValue.textContent = readSoroban().toLocaleString('es-ES');
+}
+
+function clearSoroban(){
+  for(let i = 0; i < NUM_COLS; i++){
+    state.columns[i] = {top:false, bottom:0};
+  }
+  renderAll();
+}
+
+function setDigit(i, digit){
+  if(i < 0 || i >= NUM_COLS || digit < 0 || digit > 9) return;
+  state.columns[i].top = digit >= 5;
+  state.columns[i].bottom = digit - (digit >= 5 ? 5 : 0);
+  renderColumn(i);
+  displayValue.textContent = readSoroban().toLocaleString('es-ES');
+}
+
+function writeNumber(n){
+  clearSoroban();
+  const s = String(n);
+  for(let k = 0; k < s.length; k++){
+    const colIdx = s.length - 1 - k;
+    if(colIdx >= NUM_COLS) continue;
+    setDigit(colIdx, parseInt(s[k], 10));
+  }
+}
+
+/* ---------- Highlighting para narración ---------- */
+function highlightColumn(i, on){
+  const colEl = document.getElementById('col-' + i);
+  if(!colEl) return;
+  colEl.querySelectorAll('.bead').forEach(b => {
+    if(on) b.classList.add('highlight');
+    else b.classList.remove('highlight');
+  });
+}
+function clearHighlights(){
+  document.querySelectorAll('.bead.highlight').forEach(b => b.classList.remove('highlight'));
+}
+
+/* ---------- TTS ---------- */
+function narrate(text){
+  return new Promise(resolve => {
+    if(!('speechSynthesis' in window)){ resolve(); return; }
+    try{
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'es-ES';
+      u.rate = state.speed;
+      u.onend = () => resolve();
+      u.onerror = () => resolve();
+      speechSynthesis.speak(u);
+    }catch(e){ resolve(); }
+  });
+}
+function stopNarration(){
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+}
+
+/* ---------- Ejecutar paso con UI ---------- */
+let stepCounter = 0;
+function resetStepsLog(){
+  stepCounter = 0;
+  stepsLog.innerHTML = '';
+  resultContainer.innerHTML = '';
+}
+function addStepToLog(text, isCurrent=true){
+  // Quitar clase current del anterior
+  stepsLog.querySelectorAll('.step-item.current').forEach(el => el.classList.remove('current'));
+  stepCounter++;
+  const div = document.createElement('div');
+  div.className = 'step-item' + (isCurrent ? ' current' : '');
+  div.innerHTML = `<span class="step-num">Paso ${stepCounter}</span>${text}`;
+  stepsLog.appendChild(div);
+  stepsLog.scrollTop = stepsLog.scrollHeight;
+}
+
+async function executeStep(text, action){
+  if(!state.running) return false;
+  addStepToLog(text);
+  await narrate(text);
+  if(!state.running) return false;
+  if(action) action();
+  await sleep(180 / state.speed);
+  return state.running;
+}
+
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+/* ═══════════════════════════════════════════════════════════════
+   OPERACIONES
+   ═══════════════════════════════════════════════════════════════ */
+
+async function opSuma(a, b){
+  await narrate(`Vamos a sumar ${a} más ${b}. Coloco ${a} en el soroban.`);
+  if(!state.running) return;
+  writeNumber(a);
+  addStepToLog(`Coloco el primer sumando ${a} en el soroban.`);
+  await sleep(300);
+
+  // Sumar dígito a dígito desde unidades
+  const digitsB = String(b).split('').reverse().map(d => parseInt(d,10));
+  for(let i = 0; i < digitsB.length; i++){
+    if(!state.running) return;
+    const d = digitsB[i];
+    if(d === 0) continue;
+    highlightColumn(i, true);
+    const current = colDigit(i);
+    const sum = current + d;
+    if(sum <= 9){
+      await executeStep(
+        `En la columna de ${COL_NAMES[i]} sumo ${d} a ${current}, que da ${sum}.`,
+        () => setDigit(i, sum)
+      );
+    }else{
+      // Acarreo
+      const newDigit = sum - 10;
+      await executeStep(
+        `En la columna de ${COL_NAMES[i]} sumo ${d} a ${current}. Como da ${sum}, mayor que 9, escribo ${newDigit} y llevo 1 a la columna siguiente.`,
+        () => setDigit(i, newDigit)
+      );
+      await propagateCarry(i + 1, 1);
+    }
+    highlightColumn(i, false);
+  }
+
+  const result = readSoroban();
+  await narrate(`El resultado es ${result}.`);
+  showResult(a, b, '+', result);
+}
+
+async function propagateCarry(i, carry){
+  while(carry > 0 && i < NUM_COLS && state.running){
+    highlightColumn(i, true);
+    const current = colDigit(i);
+    const sum = current + carry;
+    if(sum <= 9){
+      await executeStep(
+        `Sumo el acarreo 1 a la columna de ${COL_NAMES[i]}: ${current} más 1 igual a ${sum}.`,
+        () => setDigit(i, sum)
+      );
+      carry = 0;
+    }else{
+      await executeStep(
+        `La columna de ${COL_NAMES[i]} ya tiene ${current}. Al sumar 1 da 10, escribo 0 y llevo 1 más.`,
+        () => setDigit(i, 0)
+      );
+      carry = 1;
+    }
+    highlightColumn(i, false);
+    i++;
+  }
+}
+
+async function opResta(a, b){
+  if(b > a){
+    await narrate(`No puedo restar: ${b} es mayor que ${a}. El resultado sería negativo y el soroban solo representa números no negativos.`);
+    showError(`${a} − ${b} es negativo. Intercambia los operandos o prueba otro ejemplo.`);
+    return;
+  }
+  await narrate(`Vamos a restar ${a} menos ${b}. Coloco ${a} en el soroban.`);
+  if(!state.running) return;
+  writeNumber(a);
+  addStepToLog(`Coloco el minuendo ${a} en el soroban.`);
+  await sleep(300);
+
+  const digitsB = String(b).split('').reverse().map(d => parseInt(d,10));
+  for(let i = 0; i < digitsB.length; i++){
+    if(!state.running) return;
+    const d = digitsB[i];
+    if(d === 0) continue;
+    highlightColumn(i, true);
+    const current = colDigit(i);
+    if(current >= d){
+      const newDigit = current - d;
+      await executeStep(
+        `En la columna de ${COL_NAMES[i]} resto ${d} a ${current}, que da ${newDigit}.`,
+        () => setDigit(i, newDigit)
+      );
+    }else{
+      // Préstamo
+      await executeStep(
+        `En la columna de ${COL_NAMES[i]} no puedo restar ${d} de ${current}. Pido prestado 1 a la columna siguiente.`,
+        () => {}
+      );
+      await propagateBorrow(i + 1);
+      if(!state.running) return;
+      const newDigit = (current + 10) - d;
+      await executeStep(
+        `Ahora tengo ${current + 10} en la columna de ${COL_NAMES[i]}. Resto ${d} y queda ${newDigit}.`,
+        () => setDigit(i, newDigit)
+      );
+    }
+    highlightColumn(i, false);
+  }
+
+  const result = readSoroban();
+  await narrate(`El resultado es ${result}.`);
+  showResult(a, b, '−', result);
+}
+
+async function propagateBorrow(i){
+  if(i >= NUM_COLS || !state.running) return;
+  highlightColumn(i, true);
+  const current = colDigit(i);
+  if(current > 0){
+    await executeStep(
+      `La columna de ${COL_NAMES[i]} tiene ${current}, resto 1 para prestarlo, queda ${current - 1}.`,
+      () => setDigit(i, current - 1)
+    );
+  }else{
+    await executeStep(
+      `La columna de ${COL_NAMES[i]} está en 0, pido prestado a la siguiente y escribo 9 aquí.`,
+      () => setDigit(i, 9)
+    );
+    highlightColumn(i, false);
+    await propagateBorrow(i + 1);
+    return;
+  }
+  highlightColumn(i, false);
+}
+
+async function opMult(a, b){
+  if(a * b > 999999999){
+    await narrate(`El producto excede la capacidad de 9 columnas. Intenta con números más pequeños.`);
+    showError(`${a} × ${b} = ${a*b}, excede la capacidad del soroban (9 dígitos).`);
+    return;
+  }
+  await narrate(`Vamos a multiplicar ${a} por ${b}. En el soroban empezamos con el resultado en cero e iremos sumando los productos parciales.`);
+  if(!state.running) return;
+  clearSoroban();
+  addStepToLog(`Iniciamos el soroban en cero para acumular el producto de ${a} por ${b}.`);
+
+  if(a === 0 || b === 0){
+    await narrate(`Cualquier número multiplicado por cero es cero. Resultado: 0.`);
+    showResult(a, b, '×', 0);
+    return;
+  }
+
+  const digitsA = String(a).split('').reverse().map(d => parseInt(d,10));
+  const digitsB = String(b).split('').reverse().map(d => parseInt(d,10));
+
+  for(let j = 0; j < digitsB.length; j++){
+    for(let i = 0; i < digitsA.length; i++){
+      if(!state.running) return;
+      const da = digitsA[i];
+      const db = digitsB[j];
+      if(da === 0 || db === 0) continue;
+      const product = da * db;
+      const position = i + j;
+      const digitLow = product % 10;
+      const digitHigh = Math.floor(product / 10);
+
+      await executeStep(
+        `Multiplico ${da} por ${db} igual a ${product}. Lo sumo en las columnas de posición ${position === 0 ? 'unidades' : COL_NAMES[position]}.`,
+        () => {}
+      );
+      if(!state.running) return;
+
+      // Sumar digitLow en posición y digitHigh en posición+1
+      if(digitLow > 0){
+        await addAtPosition(position, digitLow);
+      }
+      if(digitHigh > 0){
+        if(!state.running) return;
+        await addAtPosition(position + 1, digitHigh);
+      }
+    }
+  }
+
+  const result = readSoroban();
+  await narrate(`El producto de ${a} por ${b} es ${result}.`);
+  showResult(a, b, '×', result);
+}
+
+async function addAtPosition(pos, d){
+  if(pos >= NUM_COLS) return;
+  highlightColumn(pos, true);
+  const current = colDigit(pos);
+  const sum = current + d;
+  if(sum <= 9){
+    await executeStep(
+      `Sumo ${d} en la columna de ${COL_NAMES[pos]}: ${current} más ${d} igual a ${sum}.`,
+      () => setDigit(pos, sum)
+    );
+  }else{
+    await executeStep(
+      `Sumo ${d} en la columna de ${COL_NAMES[pos]}: ${current} más ${d} igual a ${sum}. Escribo ${sum - 10} y llevo 1.`,
+      () => setDigit(pos, sum - 10)
+    );
+    highlightColumn(pos, false);
+    await propagateCarry(pos + 1, 1);
+    return;
+  }
+  highlightColumn(pos, false);
+}
+
+async function opDiv(a, b){
+  if(b === 0){
+    await narrate(`No se puede dividir entre cero.`);
+    showError(`División entre cero no está definida.`);
+    return;
+  }
+  await narrate(`Vamos a dividir ${a} entre ${b}. Coloco el dividendo ${a} en el soroban y calcularemos el cociente.`);
+  if(!state.running) return;
+  writeNumber(a);
+  addStepToLog(`Coloco el dividendo ${a} en el soroban. Divisor: ${b}.`);
+  await sleep(300);
+
+  // División larga accesible: procesar dígito por dígito desde la izquierda
+  const digitsA = String(a).split('').map(d => parseInt(d,10));
+  const quotientDigits = [];
+  let remainder = 0;
+
+  for(let k = 0; k < digitsA.length; k++){
+    if(!state.running) return;
+    remainder = remainder * 10 + digitsA[k];
+    const q = Math.floor(remainder / b);
+    const r = remainder - q * b;
+    quotientDigits.push(q);
+    await executeStep(
+      `Tomo ${remainder}. ${b} cabe ${q} ${q === 1 ? 'vez' : 'veces'} en ${remainder}. Resto ${q} por ${b} igual a ${q*b}, queda ${r}.`,
+      () => {}
+    );
+    remainder = r;
+  }
+
+  // Limpiar dividendo y escribir cociente + residuo
+  if(!state.running) return;
+  // Eliminar ceros a la izquierda del cociente
+  while(quotientDigits.length > 1 && quotientDigits[0] === 0) quotientDigits.shift();
+  const cociente = parseInt(quotientDigits.join(''), 10);
+
+  await narrate(`Limpio el soroban y escribo el cociente ${cociente}.`);
+  if(!state.running) return;
+  writeNumber(cociente);
+  addStepToLog(`Escribo el cociente ${cociente} en el soroban.`);
+
+  if(remainder > 0){
+    await narrate(`El cociente es ${cociente} y el residuo es ${remainder}.`);
+    showResult(a, b, '÷', `${cociente} residuo ${remainder}`);
+  }else{
+    await narrate(`La división es exacta. ${a} entre ${b} es igual a ${cociente}.`);
+    showResult(a, b, '÷', cociente);
+  }
+}
+
+/* ---------- Resultado y errores ---------- */
+function showResult(a, b, symbol, result){
+  resultContainer.innerHTML = `
+    <div class="result-box" role="status" aria-live="polite">
+      <div class="result-label">Resultado</div>
+      <div class="result-value">${a} ${symbol} ${b} = ${result}</div>
+    </div>`;
+}
+function showError(msg){
+  resultContainer.innerHTML = `
+    <div class="error-box" role="alert">${msg}</div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EVENT HANDLERS
+   ═══════════════════════════════════════════════════════════════ */
+
+document.querySelectorAll('.op-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.op-btn').forEach(b => b.setAttribute('aria-pressed','false'));
+    btn.setAttribute('aria-pressed','true');
+    state.op = btn.dataset.op;
+    const symbols = {suma:'+', resta:'−', mult:'×', div:'÷'};
+    opSymbol.textContent = symbols[state.op];
+    // Cambiar color de acento según operación
+    const colorMap = {suma:'var(--c-sum)', resta:'var(--c-res)', mult:'var(--c-mul)', div:'var(--c-div)'};
+    document.documentElement.style.setProperty('--accent', colorMap[state.op]);
+  });
+});
+
+document.getElementById('btnRun').addEventListener('click', async () => {
+  if(state.running){ return; }
+  const a = parseInt(inA.value, 10);
+  const b = parseInt(inB.value, 10);
+  if(isNaN(a) || isNaN(b) || a < 0 || b < 0){
+    showError('Ingresa dos números enteros no negativos.');
+    await narrate('Por favor ingresa dos números enteros no negativos.');
+    return;
+  }
+  if(a > 999999999 || b > 999999999){
+    showError('Los operandos no pueden tener más de 9 dígitos.');
+    return;
+  }
+  stopNarration();
+  state.running = true;
+  resetStepsLog();
+  try{
+    if(state.op === 'suma') await opSuma(a, b);
+    else if(state.op === 'resta') await opResta(a, b);
+    else if(state.op === 'mult') await opMult(a, b);
+    else if(state.op === 'div') await opDiv(a, b);
+  }finally{
+    state.running = false;
+    clearHighlights();
+  }
+});
+
+document.getElementById('btnStop').addEventListener('click', () => {
+  state.running = false;
+  stopNarration();
+  clearHighlights();
+  addStepToLog('Narración detenida por el usuario.');
+});
+
+document.getElementById('btnReset').addEventListener('click', () => {
+  state.running = false;
+  stopNarration();
+  clearSoroban();
+  resetStepsLog();
+  addStepToLog('Soroban reiniciado a cero.');
+  narrate('Soroban reiniciado.');
+});
+
+document.getElementById('btnRead').addEventListener('click', () => {
+  const n = readSoroban();
+  narrate(`El valor actual del soroban es ${n}.`);
+});
+
+speedSlider.addEventListener('input', () => {
+  state.speed = parseFloat(speedSlider.value);
+  speedVal.textContent = state.speed.toFixed(2) + 'x';
+  speedSlider.setAttribute('aria-valuenow', state.speed);
+});
+
+manualToggle.addEventListener('change', () => {
+  state.manualMode = manualToggle.checked;
+  narrate(state.manualMode
+    ? 'Modo manual activado. Haz clic o pulsa Enter sobre las cuentas para moverlas.'
+    : 'Modo manual desactivado.');
+});
+
+/* Clic en cuenta (solo en modo manual) */
+function onBeadClick(col, type, pos){
+  if(!state.manualMode) return;
+  const c = state.columns[col];
+  if(type === 'top'){
+    c.top = !c.top;
+  }else{
+    // Lógica estándar soroban: activar/desactivar cuentas contiguas desde la barra
+    // Si el usuario hace clic en la cuenta k, activar las primeras (k+1) si antes había menos;
+    // si clickea una ya activa, desactivar hasta (pos-1) activas — efectivamente desactivar desde pos.
+    const active = pos < c.bottom;
+    if(active){
+      // Desactivar esta y las siguientes hacia abajo
+      c.bottom = pos;
+    }else{
+      c.bottom = pos + 1;
+    }
+  }
+  renderColumn(col);
+  displayValue.textContent = readSoroban().toLocaleString('es-ES');
+  narrate(`Columna de ${COL_NAMES[col]}: valor ${colDigit(col)}.`);
+}
+
+/* Esc detiene narración */
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape'){
+    state.running = false;
+    stopNarration();
+  }
+});
+
+/* ---------- Inicialización ---------- */
+buildSoroban();
+renderAll();
+
+// Avisar si no hay speechSynthesis
+if(!('speechSynthesis' in window)){
+  showError('Tu navegador no soporta síntesis de voz. La herramienta funcionará visualmente pero sin narración.');
+}
+</script>
+</body>
+</html>
