@@ -6,7 +6,7 @@
 <title>UdeA Posible — Razonamiento Lógico · Todas las sesiones</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;--border:#2e2e2e;--accent:#c8f060;--accent2:#f0a060;--accent3:#a0c8f0;--text:#e8e8e0;--text2:#888880;--text3:#555550;--radius:12px}
+:root{--bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;--border:#2e2e2e;--accent:#c8f060;--accent2:#f0a060;--accent3:#a0c8f0;--accent4:#d0a0f0;--text:#e8e8e0;--text2:#888880;--text3:#555550;--radius:12px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-size:15px;line-height:1.7;min-height:100vh;padding:2rem 1rem 4rem}
 .page{max-width:740px;margin:0 auto}
@@ -20,6 +20,7 @@ h3{font-size:15px;font-weight:500;margin:1.5rem 0 .3rem;color:var(--text)}
 .tag-s1{color:var(--accent);border-color:#1e2a0e;background:#0f1508}
 .tag-s2{color:var(--accent3);border-color:#1a2a3a;background:#0a1520}
 .tag-s3{color:var(--accent2);border-color:#3a2a10;background:#1a1208}
+.tag-s4{color:var(--accent4);border-color:#2e1e3a;background:#150a20}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:.75rem;padding:1.25rem;overflow:hidden}
 .card-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.04em;margin-bottom:.5rem}
 .card h3{margin:0 0 .5rem}
@@ -84,6 +85,11 @@ footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);fon
   <a href="#s3-pa">Sesion 3 — Progresion Aritmetica</a>
   <a href="#s3-pg">Sesion 3 — Progresion Geometrica</a>
   <a href="#s3-ej">Sesion 3 — Ejercicios tipo examen (8)</a>
+  <a href="#s4-razon">Sesion 4 — Razon y proporcion</a>
+  <a href="#s4-regla-directa">Sesion 4 — Regla de tres directa</a>
+  <a href="#s4-regla-inversa">Sesion 4 — Regla de tres inversa</a>
+  <a href="#s4-porcentaje">Sesion 4 — Porcentaje base</a>
+  <a href="#s4-ejercicios">Sesion 4 — Ejercicios tipo examen (5)</a>
 </nav>
 
 <h2 id="s1-diag"><span class="sesion-tag tag-s1">Sesión 1</span><br>Diagnóstico — 7 problemas</h2>
@@ -2225,6 +2231,410 @@ footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);fon
     <strong>¿Por qué funciona?</strong> El crecimiento de bacterias que se duplican es el ejemplo clásico de Progresión Geométrica. Cada hora multiplicamos por 2. En 8 horas, multiplicamos por 2 ocho veces, que es 2^8 = 256. 50 × 256 = 12.800.<br><br>
     <strong>Error frecuente:</strong> Confundir las posiciones. Si alguien toma n = 8 (en vez de n = 9), calcula 50 × 2^7 = 50 × 128 = 6.400 (opción 1). La clave es: "después de 8 horas" significa que han pasado 8 duplicaciones desde el inicio. Si el inicio es la posición 1, después de 8 pasos estamos en la posición 9. O también se puede pensar así: a(1) = 50 es hora 0, entonces hora 8 = posición 9.<br><br>
     <strong>Otra forma de pensarlo:</strong> Si prefieren evitar la confusión de posiciones, simplemente dupliquen 8 veces: 50 → 100 → 200 → 400 → 800 → 1.600 → 3.200 → 6.400 → 12.800. Ocho duplicaciones dan 12.800.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SESIÓN 4 — PROPORCIONALIDAD Y PORCENTAJES · BLOQUES DE CONTENIDO
+     UdeA Posible · Fecha: 2026-04-13
+     TTS index: 69–81 (sesión 3 usa 42–68)
+     ═══════════════════════════════════════════════════════════════════════ -->
+
+<h2 id="s4-razon"><span class="sesion-tag tag-s4">Sesión 4</span><br>Razón y proporción</h2>
+
+<div class="card">
+  <div class="card-tag">CONCEPTO · RAZÓN, PROPORCIÓN, PROPIEDAD FUNDAMENTAL</div>
+  <h3>C1: Qué es una razón y qué es una proporción</h3>
+  <button class="btn-play" onclick="playTTS(69)">▶ Reproducir</button>
+  <div class="enunciado">
+    Una <strong>razón</strong> es una comparación entre dos cantidades por medio de una división. Por ejemplo, si en un salón hay 3 estudiantes hombres por cada 2 mujeres, decimos que la razón de hombres a mujeres es 3 a 2. Se escribe "3 a 2" o como fracción: tres medios.
+    <br><br>
+    Una <strong>proporción</strong> es una igualdad entre dos razones. Es decir, cuando dos razones representan la misma comparación. Por ejemplo: tres medios es igual a seis cuartos, porque ambas razones comparan "una cantidad y media veces". Se escribe: "a es a b como c es a d", o en fracción: a sobre b igual a c sobre d.
+    <br><br>
+    <strong>Nombres de los términos:</strong> En la proporción "a es a b como c es a d", los términos de los bordes, es decir a y d, se llaman <strong>extremos</strong>. Los términos del centro, b y c, se llaman <strong>medios</strong>.
+    <br><br>
+    <strong>Propiedad fundamental de las proporciones:</strong> En toda proporción, el producto de los extremos es igual al producto de los medios. Es decir, a por d es igual a b por c. Esta propiedad es la que permite encontrar un valor desconocido en una proporción.
+    <br><br>
+    <strong>Idea clave para recordar verbalmente:</strong> cuando tenemos una proporción con una incógnita, multiplicamos los dos valores conocidos que están en posición cruzada y dividimos entre el tercer valor conocido.
+  </div>
+  <div class="respuesta">
+    <strong>Resumen:</strong><br><br>
+    Razón = comparación entre dos cantidades por división.<br>
+    Proporción = igualdad entre dos razones.<br>
+    Extremos = los términos de los bordes (primero y cuarto).<br>
+    Medios = los términos del centro (segundo y tercero).<br><br>
+    <strong>Propiedad fundamental:</strong> a por d igual a b por c.<br><br>
+    <strong>¿Por qué funciona?</strong> Si a sobre b es igual a c sobre d, y multiplicamos ambos lados de la igualdad por b y por d al mismo tiempo, los denominadores se eliminan y queda a por d igual a b por c. Es pura álgebra básica.<br><br>
+    <strong>Ejemplo mental:</strong> en la proporción "2 es a 3 como 4 es a 6", los extremos son 2 y 6, los medios son 3 y 4. Producto de extremos: 2 por 6 es 12. Producto de medios: 3 por 4 es 12. Iguales, confirmado.
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-tag">EJEMPLO · CALCULAR UN TÉRMINO DESCONOCIDO</div>
+  <h3>C2: Ejemplo — Proporción en una receta (con ábaco)</h3>
+  <button class="btn-play" onclick="playTTS(70)">▶ Reproducir</button>
+  <div class="enunciado">
+    En una receta de arepas, por cada 3 tazas de harina se usan 2 tazas de agua. Si queremos usar 9 tazas de harina manteniendo la misma proporción, ¿cuántas tazas de agua necesitamos?
+    <br><br>
+    <strong>Planteamiento:</strong> La proporción es "3 es a 2 como 9 es a x", donde x son las tazas de agua que buscamos.
+    <br><br>
+    <strong>Paso 1:</strong> Identificar extremos y medios. Extremos: 3 y x. Medios: 2 y 9.
+    <br><br>
+    <strong>Paso 2:</strong> Aplicar la propiedad fundamental. Producto de extremos igual a producto de medios: 3 por x igual a 2 por 9. Es decir, 3x igual a 18.
+    <br><br>
+    <strong>Paso 3 — con ábaco:</strong> Para despejar x, dividimos 18 entre 3. En el ábaco: representen 18 (decenas = 1, unidades = 8). Dividir entre 3: pensamos cuántas veces cabe 3 en 18. Tres por seis es dieciocho. Entonces 18 dividido 3 es 6.
+    <br><br>
+    <strong>Respuesta:</strong> x igual a 6 tazas de agua.
+  </div>
+  <div class="respuesta">
+    <strong>Resultado: 6 tazas de agua.</strong><br><br>
+    <strong>Verificación:</strong> 3 por 6 igual a 18. 2 por 9 igual a 18. Los productos son iguales, la proporción se cumple.<br><br>
+    <strong>¿Por qué funciona?</strong> Mantener la proporción significa que si triplicamos la cantidad de harina (de 3 a 9), también debemos triplicar la cantidad de agua (de 2 a 6). La razón harina sobre agua se conserva: tres medios es igual a nueve sextos.<br><br>
+    <strong>En el ábaco:</strong> Esta es una aplicación directa de la división que aprendimos en sesión 2. La proporcionalidad se apoya totalmente en multiplicar y dividir, por eso el ábaco es su mejor aliado.<br><br>
+    <strong>Error frecuente:</strong> Confundir extremos y medios. Recuerden: extremos son los que están en los bordes, primero y último; medios son los del centro.
+  </div>
+</div>
+
+<h2 id="s4-regla-directa"><span class="sesion-tag tag-s4">Sesión 4</span><br>Regla de tres directa</h2>
+
+<div class="card">
+  <div class="card-tag">CONCEPTO · CUÁNDO Y CÓMO APLICAR</div>
+  <h3>C3: Regla de tres directa — cuándo se usa y cómo se calcula</h3>
+  <button class="btn-play" onclick="playTTS(71)">▶ Reproducir</button>
+  <div class="enunciado">
+    La <strong>regla de tres directa</strong> se aplica cuando dos magnitudes son <strong>directamente proporcionales</strong>. Esto significa que si una aumenta, la otra también aumenta en la misma medida; y si una disminuye, la otra también disminuye.
+    <br><br>
+    <strong>Ejemplos típicos de proporcionalidad directa:</strong><br>
+    Más kilos de arroz, más pesos se pagan.<br>
+    Más horas de trabajo, más dinero se recibe.<br>
+    Más metros de tela, más botones se necesitan.<br>
+    Más litros de gasolina, más kilómetros se pueden recorrer.
+    <br><br>
+    <strong>Cómo organizar los datos verbalmente:</strong><br>
+    Primero, identificamos los dos pares de datos. Llamemos A y B a las dos magnitudes.<br>
+    Fila uno: un valor conocido de A y su valor correspondiente de B.<br>
+    Fila dos: otro valor conocido de A y la incógnita x en B.
+    <br><br>
+    <strong>Fórmula verbal (sin referirse a cruces ni diagonales):</strong><br>
+    Para hallar la incógnita x, multiplicamos el valor de A de la segunda fila por el valor de B de la primera fila, y dividimos todo entre el valor de A de la primera fila.
+    <br><br>
+    <strong>En símbolos:</strong> si en la primera fila tenemos a correspondiente a b, y en la segunda fila tenemos c correspondiente a x, entonces x es igual a c por b dividido entre a.
+    <br><br>
+    <strong>Regla de oro para identificar una proporcionalidad directa:</strong> pregúntense "si esta magnitud aumenta, ¿la otra también aumenta?". Si la respuesta es sí, es directa.
+  </div>
+  <div class="respuesta">
+    <strong>Fórmula:</strong> si a ↔ b, y c ↔ x, entonces x = (c × b) / a.<br><br>
+    <strong>¿Por qué funciona?</strong> Si son directamente proporcionales, se cumple que a sobre b es igual a c sobre x. Aplicando la propiedad fundamental: a por x igual a b por c. Despejando x: x igual a b por c sobre a. Es la misma propiedad fundamental de las proporciones.<br><br>
+    <strong>Truco para recordar verbalmente:</strong> "el conocido de arriba con el conocido de abajo en la otra columna, y dividido por el único que queda".<br><br>
+    <strong>Error frecuente:</strong> dividir al revés. Si la fórmula sale con la incógnita más pequeña que los datos, pero la realidad dice que debe ser más grande (o al contrario), revisen la operación. El sentido común tiene que ajustarse con el resultado.
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-tag">EJEMPLO · RESOLUCIÓN PASO A PASO</div>
+  <h3>C4: Ejemplo — Precio del arroz con regla de tres directa</h3>
+  <button class="btn-play" onclick="playTTS(72)">▶ Reproducir</button>
+  <div class="enunciado">
+    Si 4 kilos de arroz cuestan 18.000 pesos, ¿cuánto cuestan 7 kilos al mismo precio por kilo?
+    <br><br>
+    <strong>Paso 1 — Identificar el tipo de proporcionalidad:</strong> más kilos implica más pesos. Es directamente proporcional.
+    <br><br>
+    <strong>Paso 2 — Organizar los datos:</strong><br>
+    Primera fila: 4 kilos corresponden a 18.000 pesos.<br>
+    Segunda fila: 7 kilos corresponden a x pesos.
+    <br><br>
+    <strong>Paso 3 — Aplicar la fórmula:</strong> x igual a 7 por 18.000, dividido entre 4.
+    <br><br>
+    <strong>Paso 4 — Calcular con el ábaco:</strong><br>
+    Primero multiplicamos 7 por 18.000. Descomponemos: 7 por 18 es igual a 126. Por lo tanto, 7 por 18.000 es 126.000.<br>
+    Luego dividimos 126.000 entre 4. Pensamos: 12 dividido 4 es 3; 6 dividido 4 es 1 y sobran 2. 2 se convierten en 20 al bajar la siguiente cifra; 20 más el cero siguiente no cambia. 20 dividido 4 es 5. Resultado: 31.500.
+    <br><br>
+    <strong>Respuesta:</strong> 7 kilos cuestan 31.500 pesos.
+  </div>
+  <div class="respuesta">
+    <strong>Resultado: 31.500 pesos.</strong><br><br>
+    <strong>Verificación por proporción:</strong> cuatro sobre dieciocho mil es igual a siete sobre treinta y un mil quinientos. Simplificamos la primera: 4/18.000 = 1/4.500. Simplificamos la segunda: 7/31.500 = 1/4.500. Son iguales, confirmado.<br><br>
+    <strong>Verificación por precio unitario:</strong> 18.000 entre 4 es 4.500 pesos por kilo. Entonces 7 kilos cuestan 7 por 4.500 igual a 31.500. Mismo resultado.<br><br>
+    <strong>¿Por qué funciona?</strong> El precio por kilo es constante. Al comprar más kilos, pagamos proporcionalmente más. La regla de tres directa es simplemente una forma rápida de calcular sin tener que encontrar primero el precio por kilo, aunque ambos métodos dan el mismo resultado.<br><br>
+    <strong>Error frecuente:</strong> olvidar los ceros. 7 por 18 es 126, pero estamos multiplicando por 18.000, no por 18. Siempre arrastren los ceros y verifiquen el orden de magnitud del resultado: si 4 kilos cuestan 18 mil, 7 kilos deben costar entre 31 mil y 32 mil, no 3.150 ni 315.000.
+  </div>
+</div>
+
+<h2 id="s4-regla-inversa"><span class="sesion-tag tag-s4">Sesión 4</span><br>Regla de tres inversa</h2>
+
+<div class="card">
+  <div class="card-tag">CONCEPTO · PROPORCIONALIDAD INVERSA</div>
+  <h3>C5: Regla de tres inversa — cuándo más significa menos</h3>
+  <button class="btn-play" onclick="playTTS(73)">▶ Reproducir</button>
+  <div class="enunciado">
+    La <strong>regla de tres inversa</strong> se aplica cuando dos magnitudes son <strong>inversamente proporcionales</strong>. Esto significa que si una aumenta, la otra disminuye, y viceversa. La relación es opuesta a la directa.
+    <br><br>
+    <strong>Ejemplos típicos de proporcionalidad inversa:</strong><br>
+    Más obreros trabajando, menos días para terminar una obra.<br>
+    Más velocidad, menos tiempo para recorrer una distancia fija.<br>
+    Más grifos abiertos, menos tiempo para llenar un tanque.<br>
+    Más personas compartiendo un dulce, menos cantidad para cada una.
+    <br><br>
+    <strong>Propiedad clave:</strong> el <strong>producto</strong> de las dos magnitudes permanece constante. Por ejemplo, si 6 obreros tardan 10 días, el producto 6 por 10 es 60, y ese número (60 "días-obrero") representa el trabajo total. Cambiando el número de obreros, los días cambiarán de forma que el producto siga siendo 60.
+    <br><br>
+    <strong>Fórmula verbal:</strong><br>
+    Primera fila: a obreros con b días.<br>
+    Segunda fila: c obreros con x días.<br>
+    Se cumple: a por b igual a c por x.<br>
+    Despejando x: x igual a (a por b) dividido entre c.
+    <br><br>
+    <strong>Regla de oro para identificar una proporcionalidad inversa:</strong> pregúntense "si esta magnitud aumenta, ¿la otra disminuye?". Si la respuesta es sí, es inversa.
+  </div>
+  <div class="respuesta">
+    <strong>Fórmula:</strong> si a ↔ b y c ↔ x, entonces x = (a × b) / c.<br><br>
+    <strong>Diferencia clave con la directa:</strong><br>
+    En la directa: x = (c × b) / a → se multiplica "cruzado".<br>
+    En la inversa: x = (a × b) / c → se multiplica "en la misma fila" y se divide entre el dato restante.<br><br>
+    <strong>¿Por qué funciona?</strong> En la inversa, a por b es igual a c por x porque ambas expresiones representan el mismo trabajo total (o la misma distancia, o el mismo volumen). Es un invariante del problema.<br><br>
+    <strong>Error frecuente:</strong> aplicar la fórmula de la regla directa sin verificar si la proporcionalidad es inversa. Siempre hagan primero la pregunta clave: "¿más de uno implica más o menos del otro?".
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-tag">EJEMPLO · OBREROS Y DÍAS</div>
+  <h3>C6: Ejemplo — Obreros construyendo un muro</h3>
+  <button class="btn-play" onclick="playTTS(74)">▶ Reproducir</button>
+  <div class="enunciado">
+    Si 6 obreros construyen un muro en 10 días, ¿cuántos días tardarían 4 obreros trabajando al mismo ritmo?
+    <br><br>
+    <strong>Paso 1 — Identificar el tipo de proporcionalidad:</strong> con menos obreros, el trabajo tarda más. Entonces es inversamente proporcional.
+    <br><br>
+    <strong>Paso 2 — Predicción por sentido común:</strong> si 6 obreros tardan 10 días, 4 obreros deben tardar más de 10 días. El resultado debe ser un número mayor que 10.
+    <br><br>
+    <strong>Paso 3 — Organizar los datos:</strong><br>
+    Primera fila: 6 obreros con 10 días.<br>
+    Segunda fila: 4 obreros con x días.
+    <br><br>
+    <strong>Paso 4 — Aplicar la fórmula:</strong> x igual a (6 por 10) dividido entre 4.
+    <br><br>
+    <strong>Paso 5 — Calcular con el ábaco:</strong><br>
+    6 por 10 es 60. Representen 60 en el ábaco.<br>
+    60 dividido 4: pensamos cuántas veces cabe 4 en 60. Cuatro por quince es sesenta. Entonces 60 entre 4 es 15.
+    <br><br>
+    <strong>Respuesta:</strong> 4 obreros tardan 15 días.
+  </div>
+  <div class="respuesta">
+    <strong>Resultado: 15 días.</strong><br><br>
+    <strong>Verificación por producto constante:</strong> 6 por 10 igual a 60 "días-obrero". 4 por 15 igual a 60 "días-obrero". Iguales, confirmado.<br><br>
+    <strong>Verificación por sentido común:</strong> 15 es mayor que 10, y esperábamos un número mayor que 10 porque hay menos obreros. Ajusta.<br><br>
+    <strong>¿Por qué funciona?</strong> El trabajo total "construir el muro" requiere siempre la misma cantidad de esfuerzo, que podemos medir en "días-obrero". Si ese esfuerzo total es 60 "días-obrero", da igual distribuirlo entre 6 personas en 10 días, o entre 4 personas en 15 días, o entre 2 personas en 30 días. El producto siempre da 60.<br><br>
+    <strong>Error frecuente:</strong> aplicar la regla directa y obtener 4 por 10 sobre 6 igual a 6,67 días. Eso da menos de 10, lo cual contradice el sentido común (menos obreros deberían tardar más, no menos). Si el resultado contradice el sentido común, revisen qué tipo de proporcionalidad es.
+  </div>
+</div>
+
+<h2 id="s4-porcentaje"><span class="sesion-tag tag-s4">Sesión 4</span><br>Porcentaje base</h2>
+
+<div class="card">
+  <div class="card-tag">CONCEPTO · PORCENTAJE COMO RAZÓN</div>
+  <h3>C7: El porcentaje es una razón sobre 100</h3>
+  <button class="btn-play" onclick="playTTS(75)">▶ Reproducir</button>
+  <div class="enunciado">
+    La palabra <strong>porcentaje</strong> significa literalmente "por cada cien". Cuando decimos "25 por ciento", estamos diciendo "25 de cada 100". El símbolo % no es más que una forma abreviada de escribir "dividido entre 100".
+    <br><br>
+    <strong>El porcentaje es una razón particular:</strong> toda razón que tenga 100 en el denominador se puede escribir como porcentaje. Por ejemplo, 25 sobre 100 es 25 por ciento. 50 sobre 100 es 50 por ciento.
+    <br><br>
+    <strong>Equivalencias clave para memorizar con el oído:</strong><br>
+    50 por ciento es igual a 1 medio (la mitad).<br>
+    25 por ciento es igual a 1 cuarto.<br>
+    75 por ciento es igual a 3 cuartos.<br>
+    10 por ciento es igual a 1 décima.<br>
+    20 por ciento es igual a 1 quinta parte.<br>
+    1 por ciento es igual a 1 centésima.<br>
+    100 por ciento es igual al total, es decir, al entero completo.
+    <br><br>
+    <strong>Para calcular un porcentaje de una cantidad:</strong><br>
+    Método 1 (con fracción equivalente): reemplazar el porcentaje por su fracción. Por ejemplo, 25 por ciento de 80 es un cuarto de 80, que es 80 entre 4 igual a 20.<br>
+    Método 2 (con la fórmula general): multiplicar la cantidad por el porcentaje y dividir entre 100. Por ejemplo, 25 por ciento de 80 es 80 por 25 entre 100, que es 2.000 entre 100, igual a 20.
+    <br><br>
+    <strong>Consejo:</strong> cuando el porcentaje es una equivalencia conocida (50%, 25%, 10%, 20%, 75%), el método 1 suele ser más rápido y menos propenso a errores en el ábaco.
+  </div>
+  <div class="respuesta">
+    <strong>Resumen:</strong><br><br>
+    Porcentaje = razón sobre 100. El signo % significa "dividido entre 100".<br><br>
+    <strong>Tabla de equivalencias:</strong><br>
+    1% = 1/100 &nbsp;|&nbsp; 10% = 1/10 &nbsp;|&nbsp; 20% = 1/5<br>
+    25% = 1/4 &nbsp;|&nbsp; 50% = 1/2 &nbsp;|&nbsp; 75% = 3/4 &nbsp;|&nbsp; 100% = entero<br><br>
+    <strong>Fórmula general:</strong> el x por ciento de N es igual a (N × x) dividido entre 100.<br><br>
+    <strong>¿Por qué funciona?</strong> Porcentaje es solo un nombre elegante para una fracción con denominador 100. Todo lo que sabemos de fracciones se aplica a porcentajes.<br><br>
+    <strong>Error frecuente:</strong> olvidar dividir entre 100. Por ejemplo, calcular "25 por ciento de 80" como "80 por 25 igual a 2.000". Les falta el paso final de dividir entre 100 para obtener 20.
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-tag">CONCEPTO · LOS TRES MODOS DE PORCENTAJE</div>
+  <h3>C8: Los tres problemas típicos con porcentajes</h3>
+  <button class="btn-play" onclick="playTTS(76)">▶ Reproducir</button>
+  <div class="enunciado">
+    Casi todos los problemas de porcentajes del examen UdeA caen en uno de estos tres tipos. Identificar el tipo es la mitad del trabajo.
+    <br><br>
+    <strong>Tipo 1 — Hallar la parte:</strong> nos dan el todo y el porcentaje, piden la parte.<br>
+    Pregunta típica: "¿Cuánto es el x por ciento de N?".<br>
+    Fórmula: parte igual a N por x dividido entre 100.<br>
+    Ejemplo: 20 por ciento de 80.000 pesos. Cálculo: 80.000 por 20 entre 100. Primero 80.000 por 20 igual a 1.600.000. Luego 1.600.000 entre 100 igual a 16.000. Respuesta: 16.000 pesos.
+    <br><br>
+    <strong>Tipo 2 — Hallar el porcentaje:</strong> nos dan la parte y el todo, piden el porcentaje.<br>
+    Pregunta típica: "¿Qué porcentaje es A de B?".<br>
+    Fórmula: porcentaje igual a (A dividido entre B) multiplicado por 100.<br>
+    Ejemplo: ¿qué porcentaje es 15 de 60? Cálculo: 15 entre 60 igual a 1 cuarto. 1 cuarto por 100 igual a 25. Respuesta: 25 por ciento.
+    <br><br>
+    <strong>Tipo 3 — Hallar el todo:</strong> nos dan la parte y el porcentaje, piden el todo.<br>
+    Pregunta típica: "Si el x por ciento de un total es A, ¿cuál es el total?".<br>
+    Fórmula: total igual a A por 100 dividido entre x.<br>
+    Ejemplo: si el 25 por ciento de una mesada es 40.000 pesos, ¿cuánto es la mesada completa? Cálculo: 40.000 por 100 entre 25 igual a 4.000.000 entre 25 igual a 160.000 pesos. Respuesta: 160.000 pesos.
+    <br><br>
+    <strong>Cómo distinguir los tres tipos:</strong> siempre pregúntense qué dato falta. Si falta la parte, es tipo 1. Si falta el porcentaje (el número con el símbolo %), es tipo 2. Si falta el todo (la cantidad de referencia completa), es tipo 3.
+  </div>
+  <div class="respuesta">
+    <strong>Resumen:</strong><br><br>
+    Tipo 1 — hallar la parte: parte = (todo × porcentaje) / 100.<br>
+    Tipo 2 — hallar el porcentaje: porcentaje = (parte / todo) × 100.<br>
+    Tipo 3 — hallar el todo: todo = (parte × 100) / porcentaje.<br><br>
+    <strong>¿Por qué funciona?</strong> Las tres fórmulas son la misma relación básica despejada de tres formas distintas:<br>
+    parte / todo = porcentaje / 100.<br>
+    Según cuál de las tres incógnitas sea la que falta, despejamos una u otra variable.<br><br>
+    <strong>Regla mnemotécnica:</strong> en los tipos 1 y 3 se multiplica por 100 en algún paso. En el tipo 2 también aparece 100, pero al final como multiplicador del resultado de la división. En los tres casos siempre aparece el 100.<br><br>
+    <strong>Error frecuente:</strong> equivocar el tipo. Por ejemplo, cuando dicen "si el 15 por ciento es 90.000, ¿cuál es el total?", algunos calculan 15 por ciento de 90.000 (eso sería tipo 1) cuando en realidad falta el todo (tipo 3). Siempre identifiquen qué falta antes de calcular.
+  </div>
+</div>
+
+<h2 id="s4-ejercicios"><span class="sesion-tag tag-s4">Sesión 4</span><br>Ejercicios tipo examen UdeA</h2>
+
+<div class="card">
+  <div class="card-tag">EJERCICIO 1 · REGLA DE TRES DIRECTA</div>
+  <h3>E1: Bus a velocidad constante</h3>
+  <button class="btn-play" onclick="playTTS(77)">▶ Reproducir</button>
+  <div class="enunciado">
+    Un bus que va hacia la UdeA recorre 60 kilómetros en 45 minutos. Si continúa a la misma velocidad, ¿cuántos kilómetros recorre en 60 minutos?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>75 kilómetros</div>
+    <div class="opcion"><span class="opcion-num">2</span>80 kilómetros</div>
+    <div class="opcion"><span class="opcion-num">3</span>85 kilómetros</div>
+    <div class="opcion"><span class="opcion-num">4</span>90 kilómetros</div>
+  </div>
+  <div class="respuesta">
+    <strong>Respuesta correcta: opción 2 (80 kilómetros).</strong><br><br>
+    <strong>Paso a paso:</strong><br>
+    1. Tipo de proporcionalidad: más minutos, más kilómetros. Directa.<br>
+    2. Datos: 45 minutos ↔ 60 km; 60 minutos ↔ x km.<br>
+    3. Fórmula directa: x = (60 × 60) / 45.<br>
+    4. Cálculo con ábaco: 60 × 60 = 3.600. 3.600 / 45 = 80.<br>
+    &nbsp;&nbsp;&nbsp;(3.600 entre 45: pensamos 45 × 80 = 3.600, confirmado).<br><br>
+    <strong>¿Por qué funciona?</strong> La velocidad es constante (misma velocidad). Entonces la distancia aumenta proporcionalmente con el tiempo.<br><br>
+    <strong>Error frecuente:</strong> calcular 60 − 45 = 15 minutos adicionales, y pensar que en 15 minutos recorre los mismos 60 km que en 45. Eso daría 120. Falso: en 15 minutos solo recorre un tercio de 60, es decir 20 km. Y sumando 20 a 60 da exactamente 80. Los dos caminos confirman 80.<br><br>
+    <strong>Verificación:</strong> velocidad = 60 km / 45 min = 4/3 km por minuto. En 60 min recorre 60 × 4/3 = 80 km. ✓
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-tag">EJERCICIO 2 · REGLA DE TRES DIRECTA</div>
+  <h3>E2: Compra de libros de preparación</h3>
+  <button class="btn-play" onclick="playTTS(78)">▶ Reproducir</button>
+  <div class="enunciado">
+    Si 5 libros de preparación para el examen UdeA cuestan 75.000 pesos en total, ¿cuánto cuestan 8 libros al mismo precio unitario?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>100.000 pesos</div>
+    <div class="opcion"><span class="opcion-num">2</span>110.000 pesos</div>
+    <div class="opcion"><span class="opcion-num">3</span>120.000 pesos</div>
+    <div class="opcion"><span class="opcion-num">4</span>125.000 pesos</div>
+  </div>
+  <div class="respuesta">
+    <strong>Respuesta correcta: opción 3 (120.000 pesos).</strong><br><br>
+    <strong>Paso a paso:</strong><br>
+    1. Tipo de proporcionalidad: más libros, más pesos. Directa.<br>
+    2. Datos: 5 libros ↔ 75.000 pesos; 8 libros ↔ x pesos.<br>
+    3. Fórmula directa: x = (8 × 75.000) / 5.<br>
+    4. Cálculo con ábaco: 8 × 75.000 = 600.000. 600.000 / 5 = 120.000.<br><br>
+    <strong>Verificación por precio unitario:</strong> 75.000 / 5 = 15.000 pesos por libro. 8 × 15.000 = 120.000. ✓<br><br>
+    <strong>¿Por qué funciona?</strong> Precio unitario constante implica proporcionalidad directa entre cantidad y costo.<br><br>
+    <strong>Error frecuente:</strong> confundirse con los ceros. Si calculan 8 × 75 = 600 y olvidan los tres ceros, obtienen 600 o 1.200 en lugar de 120.000. Siempre revisen el orden de magnitud del resultado comparado con los datos.
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-tag">EJERCICIO 3 · REGLA DE TRES INVERSA</div>
+  <h3>E3: Estudiantes organizando un evento</h3>
+  <button class="btn-play" onclick="playTTS(79)">▶ Reproducir</button>
+  <div class="enunciado">
+    Si 8 estudiantes organizan un evento cultural de bienvenida en 6 horas, ¿cuántas horas tardarían 12 estudiantes al mismo ritmo de trabajo?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>3 horas</div>
+    <div class="opcion"><span class="opcion-num">2</span>4 horas</div>
+    <div class="opcion"><span class="opcion-num">3</span>5 horas</div>
+    <div class="opcion"><span class="opcion-num">4</span>9 horas</div>
+  </div>
+  <div class="respuesta">
+    <strong>Respuesta correcta: opción 2 (4 horas).</strong><br><br>
+    <strong>Paso a paso:</strong><br>
+    1. Tipo de proporcionalidad: más estudiantes, menos horas. Inversa.<br>
+    2. Predicción por sentido común: con más estudiantes, el resultado debe ser menor a 6 horas. Eso elimina la opción 4 (9 horas) de entrada.<br>
+    3. Datos: 8 estudiantes ↔ 6 horas; 12 estudiantes ↔ x horas.<br>
+    4. Fórmula inversa: x = (8 × 6) / 12.<br>
+    5. Cálculo con ábaco: 8 × 6 = 48. 48 / 12 = 4.<br><br>
+    <strong>Verificación por producto constante:</strong> 8 × 6 = 48 "horas-estudiante". 12 × 4 = 48 "horas-estudiante". ✓<br><br>
+    <strong>¿Por qué funciona?</strong> El trabajo total (organizar el evento) es fijo. Se puede distribuir entre más personas en menos tiempo o entre menos personas en más tiempo, pero el total de esfuerzo no cambia.<br><br>
+    <strong>Error frecuente:</strong> aplicar la regla directa y calcular x = (12 × 6) / 8 = 9 (opción 4, incorrecta). Eso da más horas con más estudiantes, lo cual es contraintuitivo. Siempre verifiquen si el resultado tiene sentido antes de elegir.
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-tag">EJERCICIO 4 · PORCENTAJE · HALLAR LA PARTE</div>
+  <h3>E4: Beca UdeA</h3>
+  <button class="btn-play" onclick="playTTS(80)">▶ Reproducir</button>
+  <div class="enunciado">
+    La UdeA otorga a un aspirante una beca que cubre el 35 por ciento de una matrícula de 1.800.000 pesos. ¿Cuánto debe pagar el aspirante después de aplicar la beca?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>1.080.000 pesos</div>
+    <div class="opcion"><span class="opcion-num">2</span>1.170.000 pesos</div>
+    <div class="opcion"><span class="opcion-num">3</span>1.260.000 pesos</div>
+    <div class="opcion"><span class="opcion-num">4</span>1.350.000 pesos</div>
+  </div>
+  <div class="respuesta">
+    <strong>Respuesta correcta: opción 2 (1.170.000 pesos).</strong><br><br>
+    <strong>Paso a paso:</strong><br>
+    1. Tipo de problema: hallar la parte (la beca) y luego restarla del todo.<br>
+    2. Beca = 35 por ciento de 1.800.000 = (1.800.000 × 35) / 100.<br>
+    3. Cálculo con ábaco: 1.800.000 × 35 = 63.000.000. Entre 100 = 630.000.<br>
+    4. Lo que paga = 1.800.000 − 630.000 = 1.170.000.<br><br>
+    <strong>Verificación:</strong> si la beca es el 35%, el aspirante paga el 65% restante. 65% de 1.800.000 = (1.800.000 × 65) / 100 = 1.170.000. ✓<br><br>
+    <strong>¿Por qué funciona?</strong> Beca + Lo que paga = Todo. Si conocemos la beca en pesos, restamos del todo para saber cuánto paga. O equivalentemente, calculamos directamente el 65% (el complemento) del todo.<br><br>
+    <strong>Error frecuente:</strong> elegir la opción 3 (1.260.000), que es simplemente 1.800.000 × 70 / 100. Algunos calculan mal el complemento (100 − 35 = 70 es un error común; lo correcto es 100 − 35 = 65).<br><br>
+    <strong>Error frecuente 2:</strong> elegir la opción 1 (1.080.000). Eso es la beca del 60% aplicada sobre el total. Si el enunciado dice 35%, la beca es 35%, no 40% ni 60%.
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-tag">EJERCICIO 5 · PORCENTAJE · HALLAR EL TODO</div>
+  <h3>E5: Mesada mensual de Juan</h3>
+  <button class="btn-play" onclick="playTTS(81)">▶ Reproducir</button>
+  <div class="enunciado">
+    Juan ahorró 90.000 pesos en un mes, lo que corresponde al 15 por ciento de su mesada mensual. ¿Cuánto es la mesada completa de Juan?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-num">1</span>450.000 pesos</div>
+    <div class="opcion"><span class="opcion-num">2</span>540.000 pesos</div>
+    <div class="opcion"><span class="opcion-num">3</span>600.000 pesos</div>
+    <div class="opcion"><span class="opcion-num">4</span>650.000 pesos</div>
+  </div>
+  <div class="respuesta">
+    <strong>Respuesta correcta: opción 3 (600.000 pesos).</strong><br><br>
+    <strong>Paso a paso:</strong><br>
+    1. Tipo de problema: hallar el todo (la mesada). Nos dan la parte (90.000) y el porcentaje (15%).<br>
+    2. Fórmula: todo = (parte × 100) / porcentaje = (90.000 × 100) / 15.<br>
+    3. Cálculo con ábaco: 90.000 × 100 = 9.000.000. 9.000.000 / 15 = 600.000.<br>
+    &nbsp;&nbsp;&nbsp;(Verificar: 15 × 600.000 = 9.000.000. ✓)<br><br>
+    <strong>Verificación:</strong> 15% de 600.000 debe dar 90.000. Cálculo: (600.000 × 15) / 100 = 9.000.000 / 100 = 90.000. ✓<br><br>
+    <strong>¿Por qué funciona?</strong> La relación "parte sobre todo igual a porcentaje sobre 100" es la clave. Despejando el todo: todo = (parte × 100) / porcentaje.<br><br>
+    <strong>Error frecuente:</strong> aplicar la fórmula del Tipo 1 (hallar la parte) cuando en realidad falta el todo. Algunos calculan 15 por ciento de 90.000 igual a 13.500 y no encuentran esa respuesta entre las opciones, pero aún así eligen al azar. Siempre identifiquen qué dato falta antes de calcular.<br><br>
+    <strong>Truco mental:</strong> si 15% son 90.000, entonces 1% son 90.000/15 = 6.000. Y 100% (el todo) son 6.000 × 100 = 600.000. Mismo resultado por otro camino.
   </div>
 </div>
 
