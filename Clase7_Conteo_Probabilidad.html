@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 7 — Conteo y Probabilidad · UdeA Posible</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;--border:#2e2e2e;
+  --text:#e8e8e0;--text2:#888880;--text3:#555550;
+  --accent:#f0a0c8;       /* rosa-coral, identidad Sesión 7 */
+  --accent-soft:#200a18;
+  --accent-soft2:#2c0e22;
+  --accent-warm:#f0c060;  /* color para "cómo usar" */
+  --accent-info:#a0c8f0;  /* color para enlaces a otras herramientas */
+  --accent-rest:#80c0a0;  /* verde tenue para el descanso */
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-size:15px;line-height:1.7;min-height:100vh;padding:2rem 1rem 4rem}
+.page{max-width:780px;margin:0 auto}
+
+header{margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+h1{font-size:24px;font-weight:600;line-height:1.3;margin-bottom:.4rem}
+.subtitle{font-size:14px;color:var(--text2)}
+.back{display:inline-block;color:var(--accent-info);font-size:13px;text-decoration:none;margin-bottom:1rem;font-family:'JetBrains Mono',monospace}
+.back:hover{color:var(--accent)}
+
+/* "Cómo usar" — recuadro arriba (regla #9 de la experta) */
+.como-usar{background:#1a1408;border:2px solid var(--accent-warm);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem}
+.como-usar h2{font-size:17px;color:var(--accent-warm);margin-bottom:.6rem}
+.como-usar p{font-size:14px;line-height:1.85;color:#e8d8b8;margin-bottom:.5rem}
+.como-usar p:last-child{margin-bottom:0}
+.como-usar kbd{font-family:'JetBrains Mono',monospace;font-size:12px;background:#2a200a;border:1px solid #4a3a14;border-radius:4px;padding:1px 6px;color:var(--accent-warm)}
+
+/* Controles globales */
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:1.25rem}
+.speed-control{display:inline-flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);padding:8px 14px;border-radius:8px}
+.speed-control label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);white-space:nowrap}
+.speed-control input[type=range]{-webkit-appearance:none;width:130px;height:6px;background:var(--border);border-radius:3px;outline:none}
+.speed-control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer}
+.speed-control input[type=range]:focus{outline:3px solid #ffeb3b;outline-offset:4px}
+.speed-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:40px}
+.voice-select{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;padding:9px 12px;border-radius:8px;min-height:44px;max-width:280px}
+.voice-select:focus{outline:3px solid #ffeb3b;outline-offset:2px}
+.btn-resume{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:8px;border:1px solid var(--accent);background:var(--accent-soft2);color:var(--accent);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;min-height:44px}
+.btn-resume:hover{background:var(--accent);color:#0f0f0f}
+.btn-resume:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+
+/* TOC */
+.toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.75rem}
+.toc-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+.toc a{display:block;color:var(--accent-info);font-size:13px;text-decoration:none;padding:5px 0;border-bottom:1px solid #1a1a1a}
+.toc a:last-child{border-bottom:none}
+.toc a:hover, .toc a:focus{color:var(--accent);outline:none}
+.toc .toc-rest{color:var(--accent-rest)}
+
+/* Encabezados de bloques */
+h2.bloque{font-size:18px;font-weight:600;margin:2.25rem 0 .5rem;padding-top:1.25rem;border-top:1px solid var(--border)}
+h2.bloque .tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:20px;color:var(--accent);border:1px solid var(--accent-soft2);background:var(--accent-soft);margin-right:.5rem}
+h2.bloque .duracion{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);font-weight:400;margin-left:.5rem}
+
+/* Tarjetas */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:.75rem;padding:1.25rem}
+.card-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.04em;margin-bottom:.5rem}
+.card h3{font-size:15px;font-weight:500;margin:0 0 .5rem;color:var(--text)}
+.enunciado{font-size:14px;line-height:1.95;color:#c8c8c0}
+.enunciado strong{color:var(--text)}
+.enunciado em{color:var(--accent);font-style:normal}
+.respuesta{margin-top:.85rem;padding:.95rem 1.05rem;border-radius:8px;font-size:13.5px;line-height:1.85;color:var(--text2);background:var(--accent-soft);border:1px solid var(--accent-soft2)}
+.respuesta strong{color:var(--accent);font-weight:500}
+
+/* Botón de reproducción */
+.btn-play{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:8px;border:none;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;background:var(--accent);color:#0f0f0f;margin-bottom:.6rem;min-height:44px;transition:all .15s}
+.btn-play:hover{filter:brightness(1.1)}
+.btn-play.playing{background:#f06060;color:#fff}
+.btn-play:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.playing-dot{display:inline-block;width:6px;height:6px;background:#fff;border-radius:50%;animation:pulse 1s ease-in-out infinite;margin-right:4px}
+
+/* Listas dentro del enunciado */
+.enunciado ul, .enunciado ol{margin:.5rem 0 .5rem 1.5rem}
+.enunciado li{margin-bottom:.35rem}
+
+/* Tablas verbales (descripciones, no figuras) */
+.tabla-verbal{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;margin:.75rem 0;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.85}
+
+/* Bloque de descanso (D) — visualmente distinto */
+.descanso{background:#0c1612;border:2px dashed var(--accent-rest);border-radius:var(--radius);padding:1.5rem;margin:1rem 0 .75rem;text-align:center}
+.descanso h3{color:var(--accent-rest);font-size:16px;margin-bottom:.5rem}
+.descanso p{color:#a8d8c0;font-size:14px;line-height:1.85}
+
+footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:12px;color:var(--text3);text-align:center;line-height:1.8}
+
+@media(max-width:600px){
+  body{padding:1rem .75rem 3rem}
+  h1{font-size:20px}
+  .card{padding:1rem}
+  .btn-play{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<a href="index.html" class="back">← Volver al índice de sesiones</a>
+
+<header>
+  <div class="label">UdeA Posible · Sesión 7 · Mayo de 2026</div>
+  <h1>Conteo y Probabilidad<br>Permutaciones, combinaciones y probabilidad clásica</h1>
+  <div class="subtitle">Razonamiento lógico — Preparatorio examen de admisión Universidad de Antioquia · Aspirantes con discapacidad visual</div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     CÓMO USAR (siempre arriba — regla #9 de la experta en tiflotecnología)
+     ═══════════════════════════════════════════════════════════════════ -->
+<section class="como-usar" id="como-usar-section" tabindex="-1" aria-labelledby="como-usar-titulo">
+  <h2 id="como-usar-titulo">Cómo usar esta clase</h2>
+  <p><strong>Reproducir el audio:</strong> en cada bloque hay un botón "Reproducir". Al pulsarlo, una voz lee el contenido completo del bloque, incluida la notación matemática expandida. Para detenerlo, pulsa el mismo botón otra vez o la tecla <kbd>Esc</kbd>.</p>
+  <p><strong>Notación matemática:</strong> los símbolos C de n en k, P de n en k, V de n en k y n factorial se leen con sus nombres completos. Por ejemplo, "C abierto paréntesis 6 coma 2 cerrado paréntesis" se lee "combinaciones de 6 en 2".</p>
+  <p><strong>Velocidad:</strong> ajusta la velocidad de la voz con el deslizador. Para enunciados con muchos números, conviene bajar a 0.75 o 0.80; para narrativa, subir a 0.95 está bien. La velocidad se guarda automáticamente.</p>
+  <p><strong>Voz:</strong> elige la voz que prefieras del selector. Si tu equipo tiene la voz Eloquence de JAWS instalada, aparecerá en la lista y se selecciona como primera opción.</p>
+  <p><strong>Continuar donde quedaste:</strong> si cierras la página y vuelves, el botón <em>Continuar donde quedé</em> te lleva al último bloque que estuviste escuchando.</p>
+  <p><strong>Una sola voz a la vez:</strong> al pulsar otro botón mientras hay audio sonando, la voz anterior se detiene. Nunca se superponen.</p>
+  <p><strong>Soroban virtual:</strong> en el bloque A se calcula 2 elevado a la 6, igual a 64. Si quieres seguirlo paso a paso, abre el <a href="soroban_virtual.html" style="color:var(--accent);text-decoration:underline">soroban virtual</a> de la Sesión 2 en otra pestaña.</p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     CONTROLES GLOBALES
+     ═══════════════════════════════════════════════════════════════════ -->
+<div class="controls">
+  <div class="speed-control">
+    <label for="speedSlider">Velocidad de voz</label>
+    <input type="range" id="speedSlider" min="0.6" max="1.2" step="0.05" value="0.85" aria-label="Velocidad de voz">
+    <span class="speed-val" id="speedVal">0.85x</span>
+  </div>
+  <select id="voiceSelect" class="voice-select" aria-label="Voz de lectura"></select>
+  <button id="btnResume" class="btn-resume" aria-label="Continuar desde el último bloque que escuchaste">⤴ Continuar donde quedé</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     TABLA DE CONTENIDO
+     ═══════════════════════════════════════════════════════════════════ -->
+<nav class="toc" aria-label="Tabla de contenido de la sesión">
+  <div class="toc-title">Contenido de la sesión · 3 horas 30 minutos</div>
+  <a href="#bloque-a">A — Apertura: el sistema Braille y el principio multiplicativo (25 min)</a>
+  <a href="#bloque-b">B — Repaso de MCD y MCM (12 min)</a>
+  <a href="#bloque-c">C — Permutaciones, variaciones y combinaciones (35 min)</a>
+  <a href="#bloque-d" class="toc-rest">D — Descanso (20 min)</a>
+  <a href="#bloque-e">E — Probabilidad clásica y espacios muestrales (30 min)</a>
+  <a href="#bloque-f">F — Conteo con restricciones: bloque-juntos y complemento (30 min)</a>
+  <a href="#bloque-g">G — Cierre: el problema de Monty Hall (25 min)</a>
+  <a href="#bloque-h">H — Enlace al taller de problemas tipo UdeA</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE A — APERTURA: BRAILLE Y PRINCIPIO MULTIPLICATIVO
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-a"><span class="tag">Bloque A</span>Apertura: Braille y principio multiplicativo<span class="duracion">· 25 minutos</span></h2>
+
+<div class="card" id="b-a1" data-block="b-a1">
+  <div class="card-tag">NARRATIVA · ANCLAJE EN TIFLOTECNOLOGÍA</div>
+  <h3>A1: El sistema Braille tiene exactamente 64 caracteres. ¿Por qué?</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Quienes leen Braille saben que cada celda tiene <strong>seis puntos</strong> dispuestos en dos columnas y tres filas. Los puntos se nombran del 1 al 6: punto 1 arriba a la izquierda, punto 2 al medio izquierda, punto 3 abajo a la izquierda, punto 4 arriba a la derecha, punto 5 al medio derecha, punto 6 abajo a la derecha.
+    <br><br>
+    Cada uno de esos seis puntos puede estar <strong>elevado</strong> (presente al tacto) o <strong>plano</strong> (ausente). Es decir, en cada punto solo hay dos posibilidades: sí o no, presente o ausente.
+    <br><br>
+    Pregunta: ¿cuántos caracteres distintos puede formar el sistema Braille con seis puntos donde cada uno puede estar presente o ausente?
+    <br><br>
+    Razonemos. Para el punto 1 hay dos posibilidades, presente o ausente. Para el punto 2, también dos. Y así con los seis puntos. Como cada decisión es independiente de las demás —que el punto 1 esté elevado no obliga a nada sobre el punto 4—, las posibilidades se <strong>multiplican</strong>:
+    <div class="tabla-verbal">
+    2 por 2 por 2 por 2 por 2 por 2 = 2 elevado a la 6 = <strong>64 caracteres</strong>.
+    </div>
+    Ahí está. Sesenta y cuatro combinaciones distintas de los seis puntos. Una de ellas, la que tiene los seis puntos planos, es el espacio en blanco. Las otras 63 corresponden a letras, números, signos de puntuación y abreviaturas. Por eso el Braille tiene exactamente 64 caracteres: porque 2 elevado a la 6 es 64. No es una decisión arbitraria, es una consecuencia matemática directa de su diseño.
+    <br><br>
+    <strong>¿Qué tiene que ver esto con la sesión de hoy?</strong> Acabamos de aplicar, sin nombrarlo, el <em>principio multiplicativo de conteo</em>: cuando una decisión se descompone en varias etapas independientes, el total de resultados es el producto de las opciones en cada etapa. Hoy le vamos a poner nombre, lo vamos a generalizar a permutaciones, variaciones y combinaciones, y vamos a usarlo para resolver problemas de probabilidad. La realidad táctil del Braille es la sesión 7 entera contada en una historia.
+  </div>
+  <div class="respuesta">
+    <strong>Idea para llevarse:</strong> el conteo no empieza con fórmulas. Empieza con la pregunta "¿cuántas decisiones independientes hay y cuántas opciones tiene cada una?". El Braille resuelve esa pregunta con seis decisiones de dos opciones cada una, dando 2 elevado a la 6 igual a 64. Toda la combinatoria que veremos hoy se construye sobre esta intuición.
+  </div>
+</div>
+
+<div class="card" id="b-a2" data-block="b-a2">
+  <div class="card-tag">DEFINICIÓN · PRINCIPIO MULTIPLICATIVO</div>
+  <h3>A2: El principio multiplicativo, formal</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Principio multiplicativo de conteo:</strong> si una tarea se realiza en dos etapas, donde la primera puede hacerse de <em>m</em> formas distintas y, sin importar lo elegido en la primera, la segunda puede hacerse de <em>n</em> formas distintas, entonces la tarea completa puede hacerse de m por n formas distintas.
+    <br><br>
+    Se generaliza a más etapas: si hay tres etapas con m, n y k opciones, el total es m por n por k. Y así sucesivamente.
+    <br><br>
+    <strong>Ejemplo cotidiano:</strong> tienes tres camisetas y dos pantalones. ¿De cuántas maneras puedes vestirte? Tres por dos, igual a seis combinaciones. Si además tienes dos pares de zapatos: tres por dos por dos, igual a doce.
+    <br><br>
+    <strong>Ejemplo numérico:</strong> ¿cuántos números de tres cifras se pueden formar con los dígitos 1, 2, 3 y 4 si se permite repetir? Cuatro opciones para la primera cifra, cuatro para la segunda, cuatro para la tercera: 4 por 4 por 4, igual a 64. Igualito al Braille pero con cuatro opciones por etapa en lugar de dos.
+    <br><br>
+    <strong>Cuándo aplica:</strong> el principio multiplicativo aplica cuando las etapas son independientes, es decir, cuando lo elegido en una etapa no cambia las opciones disponibles en las otras. Si las etapas no son independientes —por ejemplo, si no se permite repetir dígitos— hay que ajustar el conteo etapa por etapa.
+  </div>
+  <div class="respuesta">
+    <strong>Pista verbal:</strong> ante un problema de conteo, primero pregúntate "¿qué decisiones tomo y en qué orden?". Luego cuenta las opciones de cada decisión. El producto es la respuesta.
+  </div>
+</div>
+
+<div class="card" id="b-a3" data-block="b-a3">
+  <div class="card-tag">EJEMPLO EN VIVO · POSTALES Y HERMANOS (taller UdeA Ej. 35)</div>
+  <h3>A3: Luis y las cinco postales</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Enunciado del taller UdeA:</strong> Luis viajó a Europa y quiere dar a cada uno de sus cuatro hermanos una de las cinco postales de las ciudades que visitó. ¿De cuántas formas puede repartir las postales entre sus hermanos?
+    <br><br>
+    <strong>Análisis por etapas (aplicando el principio multiplicativo):</strong>
+    <ul>
+      <li>Etapa 1: dar una postal al hermano mayor. Hay 5 postales disponibles, así que hay 5 formas.</li>
+      <li>Etapa 2: dar una postal al segundo hermano. Como una postal ya se entregó en la etapa 1, quedan 4 disponibles. 4 formas.</li>
+      <li>Etapa 3: dar una postal al tercer hermano. Quedan 3 disponibles. 3 formas.</li>
+      <li>Etapa 4: dar una postal al cuarto hermano. Quedan 2 disponibles. 2 formas.</li>
+    </ul>
+    <strong>Total:</strong> 5 por 4 por 3 por 2, igual a 120.
+    <br><br>
+    Observa que no se usaron las 5 postales: una sobra al final. Eso está bien; el problema solo pide repartir cuatro postales, una por hermano, sin repetir.
+    <br><br>
+    Más adelante, en el bloque C, le pondremos nombre a este conteo: se llama <em>variación de 5 elementos tomados de 4 en 4</em>, y se escribe V(5,4). Pero no necesitas aprenderte la fórmula para resolverlo. Aplicar el principio multiplicativo etapa por etapa siempre funciona.
+  </div>
+  <div class="respuesta">
+    <strong>Respuesta correcta: opción C, 120 formas.</strong> El razonamiento es 5 por 4 por 3 por 2 = 120. Esta forma de contar etapa por etapa, descontando lo ya elegido, es la base de las permutaciones y variaciones que veremos en el bloque C.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE B — REPASO MCD/MCM
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-b"><span class="tag">Bloque B</span>Repaso de MCD y MCM<span class="duracion">· 12 minutos</span></h2>
+
+<div class="card" id="b-b1" data-block="b-b1">
+  <div class="card-tag">REPASO · DEFINICIONES EN UNA FRASE</div>
+  <h3>B1: MCD y MCM en una frase cada uno</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    En sesiones anteriores estudiamos divisibilidad y el Teorema fundamental de la aritmética, que dice que todo número se descompone de manera única en producto de primos. La página de la Sesión 5 desarrolla en detalle el máximo común divisor y el mínimo común múltiplo; aquí los cerramos rápidamente con tres tarjetas de repaso, asumiendo que las y los estudiantes pudieron leer el material entre sesiones.
+    <br><br>
+    <strong>Máximo común divisor de dos números, MCD:</strong> es <em>el más grande que reparte exacto a los dos</em>. Sirve para repartos justos y para simplificar fracciones.
+    <br><br>
+    <strong>Mínimo común múltiplo de dos números, MCM:</strong> es <em>el primer momento en que los dos coinciden</em>. Sirve para sincronizaciones y para sumar fracciones de denominadores distintos.
+    <br><br>
+    Existen dos métodos para calcular cada uno: por descomposición en factores primos, y por algoritmo de Euclides en el caso del MCD. Ambos están redactados en detalle en la página de la <a href="Clase5_Aritmetica_I.html" style="color:var(--accent);text-decoration:underline">Sesión 5 de Aritmética I</a>; aquí solo hacemos un par de ejemplos guiados.
+  </div>
+  <div class="respuesta">
+    <strong>Identidad clave:</strong> MCD(a,b) por MCM(a,b) = a por b. Es decir, el producto del máximo común divisor por el mínimo común múltiplo siempre es igual al producto de los dos números originales. Esta identidad permite calcular el MCM rápidamente una vez se conoce el MCD.
+  </div>
+</div>
+
+<div class="card" id="b-b2" data-block="b-b2">
+  <div class="card-tag">EJEMPLO GUIADO · MCD POR DESCOMPOSICIÓN</div>
+  <h3>B2: MCD de 36 y 48</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Calculemos el máximo común divisor de 36 y 48 paso a paso, por descomposición en factores primos.
+    <br><br>
+    <strong>Paso 1.</strong> Descomponemos 36 en factores primos. 36 dividido entre 2 da 18; 18 dividido entre 2 da 9; 9 dividido entre 3 da 3; 3 dividido entre 3 da 1. Entonces 36 = 2 al cuadrado por 3 al cuadrado. Es decir, 36 = 2 por 2 por 3 por 3.
+    <br><br>
+    <strong>Paso 2.</strong> Descomponemos 48 en factores primos. 48 dividido entre 2 da 24; 24 dividido entre 2 da 12; 12 dividido entre 2 da 6; 6 dividido entre 2 da 3; 3 dividido entre 3 da 1. Entonces 48 = 2 a la 4 por 3. Es decir, 48 = 2 por 2 por 2 por 2 por 3.
+    <br><br>
+    <strong>Paso 3.</strong> Para el máximo común divisor tomamos los primos comunes con el <em>menor</em> exponente. El primo 2 aparece en ambos: en 36 con exponente 2, en 48 con exponente 4. El menor exponente es 2, así que tomamos 2 al cuadrado. El primo 3 aparece en ambos: en 36 con exponente 2, en 48 con exponente 1. El menor exponente es 1, así que tomamos 3 a la 1.
+    <br><br>
+    <strong>Resultado:</strong> MCD(36, 48) = 2 al cuadrado por 3 = 4 por 3 = <strong>12</strong>.
+    <br><br>
+    Verificación: 36 dividido entre 12 da 3 exacto; 48 dividido entre 12 da 4 exacto. Los dos se reparten exactos por 12, y no hay ningún número mayor que 12 que reparta exacto a los dos a la vez.
+  </div>
+  <div class="respuesta">
+    <strong>Pista verbal:</strong> "primos comunes, menor exponente" para el MCD; "todos los primos, mayor exponente" para el MCM. Una palabra clave que ayuda en el examen UdeA: <em>repartir</em> sugiere MCD; <em>coincidir</em> o <em>sincronizar</em> sugiere MCM.
+  </div>
+</div>
+
+<div class="card" id="b-b3" data-block="b-b3">
+  <div class="card-tag">EJEMPLO GUIADO · MCM POR LA IDENTIDAD</div>
+  <h3>B3: MCM de 15 y 18 usando la identidad MCD por MCM = a por b</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Calculemos el mínimo común múltiplo de 15 y 18, esta vez sin descomponer todo, usando la identidad mágica.
+    <br><br>
+    <strong>Paso 1.</strong> Calculamos rápido el MCD de 15 y 18. Los divisores comunes de 15 y 18 son 1 y 3 (porque 15 = 3 por 5 y 18 = 2 por 3 al cuadrado, y el único primo común es el 3 con exponente menor 1). Entonces MCD(15, 18) = 3.
+    <br><br>
+    <strong>Paso 2.</strong> Aplicamos la identidad MCD(a,b) por MCM(a,b) = a por b. Es decir, MCM(15, 18) = (15 por 18) dividido entre MCD(15, 18) = 270 dividido entre 3 = <strong>90</strong>.
+    <br><br>
+    <strong>Verificación:</strong> 90 dividido entre 15 da 6 exacto; 90 dividido entre 18 da 5 exacto. Los dos caben exactos en 90, y no hay un número menor que 90 con esa propiedad.
+    <br><br>
+    Esta técnica es útil cuando los dos números son pequeños y el MCD se ve a simple vista. Si los números son grandes, conviene descomponer ambos y aplicar "todos los primos con el mayor exponente".
+  </div>
+  <div class="respuesta">
+    <strong>Cuándo se usa esto en el examen UdeA:</strong> los problemas de campanas que repican, semáforos que se sincronizan, encuentros periódicos, sumas de fracciones con denominadores distintos. En todos esos, MCM es la herramienta. Lo veremos integrado con probabilidad en el bloque F.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE C — PERMUTACIONES, VARIACIONES, COMBINACIONES
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-c"><span class="tag">Bloque C</span>Permutaciones, variaciones y combinaciones<span class="duracion">· 35 minutos</span></h2>
+
+<div class="card" id="b-c1" data-block="b-c1">
+  <div class="card-tag">DEFINICIÓN · EL FACTORIAL</div>
+  <h3>C1: El factorial de un número, n!</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Antes de hablar de permutaciones y variaciones necesitamos una notación: el <strong>factorial</strong>.
+    <br><br>
+    <strong>Definición.</strong> El factorial de un número entero positivo <em>n</em>, que se escribe n! y se lee "n factorial", es el producto de todos los números enteros desde 1 hasta n.
+    <div class="tabla-verbal">
+    1! = 1<br>
+    2! = 2 por 1 = 2<br>
+    3! = 3 por 2 por 1 = 6<br>
+    4! = 4 por 3 por 2 por 1 = 24<br>
+    5! = 5 por 4 por 3 por 2 por 1 = 120<br>
+    6! = 6 por 5 por 4 por 3 por 2 por 1 = 720<br>
+    7! = 5040<br>
+    8! = 40 320
+    </div>
+    Por convención, se define <strong>0! = 1</strong>. No es algo que se demuestre, es una definición útil para que las fórmulas funcionen siempre.
+    <br><br>
+    <strong>Por qué crece tan rápido:</strong> el factorial multiplica por un número cada vez mayor. 10! ya es 3 millones 628 mil 800. 13! supera los 6 mil millones. Por eso, en problemas con factoriales, conviene <em>simplificar antes de calcular</em> en lugar de calcular cada factorial completo y luego dividir.
+    <br><br>
+    <strong>Truco de simplificación:</strong> 7! dividido entre 5! no se calcula como 5040 dividido entre 120. Se observa que 7! = 7 por 6 por 5!, así que el 5! se cancela y queda 7 por 6 = 42. Mucho más limpio.
+  </div>
+  <div class="respuesta">
+    <strong>Cuándo aparece:</strong> el factorial cuenta el número de formas distintas de ordenar n objetos en fila. Es la base de las permutaciones, que vemos en C2.
+  </div>
+</div>
+
+<div class="card" id="b-c2" data-block="b-c2">
+  <div class="card-tag">PERMUTACIONES · TODOS EN FILA</div>
+  <h3>C2: Permutaciones, P(n) = n!</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Una <strong>permutación</strong> es un arreglo de <em>n</em> objetos distintos en fila, donde importa el orden y se usan todos los objetos.
+    <br><br>
+    <strong>Cuántas permutaciones hay:</strong> el número de permutaciones de n objetos distintos es <em>n factorial</em>. Se escribe P(n) = n!
+    <br><br>
+    <strong>Justificación por el principio multiplicativo:</strong> para la primera posición tienes n opciones; para la segunda, n menos 1 opciones (el primero ya quedó usado); para la tercera, n menos 2; y así sucesivamente hasta la última, que tiene una sola opción. El producto n por (n menos 1) por (n menos 2) por ... por 2 por 1 es n factorial.
+    <br><br>
+    <strong>Ejemplo audible:</strong> ¿cuántas permutaciones tienen las letras A, B y C? Son 3! = 6. Listémoslas en orden alfabético, como un árbol auditivo:
+    <div class="tabla-verbal">
+    A B C<br>
+    A C B<br>
+    B A C<br>
+    B C A<br>
+    C A B<br>
+    C B A
+    </div>
+    Seis arreglos distintos. Si fueran cuatro letras (A, B, C, D), serían 4! = 24 permutaciones. Si fueran cinco, 5! = 120. Si fueran diez, 10! = 3 millones 628 mil 800.
+    <br><br>
+    <strong>Cuándo se usa:</strong> sentar a n personas en n butacas alineadas, ordenar n libros en un estante, escribir n números en n posiciones. Cualquier situación donde "todos van" y "el orden importa".
+  </div>
+  <div class="respuesta">
+    <strong>Pista verbal:</strong> "todos en fila, importa el orden, n factorial". Si solo se sientan algunos, pasamos a variaciones (C3); si no importa el orden, pasamos a combinaciones (C4).
+  </div>
+</div>
+
+<div class="card" id="b-c3" data-block="b-c3">
+  <div class="card-tag">VARIACIONES · ALGUNOS EN FILA</div>
+  <h3>C3: Variaciones, V(n,k) = n! dividido entre (n-k)!</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Una <strong>variación</strong> es un arreglo de <em>k</em> objetos elegidos de un total de <em>n</em>, donde importa el orden. Se diferencia de la permutación en que <em>k</em> puede ser menor que <em>n</em>: no usamos todos los objetos.
+    <br><br>
+    <strong>Fórmula:</strong> V(n, k) = n factorial dividido entre la cantidad (n menos k) factorial.
+    <br><br>
+    <strong>Justificación:</strong> es lo mismo que la permutación pero parando antes. Para la primera posición tienes n opciones; para la segunda, n menos 1; y así hasta la posición k, que tiene n menos k más 1 opciones. El producto de esos k factores es exactamente n factorial dividido entre (n menos k) factorial.
+    <br><br>
+    <strong>Ejemplo trabajado: V(5, 2).</strong> Tenemos cinco letras (A, B, C, D, E) y queremos saber cuántas formas hay de ponerlas en dos posiciones, con orden e importando cuál va en cada lugar. Por la fórmula: V(5, 2) = 5! dividido entre (5 menos 2)! = 5! dividido entre 3! = 120 dividido entre 6 = 20.
+    <br><br>
+    Por el principio multiplicativo directo: 5 opciones para la primera posición por 4 opciones para la segunda = 20. El mismo resultado, sin pasar por la fórmula completa. Por eso, en problemas pequeños, suele ser más rápido razonar etapa por etapa.
+    <br><br>
+    <strong>Cuándo se usa:</strong> en el problema de Luis y las postales (A3) había V(5, 4) = 120. En el examen UdeA, las variaciones aparecen en problemas tipo "elegir k de n con orden": juntas directivas con cargos diferenciados, podios de competencias, claves numéricas sin repetir.
+  </div>
+  <div class="respuesta">
+    <strong>Pista verbal:</strong> "algunos en fila, importa el orden, V de n en k". Si los objetos pueden repetirse —por ejemplo, claves de acceso donde el mismo dígito puede salir dos veces—, la fórmula cambia a n elevado a la k. Esa variante se llama variación con repetición.
+  </div>
+</div>
+
+<div class="card" id="b-c4" data-block="b-c4">
+  <div class="card-tag">COMBINACIONES · GRUPOS SIN ORDEN</div>
+  <h3>C4: Combinaciones, C(n,k) = n! dividido entre [k! por (n-k)!]</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Una <strong>combinación</strong> es un grupo de <em>k</em> objetos elegidos de un total de <em>n</em>, donde <em>no</em> importa el orden. Es decir, el grupo {A, B, C} es exactamente el mismo grupo que {B, A, C} o que {C, B, A}.
+    <br><br>
+    <strong>Fórmula:</strong> C(n, k) = n factorial dividido entre el producto de k factorial por (n menos k) factorial.
+    <br><br>
+    <strong>Por qué esa fórmula:</strong> primero contamos las variaciones, V(n, k) = n! dividido entre (n menos k)!. Pero las variaciones cuentan cada grupo con todos sus posibles órdenes; cada grupo de k objetos tiene k! ordenamientos distintos. Como las combinaciones no distinguen orden, dividimos por k! para no contar varias veces el mismo grupo.
+    <br><br>
+    <strong>Ejemplo trabajado: C(5, 2).</strong> ¿Cuántas parejas distintas se pueden formar con cinco amigos? Por la fórmula: C(5, 2) = 5! dividido entre [2! por 3!] = 120 dividido entre [2 por 6] = 120 dividido entre 12 = 10.
+    <br><br>
+    Lista verbal de las 10 parejas (con A, B, C, D, E):
+    <div class="tabla-verbal">
+    {A, B}, {A, C}, {A, D}, {A, E},<br>
+    {B, C}, {B, D}, {B, E},<br>
+    {C, D}, {C, E},<br>
+    {D, E}.
+    </div>
+    Diez parejas. Si hubiéramos contado por variaciones —donde importa el orden— habríamos obtenido 20: cada pareja contada dos veces, una vez (A, B) y otra (B, A). Por eso dividimos por 2! = 2.
+    <br><br>
+    <strong>Propiedad útil:</strong> C(n, k) = C(n, n menos k). Por ejemplo, C(10, 3) = C(10, 7). Elegir 3 de 10 es lo mismo que dejar fuera 7 de 10. Esto a veces simplifica cálculos cuando k es grande.
+  </div>
+  <div class="respuesta">
+    <strong>Pista verbal:</strong> "grupo sin orden, C de n en k". En el examen UdeA, las combinaciones aparecen en problemas tipo "formar comités", "elegir delegados sin cargos", "subconjuntos", "parejas para una tarea común".
+  </div>
+</div>
+
+<div class="card" id="b-c5" data-block="b-c5">
+  <div class="card-tag">CUADRO RESUMEN · CUÁNDO USAR QUÉ</div>
+  <h3>C5: Decidir entre permutación, variación o combinación</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Esta es la pregunta clave en cualquier problema de conteo:
+    <ol>
+      <li><strong>¿Importa el orden?</strong> Si sí, va permutación o variación. Si no, va combinación.</li>
+      <li><strong>¿Se usan todos los elementos o solo algunos?</strong> Si todos, va permutación; si solo algunos, va variación o combinación.</li>
+      <li><strong>¿Se permite repetir?</strong> Casi siempre la respuesta es no en problemas UdeA. Si fuera sí, la fórmula cambia.</li>
+    </ol>
+    <strong>Combinación de las dos primeras preguntas:</strong>
+    <div class="tabla-verbal">
+    Todos + orden importa: permutación, n!<br>
+    Algunos + orden importa: variación, V(n, k)<br>
+    Algunos + orden no importa: combinación, C(n, k)
+    </div>
+    <strong>Pista decisiva:</strong> los enunciados que dicen "ordenar", "alinear", "fila", "podio", "código", "clave" suelen pedir orden. Los que dicen "grupo", "comité", "pareja", "subconjunto", "delegación sin cargos", "elegir varios" suelen no pedir orden.
+    <br><br>
+    Cuando el enunciado mezcla restricciones —"el matemático y el biólogo deben quedar juntos", "no más de dos mujeres"— se descompone el problema en casos y se aplica una fórmula a cada caso. Esa es la técnica del bloque F.
+  </div>
+  <div class="respuesta">
+    <strong>Recordatorio:</strong> n! cuenta permutaciones; V(n, k) = n! sobre (n − k)! cuenta variaciones; C(n, k) = n! sobre [k! por (n − k)!] cuenta combinaciones. La diferencia entre V y C es exactamente el factor k! que cancela los reordenamientos.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE D — DESCANSO
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-d"><span class="tag">Bloque D</span>Descanso<span class="duracion">· 20 minutos</span></h2>
+
+<section class="descanso" aria-label="Descanso de veinte minutos">
+  <h3>Pausa de 20 minutos</h3>
+  <p>Estiren brazos y cuello, hidrátense, vayan al baño si lo necesitan. Aprovechen para asentar lo aprendido: principio multiplicativo, factorial, permutaciones, variaciones y combinaciones. La segunda mitad de la sesión aplica todo esto a probabilidad y a problemas con restricciones.</p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE E — PROBABILIDAD CLÁSICA
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-e"><span class="tag">Bloque E</span>Probabilidad clásica y espacios muestrales<span class="duracion">· 30 minutos</span></h2>
+
+<div class="card" id="b-e1" data-block="b-e1">
+  <div class="card-tag">DEFINICIÓN · LA PROBABILIDAD CLÁSICA O DE LAPLACE</div>
+  <h3>E1: Probabilidad como casos favorables sobre casos totales</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Cuando se hace un experimento aleatorio donde todos los resultados posibles son <em>igualmente probables</em>, la probabilidad de un evento se calcula así:
+    <div class="tabla-verbal">
+    Probabilidad de A = (cantidad de casos favorables a A) sobre (cantidad de casos totales).
+    </div>
+    Esta es la <strong>definición clásica</strong> o <strong>de Laplace</strong> de la probabilidad. Se escribe P(A) y se lee "probabilidad de A".
+    <br><br>
+    <strong>Vocabulario:</strong>
+    <ul>
+      <li>El <strong>experimento aleatorio</strong> es la acción cuyo resultado no se sabe de antemano: lanzar un dado, sacar una bola, repartir cartas.</li>
+      <li>El <strong>espacio muestral</strong>, que se escribe Omega, es el conjunto de todos los resultados posibles del experimento.</li>
+      <li>Un <strong>evento</strong> es un subconjunto del espacio muestral: un grupo de resultados que comparten una propiedad.</li>
+      <li>Los <strong>casos favorables</strong> son los resultados que cumplen el evento.</li>
+    </ul>
+    <strong>Ejemplo audible.</strong> Lanzar un dado de seis caras. El espacio muestral tiene 6 resultados: {1, 2, 3, 4, 5, 6}. El evento "sacar un número par" tiene 3 casos favorables: {2, 4, 6}. La probabilidad es 3 sobre 6 = 1 sobre 2 = un medio.
+    <br><br>
+    <strong>Reglas básicas:</strong>
+    <ol>
+      <li>La probabilidad siempre está entre 0 y 1, ambos incluidos.</li>
+      <li>P(evento imposible) = 0. Por ejemplo, sacar un 7 con un dado de 6 caras.</li>
+      <li>P(evento seguro) = 1. Por ejemplo, sacar un número entre 1 y 6 con un dado de 6 caras.</li>
+      <li>P(evento) + P(complemento del evento) = 1. Es decir, P(no A) = 1 menos P(A).</li>
+    </ol>
+    La regla 4 es muy útil cuando contar casos favorables directos es complicado: se cuentan los casos del complemento, se calcula su probabilidad, y se resta a 1.
+    <br><br>
+    <strong>Cuándo aplica la definición clásica.</strong> La fórmula casos favorables sobre casos totales solo funciona si los resultados del espacio muestral son <em>igualmente probables</em>. Por ejemplo, un dado justo, una moneda justa, una bolsa bien mezclada con bolas indistinguibles al tacto. Si los resultados no son equiprobables (por ejemplo, un dado cargado, una rifa donde algunos boletos cuestan más), hay que usar otras herramientas que veremos en sesiones posteriores. En el examen UdeA, salvo aviso explícito, asume que los resultados son equiprobables.
+    <br><br>
+    <strong>Cuidado con sumar probabilidades.</strong> P(A) más P(B) solo es igual a P(A o B) cuando los eventos A y B son <em>excluyentes</em>, es decir, cuando no pueden ocurrir al mismo tiempo. Si hay solapamiento, hay que restar P(A y B) para no contar dos veces. Ejemplo con un dado: P(par) más P(mayor que 3) suma 3 sobre 6 más 3 sobre 6 igual a 1, pero P(par o mayor que 3) es solo 4 sobre 6 (los casos son 2, 4, 5, 6), no 1. La diferencia son los casos 4 y 6, que son pares y mayores que 3 a la vez. Por ahora, en S7 trabajamos eventos excluyentes; la fórmula con resta queda para más adelante.
+  </div>
+  <div class="respuesta">
+    <strong>Pista verbal:</strong> "probabilidad es contar". Antes de aplicar la fórmula, se cuentan los casos totales del espacio muestral y los casos favorables del evento. La aritmética viene después.
+  </div>
+</div>
+
+<div class="card" id="b-e2" data-block="b-e2">
+  <div class="card-tag">ESPACIOS MUESTRALES TÍPICOS · DESCRIPCIÓN VERBAL</div>
+  <h3>E2: Dado, dos dados, baraja y bolsa</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    En los problemas UdeA, los espacios muestrales suelen ser los mismos. Aprenderlos verbalmente ahorra mucho tiempo en el examen.
+    <br><br>
+    <strong>Un dado de seis caras.</strong> Espacio muestral: {1, 2, 3, 4, 5, 6}. Total: 6 resultados.
+    <br><br>
+    <strong>Dos dados de seis caras (uno rojo y uno azul).</strong> Cada par ordenado (rojo, azul) es un resultado distinto. Total: 6 por 6 = 36 resultados. Lista enumerada por el primer dado:
+    <div class="tabla-verbal">
+    Si el primer dado da 1: (1,1), (1,2), (1,3), (1,4), (1,5), (1,6) → 6 pares.<br>
+    Si el primer dado da 2: (2,1), (2,2), (2,3), (2,4), (2,5), (2,6) → 6 pares.<br>
+    Si el primer dado da 3: (3,1), (3,2), ... (3,6) → 6 pares.<br>
+    Y así hasta el primer dado da 6.<br>
+    Total: 36 pares.
+    </div>
+    Una propiedad útil: la suma de los dos dados va de 2 a 12. La suma 7 es la más probable, con 6 pares (1+6, 2+5, 3+4, 4+3, 5+2, 6+1). Las sumas 2 y 12 son las menos probables, con un par cada una.
+    <br><br>
+    <strong>Una baraja simplificada.</strong> Un mazo estándar tiene 52 cartas: cuatro palos (corazones, diamantes, tréboles, picas) por 13 valores (As, 2, 3, ..., 10, J, Q, K). Si el problema es de baraja, casi siempre es 52 el total y hay que contar los favorables según la propiedad pedida (palo, color, valor).
+    <br><br>
+    <strong>Bolsa con bolas.</strong> "Una bolsa contiene 3 rojas y 5 azules." Total de bolas: 8. Probabilidad de sacar roja: 3 sobre 8. Probabilidad de sacar azul: 5 sobre 8. Si se saca una y no se devuelve, las probabilidades cambian para la segunda extracción: ahí ya hay condicionalidad, que tocaremos informalmente en el cierre con Monty Hall.
+  </div>
+  <div class="respuesta">
+    <strong>Estrategia táctil:</strong> piensa en el espacio muestral como un árbol auditivo. Para dos dados, el árbol tiene 6 ramas (primer dado) y de cada rama salen 6 hojas (segundo dado): 36 hojas en total. Para sumas, se enumeran los pares cuya suma cumple la condición.
+  </div>
+</div>
+
+<div class="card" id="b-e3" data-block="b-e3">
+  <div class="card-tag">EJEMPLO EN VIVO · CUADRADOS PERFECTOS (taller UdeA Ej. 8 y 9)</div>
+  <h3>E3: Probabilidad de sacar un cuadrado perfecto entre 1 y 400</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Enunciado del taller UdeA (Ej. 8 y Ej. 9 combinados):</strong> un número entero es un <em>cuadrado perfecto</em> cuando es la potencia al cuadrado de algún otro entero. Por ejemplo, 1 = 1 al cuadrado, 4 = 2 al cuadrado, 9 = 3 al cuadrado, son cuadrados perfectos. Si se elige al azar un número entero entre 1 y 400 inclusive, ¿cuál es la probabilidad de que sea cuadrado perfecto?
+    <br><br>
+    <strong>Análisis.</strong>
+    <ul>
+      <li>Espacio muestral: los enteros del 1 al 400. Total: 400 casos, igualmente probables.</li>
+      <li>Casos favorables: los cuadrados perfectos en ese rango. Son 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324, 361, 400. Es decir, 1 al cuadrado, 2 al cuadrado, ..., 20 al cuadrado, porque 20 al cuadrado es 400. Total: <strong>20 cuadrados perfectos</strong>.</li>
+    </ul>
+    <strong>Probabilidad:</strong> 20 sobre 400 = 1 sobre 20 = un veinteavo.
+    <br><br>
+    <strong>Verificación rápida:</strong> 21 al cuadrado = 441, que ya pasa de 400. Y 20 al cuadrado = 400, sí entra. Así que la cuenta de 20 cuadrados perfectos está confirmada.
+    <br><br>
+    <strong>Truco para problemas similares:</strong> el número de cuadrados perfectos entre 1 y N es la parte entera de la raíz cuadrada de N. Para N = 400, raíz de 400 = 20 exacto. Para N = 1000, raíz de 1000 está entre 31 (porque 31 al cuadrado = 961) y 32 (porque 32 al cuadrado = 1024), así que la parte entera es 31.
+  </div>
+  <div class="respuesta">
+    <strong>Respuesta correcta: opción A, 1 sobre 20.</strong> Casos favorables 20, casos totales 400, fracción simplificada 1 sobre 20. Esta es probabilidad clásica pura: cuenta directa, división, simplificación.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE F — CONTEO CON RESTRICCIONES
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-f"><span class="tag">Bloque F</span>Conteo con restricciones: bloque-juntos y complemento<span class="duracion">· 30 minutos</span></h2>
+
+<div class="card" id="b-f1" data-block="b-f1">
+  <div class="card-tag">TÉCNICA · BLOQUE-JUNTOS</div>
+  <h3>F1: Cuando varios elementos deben quedar juntos, los pegamos</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Enunciado modelo (taller UdeA Ej. 41):</strong> Juan tiene 7 libros distintos: 2 de matemáticas y 5 de literatura. ¿De cuántas maneras puede ordenarlos en un estante si los dos libros de matemáticas deben quedar juntos?
+    <br><br>
+    <strong>Técnica del bloque-juntos.</strong>
+    <ol>
+      <li>Tratamos a los dos libros de matemáticas como <em>un solo paquete</em>. Llamémoslo "M".</li>
+      <li>Ahora tenemos 6 elementos para ordenar: el paquete M y los 5 libros de literatura. El número de formas es 6 factorial = 720.</li>
+      <li>Pero dentro del paquete M, los dos libros de matemáticas pueden ir en dos órdenes distintos: matemática-1 antes que matemática-2, o al revés. Es decir, hay 2 factorial = 2 ordenamientos internos.</li>
+      <li>Por el principio multiplicativo, el total es 6 factorial por 2 factorial = 720 por 2 = <strong>1440</strong>.</li>
+    </ol>
+    <strong>Generalización.</strong> Si hay <em>n</em> elementos en total y un grupo de <em>g</em> elementos debe quedar junto, las formas son (n menos g más 1) factorial por g factorial. En el ejemplo: (7 menos 2 más 1) factorial por 2 factorial = 6 factorial por 2 factorial = 1440.
+    <br><br>
+    <strong>Cuándo se usa:</strong> "deben quedar juntos", "deben ir en bloque", "no se pueden separar". Si en cambio dice "no pueden quedar juntos", ahí se aplica la técnica del complemento que vemos en F2.
+  </div>
+  <div class="respuesta">
+    <strong>Respuesta correcta: opción D, 1440 maneras.</strong> Pista verbal de la técnica: "pegar el bloque, permutar el todo y permutar dentro del bloque".
+  </div>
+</div>
+
+<div class="card" id="b-f2" data-block="b-f2">
+  <div class="card-tag">TÉCNICA · COMPLEMENTO</div>
+  <h3>F2: Cuando "no" es más fácil de contar que "sí"</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Enunciado modelo (taller UdeA Ej. 28):</strong> sea el conjunto A = {1, 2, 3, 4, 5, 6}. Si se eligen al azar dos elementos distintos de A, ¿cuál es la probabilidad de que <em>no</em> sean consecutivos? (Considera que la pareja {1, 6} es la misma que {6, 1}.)
+    <br><br>
+    <strong>Estrategia.</strong> Contar parejas no consecutivas directamente es lioso. En cambio, las consecutivas son fáciles: son {1,2}, {2,3}, {3,4}, {4,5}, {5,6}. Solo cinco parejas. Aplicamos la técnica del complemento: contamos las consecutivas y restamos del total.
+    <br><br>
+    <strong>Paso 1. Total de parejas distintas en {1, ..., 6}:</strong> es C(6, 2) = 6 factorial dividido entre [2 factorial por 4 factorial] = 720 dividido entre [2 por 24] = 720 dividido entre 48 = 15.
+    <br><br>
+    <strong>Paso 2. Parejas consecutivas:</strong> {1,2}, {2,3}, {3,4}, {4,5}, {5,6}. Son 5.
+    <br><br>
+    <strong>Paso 3. Parejas no consecutivas:</strong> 15 menos 5 = 10.
+    <br><br>
+    <strong>Paso 4. Probabilidad pedida:</strong> 10 sobre 15 = 2 sobre 3 = dos tercios.
+    <br><br>
+    <strong>Por qué funciona la técnica del complemento.</strong> Recuerda la regla básica de probabilidad: P(A) más P(no A) = 1. Equivalentemente, P(A) = 1 menos P(no A). Cuando contar A directamente es difícil pero contar "no A" es fácil, esta identidad reduce el trabajo a la mitad.
+    <br><br>
+    <strong>Cuándo se usa:</strong> "al menos uno", "que no sea ninguno", "que sean distintos", "que no coincidan". El "al menos uno" casi siempre se ataca por complemento: P(al menos uno) = 1 menos P(ninguno).
+  </div>
+  <div class="respuesta">
+    <strong>Respuesta correcta: opción C, dos tercios.</strong> La pista verbal de la técnica es "si lo contrario es fácil, restalo".
+  </div>
+</div>
+
+<div class="card" id="b-f3" data-block="b-f3">
+  <div class="card-tag">EJEMPLO INTEGRADO · TRÍOS MUSICALES (taller UdeA Ej. 53)</div>
+  <h3>F3: Combinar restricciones y casos</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Enunciado del taller UdeA:</strong> para formar un trío musical se cuenta con un pianista, un violinista, un violista, un violonchelista y un clarinetista. Si en el trío siempre debe estar el pianista o el violinista o ambos, ¿cuántos tríos diferentes se pueden formar?
+    <br><br>
+    <strong>Lectura del problema.</strong> Tenemos 5 músicos en total. Elegimos 3 para el trío. No importa el orden (es un grupo, no una fila). Sin restricción serían C(5, 3) = 10 tríos. La restricción es que el pianista o el violinista (al menos uno de los dos) esté en el trío.
+    <br><br>
+    <strong>Estrategia: usar el complemento.</strong> Más fácil que contar tríos con pianista, con violinista, con ambos, etcétera, es contar los que <em>no</em> tienen ni pianista ni violinista, y restar del total.
+    <br><br>
+    <strong>Paso 1.</strong> Total sin restricción: C(5, 3) = 10.
+    <br><br>
+    <strong>Paso 2.</strong> Tríos sin pianista ni violinista: significa que los 3 se eligen entre los 3 restantes (violista, violonchelista, clarinetista). C(3, 3) = 1. Es decir, hay un solo trío posible: violista-violonchelista-clarinetista.
+    <br><br>
+    <strong>Paso 3.</strong> Tríos válidos: 10 menos 1 = <strong>9</strong>.
+    <br><br>
+    <strong>Verificación por casos.</strong> Otra forma: contar los tríos según cuántos del par {pianista, violinista} hay.
+    <ul>
+      <li>Caso 1: solo pianista (no violinista). Pianista fijo, faltan 2 entre los otros 3 (violista, violonchelista, clarinetista): C(3, 2) = 3.</li>
+      <li>Caso 2: solo violinista (no pianista). Violinista fijo, faltan 2 entre los otros 3: C(3, 2) = 3.</li>
+      <li>Caso 3: ambos, pianista y violinista. Faltan 1 entre los otros 3: C(3, 1) = 3.</li>
+    </ul>
+    Total: 3 más 3 más 3 = 9. Coincide con el método del complemento. Ambos caminos llevan al mismo resultado, pero el complemento es más rápido.
+  </div>
+  <div class="respuesta">
+    <strong>Respuesta correcta: opción B, 9 tríos.</strong> Pista verbal: "cuando hay condición de tipo 'al menos uno', el complemento simplifica".
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE G — CIERRE: MONTY HALL
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-g"><span class="tag">Bloque G</span>Cierre: el problema de Monty Hall<span class="duracion">· 25 minutos</span></h2>
+
+<div class="card" id="b-g1" data-block="b-g1">
+  <div class="card-tag">PLANTEO · TRES PUERTAS</div>
+  <h3>G1: El concurso de las tres puertas</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Hay un concurso de televisión con tres puertas cerradas. Detrás de una de ellas hay un premio importante. Detrás de las otras dos hay una cabra cada una.
+    <br><br>
+    El concursante elige una puerta sin abrirla. Llamémosla "puerta 1" para fijar ideas. La probabilidad de que el premio esté detrás de la puerta 1 es <em>uno entre tres</em>. La probabilidad de que esté detrás de la puerta 2 o de la puerta 3 es <em>dos entre tres</em> (sumadas).
+    <br><br>
+    Aquí entra el detalle clave del problema. <strong>El presentador sabe dónde está el premio.</strong> Tras la elección del concursante, el presentador abre una de las dos puertas que quedan, eligiendo siempre una con cabra. Es decir, nunca abre la puerta del premio.
+    <br><br>
+    Suponga que el concursante eligió la puerta 1 y el presentador abre la puerta 3, mostrando una cabra. Quedan cerradas la puerta 1 (la elegida) y la puerta 2.
+    <br><br>
+    <strong>Pregunta:</strong> ¿conviene al concursante quedarse con su elección original (puerta 1) o cambiar a la puerta 2?
+    <br><br>
+    Antes de pasar al análisis, intuición rápida: ¿qué dirías?
+  </div>
+  <div class="respuesta">
+    <strong>Importante:</strong> el problema solo tiene sentido bajo dos supuestos: (1) el presentador siempre abre una puerta con cabra, no del premio; (2) el presentador siempre da la opción de cambiar. Sin esos dos supuestos, la respuesta cambia. Vamos a asumirlos a partir de aquí.
+  </div>
+</div>
+
+<div class="card" id="b-g2" data-block="b-g2">
+  <div class="card-tag">INTUICIÓN COMÚN · POR QUÉ MUCHOS RESPONDEN MAL</div>
+  <h3>G2: La trampa del 50-50</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    La intuición de la mayoría es: "ya solo quedan dos puertas, el premio está detrás de una, así que la probabilidad es 1 entre 2 para cada una. Da igual cambiar o quedarse."
+    <br><br>
+    Esa intuición es <em>incorrecta</em>. Y entender por qué es la lección más importante de este problema.
+    <br><br>
+    El error está en olvidar que la puerta abierta por el presentador <strong>no fue elegida al azar</strong>. El presentador sabía dónde estaba el premio y abrió a propósito una puerta con cabra. Esa información cambia las probabilidades. La acción del presentador transmite información, y ignorar esa información lleva a la respuesta equivocada.
+    <br><br>
+    Compara con un caso distinto: si el presentador abriera una puerta al azar (sin saber qué hay), y por casualidad saliera una cabra, ahí sí la probabilidad de las dos puertas restantes sería 1 entre 2. Pero ese no es el problema de Monty Hall. En Monty Hall, el presentador sabe.
+    <br><br>
+    <strong>En lenguaje formal.</strong> La pregunta no es P(premio en la puerta 2), que sí valdría 1 entre 3 sin más información. La pregunta es <strong>P(premio en la puerta 2 dado que el presentador abrió la puerta 3)</strong>, que en notación se escribe P(premio en 2 | presentador abrió 3). Esa es una <em>probabilidad condicional</em>, y el "dado que" indica que la acción del presentador entrega información que actualiza las cuotas iniciales. La respuesta es 2 entre 3, no 1 entre 2. La fórmula que generaliza esta intuición se llama Teorema de Bayes y la veremos en una sesión futura; aquí basta con la enumeración de G3.
+    <br><br>
+    El cálculo correcto se hace enumerando los tres escenarios iniciales del problema, sin necesidad de fórmulas. Lo vemos en G3.
+  </div>
+  <div class="respuesta">
+    <strong>Lección general:</strong> en probabilidad, <em>quién</em> hace una acción y <em>qué información</em> tiene importa tanto como el resultado de la acción. La intuición del 50-50 ignora a quién decide.
+  </div>
+</div>
+
+<div class="card" id="b-g3" data-block="b-g3">
+  <div class="card-tag">RESOLUCIÓN POR ENUMERACIÓN EXHAUSTIVA</div>
+  <h3>G3: Los tres escenarios iniciales</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Sin pérdida de generalidad, supongamos que el concursante eligió la puerta 1. Hay tres escenarios para dónde estaba el premio inicialmente, todos igualmente probables (cada uno con probabilidad 1 entre 3):
+    <div class="tabla-verbal">
+    Escenario 1: el premio está detrás de la puerta 1 (la elegida).<br>
+    Escenario 2: el premio está detrás de la puerta 2.<br>
+    Escenario 3: el premio está detrás de la puerta 3.
+    </div>
+    Analicemos qué pasa en cada escenario, sabiendo que el presentador siempre abre una puerta con cabra (no la del premio):
+    <br><br>
+    <strong>Escenario 1.</strong> Premio en la puerta 1 (la elegida). El presentador puede abrir la puerta 2 o la 3, ambas con cabra; supongamos que abre cualquiera. Si el concursante <em>se queda</em> con la puerta 1, gana. Si <em>cambia</em>, pierde. Probabilidad de este escenario: 1 entre 3.
+    <br><br>
+    <strong>Escenario 2.</strong> Premio en la puerta 2. La puerta 1 (elegida) tiene cabra; la 2 tiene el premio; la 3 tiene cabra. El presentador <em>está obligado</em> a abrir la puerta 3, porque la 1 es la del concursante y la 2 tiene el premio (no la abre). Tras abrir la puerta 3, queda cerrada la 2. Si el concursante <em>se queda</em> con la 1, pierde. Si <em>cambia</em> a la 2, gana. Probabilidad de este escenario: 1 entre 3.
+    <br><br>
+    <strong>Escenario 3.</strong> Premio en la puerta 3. Análogo al escenario 2 pero con la 2 y la 3 cambiadas. El presentador está obligado a abrir la puerta 2. Si el concursante <em>se queda</em>, pierde. Si <em>cambia</em> a la 3, gana. Probabilidad de este escenario: 1 entre 3.
+    <br><br>
+    <strong>Conclusión.</strong>
+    <div class="tabla-verbal">
+    Probabilidad de ganar quedándose: solo el escenario 1 da victoria → 1 entre 3.<br>
+    Probabilidad de ganar cambiando: los escenarios 2 y 3 dan victoria → 2 entre 3.
+    </div>
+    Cambiando, la probabilidad de ganar se duplica: pasa de un tercio a dos tercios. <strong>Conviene cambiar siempre.</strong>
+    <br><br>
+    Esto sigue contraintuyendo a casi todo el mundo cuando lo escucha por primera vez. Por eso vale la pena verlo enunciado por enumeración: no hay ningún truco, son los tres casos posibles.
+  </div>
+  <div class="respuesta">
+    <strong>Respuesta correcta:</strong> conviene cambiar. La probabilidad de ganar al cambiar es <strong>dos tercios</strong>; al quedarse, es <strong>un tercio</strong>.
+  </div>
+</div>
+
+<div class="card" id="b-g4" data-block="b-g4">
+  <div class="card-tag">MORALEJA · INTUICIÓN PROBABILÍSTICA</div>
+  <h3>G4: Por qué calculamos probabilidades</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    El problema de Monty Hall es famoso porque casi todo el mundo —incluso muchos matemáticos profesionales en su momento— responde "1 entre 2" a primera vista, y la respuesta correcta es 2 entre 3. La diferencia entre intuición y cálculo es enorme, y es lo que hace al problema valioso pedagógicamente.
+    <br><br>
+    <strong>Tres ideas para llevarse:</strong>
+    <ol>
+      <li>La intuición probabilística engaña con frecuencia. No es un problema personal: nuestro cerebro evolucionó para leer patrones simples, no para integrar información condicional. Por eso calculamos.</li>
+      <li>Cuando alguien con información actúa, su acción transmite esa información. Ignorar quién actúa lleva a respuestas incorrectas.</li>
+      <li>La enumeración exhaustiva, listar todos los casos posibles, es siempre una herramienta válida. Si la fórmula te confunde, regresa a contar casos uno por uno. Especialmente útil en el examen UdeA.</li>
+    </ol>
+    Hoy abrimos la puerta —valga el chiste— a la <em>probabilidad condicional</em>: la probabilidad de un evento <em>dado</em> que otro ya ocurrió. La fórmula formal de la condicional, conocida como Teorema de Bayes, no es necesaria para este problema; basta la enumeración. La fórmula la veremos en una sesión futura.
+    <br><br>
+    Por ahora, dos lemas para el examen: "casos favorables sobre casos totales" y "si lo contrario es fácil, restalo". Con eso, y con permutaciones, variaciones y combinaciones, el bloque de Conteo y Probabilidad de UdeA se resuelve casi en su totalidad.
+  </div>
+  <div class="respuesta">
+    <strong>Frase resumen para llevarse:</strong> "el conteo es la base de la probabilidad; el complemento simplifica; la información de quien decide cambia las cuotas".
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE H — ENLACE AL TALLER
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-h"><span class="tag">Bloque H</span>Enlace al taller de problemas tipo UdeA</h2>
+
+<div class="card" id="b-h1" data-block="b-h1">
+  <div class="card-tag">SIGUIENTE · TALLER DE PROBLEMAS</div>
+  <h3>H1: 8 problemas calibrados al examen UdeA</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    El taller incluye <strong>8 problemas calibrados</strong> al examen de admisión Universidad de Antioquia, narrados con audio y con respuesta justificada paso a paso. Trabájalos en orden: los primeros refuerzan los conceptos del bloque C (permutaciones, variaciones, combinaciones), los del medio aplican probabilidad clásica con espacios muestrales descritos verbalmente, y los últimos integran restricciones y un cierre con Monty Hall.
+    <br><br>
+    Distribución por tema:
+    <ul>
+      <li>Problemas 1 a 3: permutaciones, variaciones, combinaciones (Ej. 35, 36, 51 del taller UdeA).</li>
+      <li>Problemas 4 a 5: probabilidad clásica con espacio muestral (Ej. 9 y 46 del taller UdeA).</li>
+      <li>Problemas 6 a 7: conteo con restricciones (Ej. 41 y 28 del taller UdeA).</li>
+      <li>Problema 8: Monty Hall, problema invitado.</li>
+    </ul>
+    Duración estimada del taller: 45 minutos.
+    <br><br>
+    <a href="clase7_problemas_audio.html" style="color:var(--accent);text-decoration:underline">Ir al taller de problemas tipo UdeA &rarr;</a>
+  </div>
+  <div class="respuesta">
+    <strong>Recomendación pedagógica:</strong> antes de pulsar "Mostrar respuesta", intenta resolver el problema mentalmente o describiendo el espacio muestral en voz alta. La voz te dará la solución detallada paso a paso si la necesitas, pero el aprendizaje es mucho más sólido cuando primero intentas y luego validas.
+  </div>
+</div>
+
+<footer>
+  UdeA Posible · Razonamiento lógico para aspirantes con discapacidad visual<br>
+  Sesión 7 · Conteo y Probabilidad · Mayo de 2026<br>
+  Materiales accesibles con audio · Universidad de Antioquia
+</footer>
+
+</div>
+
+<script src="tts_helper.js"></script>
+<script>
+  TTS.bindSpeedSlider('speedSlider', 'speedVal');
+  TTS.buildVoiceSelector('voiceSelect');
+  TTS.setupResume('btnResume');
+  // Foco inicial al recuadro "cómo usar" — el lector de pantalla lo lee primero.
+  document.addEventListener('DOMContentLoaded', function () {
+    var como = document.getElementById('como-usar-section');
+    if (como) como.focus();
+  });
+</script>
+</body>
+</html>

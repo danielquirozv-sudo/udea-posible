@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Problemas de Diagnóstico — Razonamiento Lógico UdeA</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #222222;
+    --border: #2e2e2e;
+    --accent: #c8f060;
+    --accent2: #60c8f0;
+    --accent3: #f06090;
+    --text: #e8e8e0;
+    --text2: #888880;
+    --text3: #555550;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .page { max-width: 680px; margin: 0 auto; }
+
+  header {
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+  }
+
+  .subtitle { font-size: 13px; color: var(--text2); }
+
+  .global-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn-global {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-family: 'Sora', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-global:hover { border-color: var(--accent); color: var(--accent); }
+
+  .speed-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 8px;
+  }
+
+  .speed-control label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  .speed-control input[type=range] {
+    -webkit-appearance: none;
+    width: 80px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+  }
+
+  .speed-control input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+  }
+
+  .speed-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    min-width: 28px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .card.playing { border-color: var(--accent); }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1rem 1.25rem;
+  }
+
+  .num-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .card:nth-child(1) .num-badge { background: #1e2a0e; color: var(--accent); }
+  .card:nth-child(2) .num-badge { background: #0e1e2a; color: var(--accent2); }
+  .card:nth-child(3) .num-badge { background: #2a0e1e; color: var(--accent3); }
+  .card:nth-child(4) .num-badge { background: #1e2a0e; color: var(--accent); }
+  .card:nth-child(5) .num-badge { background: #0e1e2a; color: var(--accent2); }
+
+  .card-meta { flex: 1; }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .card-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.05em;
+  }
+
+  .expand-arrow { display: none; }
+
+  .card-body {
+    display: block;
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .enunciado {
+    font-size: 14px;
+    line-height: 1.9;
+    color: #c8c8c0;
+    padding: 1rem 0 0.75rem;
+  }
+
+  .opciones {
+    margin: 0 0 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .opcion {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    font-size: 13px;
+    color: #b8b8b0;
+    line-height: 1.5;
+  }
+
+  .opcion-letra {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: var(--border);
+    color: var(--text2);
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  .player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn-play {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'Sora', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-play.primary { background: var(--accent); color: #0f0f0f; }
+  .btn-play.primary:hover { background: #d4f570; }
+  .btn-play.primary.playing { background: #f06060; color: #fff; }
+
+  .progress-bar {
+    flex: 1;
+    min-width: 120px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.3s linear;
+    border-radius: 2px;
+  }
+
+  .status-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    min-width: 60px;
+    text-align: right;
+  }
+
+  .respuesta-btn {
+    margin-top: 1rem;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text3);
+    font-family: 'Sora', sans-serif;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: block;
+  }
+
+  .respuesta-btn:hover { color: var(--text2); border-color: var(--text3); }
+
+  .respuesta-box {
+    display: none;
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--text2);
+    background: #0a140a;
+    border: 1px solid #1e3010;
+  }
+
+  .respuesta-box .correcta { color: var(--accent); font-weight: 500; }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text3);
+    text-align: center;
+    line-height: 1.8;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .playing-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 1s ease-in-out infinite;
+    margin-right: 4px;
+  }
+
+  /* ── Responsive móvil ── */
+  @media (max-width: 600px) {
+    body { padding: 1rem 0.75rem 3rem; }
+    h1 { font-size: 19px; }
+    .label { font-size: 10px; }
+    .subtitle { font-size: 12px; }
+    .global-controls { flex-direction: column; align-items: stretch; }
+    .btn-global { min-height: 44px; justify-content: center; font-size: 13px; }
+    .speed-control { min-height: 44px; justify-content: center; }
+    .speed-control input[type=range] { width: 110px; height: 6px; }
+    .speed-control input[type=range]::-webkit-slider-thumb { width: 22px; height: 22px; }
+    .speed-control label { font-size: 12px; }
+    .speed-val { font-size: 12px; }
+    .card-header { padding: 0.85rem 1rem; gap: 10px; }
+    .card-body { padding: 0 1rem 1rem; }
+    .enunciado { font-size: 14px; }
+    .opcion { padding: 10px 12px; font-size: 14px; min-height: 44px; align-items: center; }
+    .opcion-letra { min-width: 24px; height: 24px; font-size: 12px; }
+    .player { flex-direction: column; align-items: stretch; gap: 8px; }
+    .btn-play { min-height: 44px; justify-content: center; font-size: 13px; }
+    .progress-bar { min-width: unset; width: 100%; height: 6px; }
+    .status-text { text-align: center; font-size: 11px; }
+    .respuesta-btn { min-height: 40px; font-size: 12px; padding: 8px 14px; }
+    .respuesta-box { font-size: 13px; }
+    footer { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="label">UdeA Posible · Inclusión · Discapacidad Visual</div>
+    <h1>Problemas de Diagnóstico<br>Razonamiento Lógico</h1>
+    <div class="subtitle">5 problemas · Opción múltiple A–D · Sesión 1</div>
+  </header>
+
+  <div class="global-controls">
+    <button class="btn-global" onclick="playAll()">
+      <svg width="13" height="13" viewBox="0 0 10 10" fill="currentColor"><polygon points="1,0 9,5 1,10"/></svg>
+      Reproducir todos
+    </button>
+    <button class="btn-global" onclick="stopAll()">
+      <svg width="13" height="13" viewBox="0 0 10 10" fill="currentColor"><rect x="1" y="1" width="8" height="8" rx="1"/></svg>
+      Detener
+    </button>
+    <div class="speed-control">
+      <label>Velocidad</label>
+      <input type="range" id="speedSlider" min="0.6" max="1.2" step="0.05" value="0.82"
+        oninput="document.getElementById('speedVal').textContent=parseFloat(this.value).toFixed(2)+'×'">
+      <span class="speed-val" id="speedVal">0.82×</span>
+    </div>
+  </div>
+
+  <div id="cards"></div>
+
+  <footer>
+    Abre en Chrome · Web Speech API · Sin conexión requerida<br>
+    Para grabar: reproduce y captura con BlackHole + QuickTime en Mac
+  </footer>
+
+</div>
+
+<script>
+const problemas = [
+  {
+    titulo: "Aritmética y porcentajes",
+    tag: "PROBLEMA 01 · NIVEL BASE",
+    enunciado: "En una tienda, un par de zapatos cuesta 80.000 pesos. El dueño decide aumentar el precio en un 25%. ¿Cuánto cuesta el par de zapatos después del aumento?",
+    opciones: ["20.000 pesos", "85.000 pesos", "100.000 pesos", "105.000 pesos"],
+    correcta: "C",
+    explicacion: "El 25% de 80.000 es 20.000. Entonces 80.000 + 20.000 = 100.000 pesos. Si alguien responde A solo calculó el porcentaje pero no lo sumó. Si responde D sumó mal.",
+    tts: `Problema número uno. Aritmética y porcentajes.
+
+En una tienda... un par de zapatos cuesta ochenta mil pesos.
+El dueño decide aumentar el precio... en un veinticinco por ciento.
+¿Cuánto cuesta el par de zapatos... después del aumento?
+
+Las opciones son:
+A: veinte mil pesos.
+B: ochenta y cinco mil pesos.
+C: cien mil pesos.
+D: ciento cinco mil pesos.
+
+Tienen cuatro minutos para responder.`
+  },
+  {
+    titulo: "Proporcionalidad",
+    tag: "PROBLEMA 02 · NIVEL BASE",
+    enunciado: "Si 4 obreros construyen una pared en 6 días, ¿cuántos días tardarán 8 obreros en construir la misma pared, si todos trabajan al mismo ritmo?",
+    opciones: ["12 días", "8 días", "4 días", "3 días"],
+    correcta: "D",
+    explicacion: "Es proporcionalidad inversa: al doble de obreros, la mitad del tiempo. 6 ÷ 2 = 3 días. Opción D. El error más frecuente es responder A por aplicar proporcionalidad directa sin analizar.",
+    tts: `Problema número dos. Proporcionalidad.
+
+Si cuatro obreros construyen una pared... en seis días...
+¿Cuántos días tardarán ocho obreros... en construir la misma pared... si todos trabajan al mismo ritmo?
+
+Las opciones son:
+A: doce días.
+B: ocho días.
+C: cuatro días.
+D: tres días.
+
+Tienen cuatro minutos para responder.`
+  },
+  {
+    titulo: "Lógica proposicional",
+    tag: "PROBLEMA 03 · NIVEL BASE",
+    enunciado: "Se sabe que: «Si un estudiante estudia, entonces aprueba el examen.» Un estudiante no aprobó el examen. ¿Qué se puede concluir con certeza?",
+    opciones: [
+      "El estudiante estudió",
+      "El estudiante no estudió",
+      "El estudiante estudió, pero no le fue bien",
+      "No se puede concluir nada sobre si estudió"
+    ],
+    correcta: "B",
+    explicacion: "Por contrarrecíproco: si 'estudia → aprueba', entonces 'no aprueba → no estudió'. La respuesta es B. Quienes responden D no conocen la regla del contrarrecíproco.",
+    tts: `Problema número tres. Lógica proposicional.
+
+Se sabe que: "Si un estudiante estudia... entonces aprueba el examen."
+Un estudiante... no aprobó el examen.
+¿Qué se puede concluir con certeza?
+
+Las opciones son:
+A: El estudiante estudió.
+B: El estudiante no estudió.
+C: El estudiante estudió... pero no le fue bien.
+D: No se puede concluir nada... sobre si estudió.
+
+Tienen cuatro minutos para responder.`
+  },
+  {
+    titulo: "Series numéricas",
+    tag: "PROBLEMA 04 · NIVEL BASE-MEDIO",
+    enunciado: "Observa la siguiente serie: 2, 5, 11, 23, 47, ___ ¿Cuál es el número que sigue?",
+    opciones: ["71", "89", "95", "94"],
+    correcta: "C",
+    explicacion: "La regla es multiplicar por 2 y sumar 1. 47 × 2 + 1 = 95. Opción C. Quien responde 71 busca diferencias sumando valores incorrectos.",
+    tts: `Problema número cuatro. Series y secuencias.
+
+Observa la siguiente serie de números:
+Dos...... cinco...... once...... veintitrés...... cuarenta y siete...... y un espacio en blanco.
+¿Cuál es el número que sigue?
+
+Las opciones son:
+A: setenta y uno.
+B: ochenta y nueve.
+C: noventa y cinco.
+D: noventa y cuatro.
+
+Tienen cuatro minutos para responder.`
+  },
+  {
+    titulo: "Conteo y probabilidad",
+    tag: "PROBLEMA 05 · NIVEL BASE-MEDIO",
+    enunciado: "En una bolsa hay 3 bolas rojas, 2 bolas azules y 1 bola verde. Se saca una bola al azar. ¿Cuál es la probabilidad de que la bola NO sea roja?",
+    opciones: ["1/6", "3/6", "2/6", "4/6"],
+    correcta: "B",
+    explicacion: "Total: 6 bolas. No rojas: 2 azules + 1 verde = 3. Probabilidad = 3/6. Opción B. Error frecuente: calcular P(roja) = 3/6 en vez de P(no roja).",
+    tts: `Problema número cinco. Conteo y probabilidad.
+
+En una bolsa hay... tres bolas rojas... dos bolas azules... y una bola verde.
+Se saca una bola al azar.
+¿Cuál es la probabilidad... de que la bola NO sea roja?
+
+Las opciones son:
+A: uno sobre seis.
+B: tres sobre seis.
+C: dos sobre seis.
+D: cuatro sobre seis.
+
+Tienen cuatro minutos para responder.`
+  }
+];
+
+let currentCard = null;
+
+function getSpeed() {
+  return parseFloat(document.getElementById('speedSlider').value);
+}
+
+function buildCards() {
+  const container = document.getElementById('cards');
+  problemas.forEach((p, i) => {
+    const opcionesHTML = p.opciones.map((o, j) => {
+      const letra = ['A','B','C','D'][j];
+      return `<div class="opcion"><span class="opcion-letra">${letra}</span><span>${o}</span></div>`;
+    }).join('');
+
+    container.innerHTML += `
+    <div class="card" id="card-${i}">
+      <div class="card-header" onclick="toggleCard(${i})">
+        <span class="num-badge">${String(i+1).padStart(2,'0')}</span>
+        <div class="card-meta">
+          <div class="card-title">${p.titulo}</div>
+          <div class="card-tag">${p.tag}</div>
+        </div>
+        <svg class="expand-arrow" width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2,4 6,8 10,4"/></svg>
+      </div>
+      <div class="card-body">
+        <div class="enunciado">${p.enunciado}</div>
+        <div class="opciones">${opcionesHTML}</div>
+        <div class="player">
+          <button class="btn-play primary" id="btn-${i}" onclick="togglePlay(${i})">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><polygon points="1,0 9,5 1,10"/></svg>
+            Reproducir
+          </button>
+          <div class="progress-bar"><div class="progress-fill" id="prog-${i}"></div></div>
+          <span class="status-text" id="status-${i}">listo</span>
+        </div>
+        <button class="respuesta-btn" onclick="toggleRespuesta(${i}, this)">Ver respuesta correcta</button>
+        <div class="respuesta-box" id="resp-${i}">
+          <span class="correcta">Respuesta correcta: ${p.correcta}</span><br><br>${p.explicacion}
+        </div>
+      </div>
+    </div>`;
+  });
+}
+
+function toggleCard(i) {
+  document.getElementById(`card-${i}`).classList.toggle('open');
+}
+
+function openCard(i) {
+  document.getElementById(`card-${i}`).classList.add('open');
+}
+
+function toggleRespuesta(i, btn) {
+  const box = document.getElementById(`resp-${i}`);
+  const showing = box.style.display === 'block';
+  box.style.display = showing ? 'none' : 'block';
+  btn.textContent = showing ? 'Ver respuesta correcta' : 'Ocultar respuesta';
+}
+
+function setBtnPlaying(i, playing) {
+  const btn = document.getElementById(`btn-${i}`);
+  const card = document.getElementById(`card-${i}`);
+  if (playing) {
+    btn.classList.add('playing');
+    btn.innerHTML = `<span class="playing-dot"></span>Detener`;
+    card.classList.add('playing');
+  } else {
+    btn.classList.remove('playing');
+    btn.innerHTML = `<svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><polygon points="1,0 9,5 1,10"/></svg> Reproducir`;
+    card.classList.remove('playing');
+  }
+}
+
+function stopAll() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  problemas.forEach((_, i) => {
+    setBtnPlaying(i, false);
+    document.getElementById(`prog-${i}`).style.width = '0%';
+    document.getElementById(`status-${i}`).textContent = 'listo';
+  });
+  currentCard = null;
+}
+
+function togglePlay(i) {
+  if (currentCard === i) { stopAll(); return; }
+  stopAll();
+  playProblem(i);
+}
+
+function playProblem(i, onEnd) {
+  if (!window.speechSynthesis) {
+    alert('Usa Chrome para la síntesis de voz.');
+    return;
+  }
+
+  const utter = new SpeechSynthesisUtterance(problemas[i].tts);
+  utter.lang = 'es-CO';
+  utter.rate = getSpeed();
+  utter.pitch = 1.0;
+  utter.volume = 1.0;
+
+  const voices = window.speechSynthesis.getVoices();
+  const esVoice = voices.find(v => v.lang === 'es-CO')
+    || voices.find(v => v.lang.startsWith('es-4'))
+    || voices.find(v => v.lang.startsWith('es'));
+  if (esVoice) utter.voice = esVoice;
+
+  currentCard = i;
+  openCard(i);
+  setBtnPlaying(i, true);
+  document.getElementById(`status-${i}`).textContent = 'reproduciendo...';
+
+  const words = problemas[i].tts.split(' ').length;
+  const secs = (words / (2.5 * getSpeed())) * 1.1;
+  let elapsed = 0;
+  const interval = setInterval(() => {
+    elapsed += 0.3;
+    document.getElementById(`prog-${i}`).style.width = Math.min((elapsed/secs)*100, 95) + '%';
+  }, 300);
+
+  utter.onend = () => {
+    clearInterval(interval);
+    setBtnPlaying(i, false);
+    document.getElementById(`prog-${i}`).style.width = '100%';
+    document.getElementById(`status-${i}`).textContent = '✓ listo';
+    currentCard = null;
+    setTimeout(() => { document.getElementById(`prog-${i}`).style.width = '0%'; }, 2000);
+    if (onEnd) onEnd();
+  };
+
+  utter.onerror = () => {
+    clearInterval(interval);
+    setBtnPlaying(i, false);
+    document.getElementById(`status-${i}`).textContent = 'error';
+    currentCard = null;
+    if (onEnd) onEnd();
+  };
+
+  window.speechSynthesis.speak(utter);
+}
+
+function playAll() {
+  stopAll();
+  let idx = 0;
+  function next() {
+    if (idx >= problemas.length) return;
+    playProblem(idx++, () => setTimeout(next, 1200));
+  }
+  next();
+}
+
+if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => {};
+buildCards();
+</script>
+</body>
+</html>

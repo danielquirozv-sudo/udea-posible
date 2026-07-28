@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taller de repaso integral · Sesiones 1 a 6 · UdeA Posible</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;--border:#2e2e2e;
+  --text:#e8e8e0;--text2:#888880;--text3:#555550;
+  --accent:#f0d060;       /* dorado, identidad del taller de repaso */
+  --accent-soft:#1a1408;
+  --accent-soft2:#22180a;
+  --accent-warm:#f0c060;
+  --accent-info:#a0c8f0;
+  --accent-pista:#a0e0f0; /* azul claro, distinto del accent y de respuesta */
+  --accent-pista-soft:#08161a;
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-size:15px;line-height:1.7;min-height:100vh;padding:2rem 1rem 4rem}
+.page{max-width:780px;margin:0 auto}
+header{margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+h1{font-size:24px;font-weight:600;line-height:1.3;margin-bottom:.4rem}
+.subtitle{font-size:14px;color:var(--text2)}
+.back{display:inline-block;color:var(--accent-info);font-size:13px;text-decoration:none;margin-bottom:1rem;font-family:'JetBrains Mono',monospace}
+.back:hover{color:var(--accent)}
+
+.como-usar{background:#1a1408;border:2px solid var(--accent-warm);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem}
+.como-usar h2{font-size:17px;color:var(--accent-warm);margin-bottom:.6rem}
+.como-usar p{font-size:14px;line-height:1.85;color:#e8d8b8;margin-bottom:.5rem}
+.como-usar p:last-child{margin-bottom:0}
+.como-usar kbd{font-family:'JetBrains Mono',monospace;font-size:12px;background:#2a200a;border:1px solid #4a3a14;border-radius:4px;padding:1px 6px;color:var(--accent-warm)}
+
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:1.25rem}
+.speed-control{display:inline-flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);padding:8px 14px;border-radius:8px}
+.speed-control label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);white-space:nowrap}
+.speed-control input[type=range]{-webkit-appearance:none;width:130px;height:6px;background:var(--border);border-radius:3px;outline:none}
+.speed-control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer}
+.speed-control input[type=range]:focus{outline:3px solid #ffeb3b;outline-offset:4px}
+.speed-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:40px}
+.voice-select{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;padding:9px 12px;border-radius:8px;min-height:44px;max-width:280px}
+.voice-select:focus{outline:3px solid #ffeb3b;outline-offset:2px}
+.btn-resume{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:8px;border:1px solid var(--accent);background:var(--accent-soft2);color:var(--accent);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;min-height:44px}
+.btn-resume:hover{background:var(--accent);color:#0f0f0f}
+.btn-resume:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1rem;padding:1.25rem}
+.card-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.04em;margin-bottom:.5rem}
+.card h3{font-size:15px;font-weight:500;margin:0 0 .5rem;color:var(--text)}
+.enunciado{font-size:14px;line-height:1.95;color:#c8c8c0;margin-bottom:.75rem}
+.enunciado strong{color:var(--text)}
+.opciones{display:flex;flex-direction:column;gap:6px;margin-bottom:.75rem}
+.opcion{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);font-size:14px;color:#b8b8b0;line-height:1.5;min-height:44px}
+.opcion-letra{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:4px;background:var(--border);color:var(--text2);flex-shrink:0}
+
+.toggles{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem}
+.pista-toggle, .respuesta-toggle{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;min-height:40px}
+.pista-toggle:hover{border-color:var(--accent-pista)}
+.respuesta-toggle:hover{border-color:var(--accent)}
+.pista-toggle:focus-visible, .respuesta-toggle:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+
+.pista{margin-top:.75rem;padding:.85rem 1rem;border-radius:8px;font-size:13.5px;line-height:1.85;color:#b8d8e0;background:var(--accent-pista-soft);border:1px solid #18323a}
+.pista strong{color:var(--accent-pista)}
+.pista[hidden]{display:none}
+.respuesta{margin-top:.75rem;padding:.95rem 1.05rem;border-radius:8px;font-size:13.5px;line-height:1.85;color:var(--text2);background:var(--accent-soft);border:1px solid var(--accent-soft2)}
+.respuesta strong{color:var(--accent)}
+.respuesta[hidden]{display:none}
+
+.tabla-verbal{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;margin:.75rem 0;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.85}
+
+.btn-play{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:8px;border:none;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;background:var(--accent);color:#0f0f0f;margin-bottom:.6rem;min-height:44px;transition:all .15s}
+.btn-play:hover{filter:brightness(1.1)}
+.btn-play.playing{background:#f06060;color:#fff}
+.btn-play:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.playing-dot{display:inline-block;width:6px;height:6px;background:#fff;border-radius:50%;animation:pulse 1s ease-in-out infinite;margin-right:4px}
+
+footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:12px;color:var(--text3);text-align:center;line-height:1.8}
+
+@media(max-width:600px){
+  body{padding:1rem .75rem 3rem}
+  h1{font-size:20px}
+  .card{padding:1rem}
+  .btn-play{width:100%;justify-content:center}
+  .pista-toggle, .respuesta-toggle{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<a href="index.html" class="back">← Volver al índice de sesiones</a>
+
+<header>
+  <div class="label">UdeA Posible · Taller de repaso integral</div>
+  <h1>Taller de repaso integral<br>Sesiones 1 a 6 · Antes de la Sesión 7</h1>
+  <div class="subtitle">8 problemas tipo examen de admisión Universidad de Antioquia · Con pista y solución detallada</div>
+</header>
+
+<section class="como-usar" id="como-usar-section" tabindex="-1" aria-labelledby="como-usar-titulo">
+  <h2 id="como-usar-titulo">Cómo trabajar este taller</h2>
+  <p><strong>Para qué sirve:</strong> consolidar lo que llevamos hasta ahora antes de comenzar la Sesión 7. Cubre proporcionalidad y porcentajes (sesiones 1 y 4), progresiones aritméticas y geométricas (sesión 3), divisibilidad, máximo común divisor y mínimo común múltiplo (sesiones 5 y 6).</p>
+  <p><strong>Estilo:</strong> los problemas están redactados como aparecen en el examen de admisión Universidad de Antioquia, con cuatro opciones A, B, C y D y una sola correcta.</p>
+  <p><strong>Cómo intentarlos:</strong> primero, escucha el enunciado completo (botón "Reproducir") y trata de resolverlo mentalmente. Si te atoras, pulsa "Mostrar pista" — la pista da la idea clave para empezar, sin revelar la respuesta. Solo cuando hayas elegido tu opción o hayas intentado de verdad, pulsa "Mostrar respuesta y solución" para validar y leer la justificación paso a paso.</p>
+  <p><strong>Audio:</strong> el botón "Reproducir" lee enunciado y opciones. Tecla <kbd>Esc</kbd> detiene la voz.</p>
+  <p><strong>Continuar donde quedaste:</strong> al volver al taller, el botón <em>Continuar donde quedé</em> te lleva al último problema escuchado.</p>
+</section>
+
+<div class="controls">
+  <div class="speed-control">
+    <label for="speedSlider">Velocidad de voz</label>
+    <input type="range" id="speedSlider" min="0.6" max="1.2" step="0.05" value="0.85" aria-label="Velocidad de voz">
+    <span class="speed-val" id="speedVal">0.85x</span>
+  </div>
+  <select id="voiceSelect" class="voice-select" aria-label="Voz de lectura"></select>
+  <button id="btnResume" class="btn-resume" aria-label="Continuar desde el último problema">⤴ Continuar donde quedé</button>
+</div>
+
+<!-- ═══════════════ PROBLEMA 1 — PROPORCIONALIDAD DIRECTA ═══════════════ -->
+<div class="card" id="p1" data-block="p1">
+  <div class="card-tag">PROBLEMA 1 · PROPORCIONALIDAD DIRECTA · SESIONES 1 Y 4</div>
+  <h3>Receta de panes</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Una receta artesanal de panadería usa 480 gramos de harina para hacer 6 panes del mismo tamaño. Si se quieren hacer 15 panes con la misma receta, manteniendo la proporción exacta de harina por pan, ¿cuántos gramos de harina se necesitan?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 800 gramos</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 960 gramos</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 1.200 gramos</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 1.500 gramos</div>
+  </div>
+  <div class="toggles">
+    <button class="pista-toggle" onclick="togglePista('pista-p1')" aria-controls="pista-p1" aria-expanded="false">Mostrar pista</button>
+    <button class="respuesta-toggle" onclick="toggleRta('rta-p1')" aria-controls="rta-p1" aria-expanded="false">Mostrar respuesta y solución</button>
+  </div>
+  <div class="pista" id="pista-p1" hidden>
+    <strong>Pista:</strong> es una regla de tres directa. A más panes, más harina, en la misma proporción. Una forma rápida es calcular cuánta harina necesita un solo pan y multiplicar por el número de panes nuevo.
+  </div>
+  <div class="respuesta" id="rta-p1" hidden>
+    <strong>Respuesta correcta: opción C, 1.200 gramos.</strong>
+    <br><br>
+    <strong>Solución por unidad de pan.</strong>
+    <br>
+    Paso 1. ¿Cuánta harina por cada pan? 480 dividido entre 6 igual a 80 gramos por pan.
+    <br>
+    Paso 2. ¿Cuánta harina para 15 panes? 80 por 15 igual a 1.200 gramos.
+    <br><br>
+    <strong>Solución por regla de tres directa (verificación).</strong>
+    <br>
+    6 panes corresponden a 480 gramos.
+    <br>
+    15 panes corresponden a equis gramos.
+    <br>
+    Equis igual a (15 por 480) dividido entre 6 igual a 7.200 dividido entre 6 igual a 1.200 gramos. Coincide.
+    <br><br>
+    <strong>Pista verbal para el examen:</strong> cuando dos magnitudes crecen juntas (más panes pide más harina), es proporcionalidad directa. La fórmula clave es a sobre b igual a c sobre d, o equivalentemente, productos cruzados a por d igual a b por c.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 2 — PROPORCIONALIDAD INVERSA ═══════════════ -->
+<div class="card" id="p2" data-block="p2">
+  <div class="card-tag">PROBLEMA 2 · PROPORCIONALIDAD INVERSA · SESIÓN 4</div>
+  <h3>Obreros pavimentando una calle</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Doce obreros pavimentan una calle en 20 días, trabajando todos al mismo ritmo. Si para terminar la siguiente calle se contratan 16 obreros con el mismo ritmo de trabajo, ¿en cuántos días terminarán?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 12 días</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 15 días</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 18 días</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 27 días</div>
+  </div>
+  <div class="toggles">
+    <button class="pista-toggle" onclick="togglePista('pista-p2')" aria-controls="pista-p2" aria-expanded="false">Mostrar pista</button>
+    <button class="respuesta-toggle" onclick="toggleRta('rta-p2')" aria-controls="rta-p2" aria-expanded="false">Mostrar respuesta y solución</button>
+  </div>
+  <div class="pista" id="pista-p2" hidden>
+    <strong>Pista:</strong> a más obreros, menos días. Es proporcionalidad inversa. La cantidad obreros multiplicada por días se mantiene constante (porque representa la misma cantidad total de trabajo). Si conoces ese producto en un caso, puedes despejar el otro.
+  </div>
+  <div class="respuesta" id="rta-p2" hidden>
+    <strong>Respuesta correcta: opción B, 15 días.</strong>
+    <br><br>
+    <strong>Solución por la constante de proporcionalidad inversa.</strong>
+    <br>
+    El trabajo total se mide en obreros-día. Si 12 obreros tardan 20 días, el trabajo total es 12 por 20 igual a 240 obreros-día.
+    <br>
+    Para 16 obreros: 16 por equis igual a 240. Despejando: equis igual a 240 dividido entre 16 igual a 15 días.
+    <br><br>
+    <strong>Solución por regla de tres inversa (verificación).</strong>
+    <br>
+    En proporcionalidad inversa, los productos cruzados se invierten:
+    <br>
+    12 obreros corresponden a 20 días.
+    <br>
+    16 obreros corresponden a equis días.
+    <br>
+    Inversa: 12 por 20 igual a 16 por equis. Equis igual a 240 dividido entre 16 igual a 15. Coincide.
+    <br><br>
+    <strong>Pista verbal para el examen:</strong> cuando dos magnitudes se mueven en sentido contrario (más de una pide menos de la otra), la proporcionalidad es inversa. La identidad clave es a por b igual a c por d, donde el producto se conserva. Palabras clave en el enunciado: "más obreros / menos tiempo", "más velocidad / menos duración", "más caños / menos tiempo en llenar".
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 3 — PORCENTAJE ═══════════════ -->
+<div class="card" id="p3" data-block="p3">
+  <div class="card-tag">PROBLEMA 3 · PORCENTAJE CON DESCUENTO · SESIONES 1 Y 4</div>
+  <h3>Televisor con descuento</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Un televisor cuesta un millón quinientos mil pesos. La tienda anuncia una oferta del 12 por ciento de descuento sobre el precio original. ¿Cuál es el precio final que se paga después de aplicar el descuento?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 1.300.000 pesos</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 1.320.000 pesos</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 1.420.000 pesos</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 1.480.000 pesos</div>
+  </div>
+  <div class="toggles">
+    <button class="pista-toggle" onclick="togglePista('pista-p3')" aria-controls="pista-p3" aria-expanded="false">Mostrar pista</button>
+    <button class="respuesta-toggle" onclick="toggleRta('rta-p3')" aria-controls="rta-p3" aria-expanded="false">Mostrar respuesta y solución</button>
+  </div>
+  <div class="pista" id="pista-p3" hidden>
+    <strong>Pista:</strong> hay dos caminos. Uno: calcular el descuento (12 por ciento del precio) y restarlo. Dos, más rápido: si descuentan 12, pagas el 88 por ciento del precio. Multiplica por 0,88 directo.
+  </div>
+  <div class="respuesta" id="rta-p3" hidden>
+    <strong>Respuesta correcta: opción B, 1.320.000 pesos.</strong>
+    <br><br>
+    <strong>Solución por descuento explícito.</strong>
+    <br>
+    Paso 1. Calcular el 12 por ciento de 1.500.000.
+    <br>
+    12 por ciento es 12 sobre 100, igual a 0,12.
+    <br>
+    0,12 por 1.500.000 igual a 180.000 pesos.
+    <br>
+    Paso 2. Restar el descuento al precio original.
+    <br>
+    1.500.000 menos 180.000 igual a 1.320.000.
+    <br><br>
+    <strong>Solución más rápida: pagar el 88 por ciento.</strong>
+    <br>
+    Si descuentan 12 por ciento, pagas el complemento, 100 menos 12 igual a 88 por ciento.
+    <br>
+    1.500.000 por 0,88. Calculémoslo: 1.500.000 por 0,88 igual a 1.500.000 menos 12 por ciento. O directo: 15 por 88 igual a 1.320, así que 1.500.000 por 0,88 igual a 1.320.000. Coincide.
+    <br><br>
+    <strong>Pista verbal para el examen:</strong> "porcentaje" es siempre "tantos sobre cien". 25 por ciento es 25 sobre 100 igual a 0,25 igual a un cuarto. 50 por ciento es la mitad. 10 por ciento es dividir entre 10 (mover la coma una posición). Para descuentos, conviene multiplicar por (uno menos el porcentaje en decimal); para incrementos, multiplicar por (uno más el porcentaje en decimal).
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 4 — PROGRESIÓN ARITMÉTICA ═══════════════ -->
+<div class="card" id="p4" data-block="p4">
+  <div class="card-tag">PROBLEMA 4 · PROGRESIÓN ARITMÉTICA · SESIÓN 3</div>
+  <h3>Término número 30 de una sucesión</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Una sucesión comienza así: 7, 13, 19, 25, 31, y así sucesivamente. Cada término se obtiene sumándole 6 al anterior. ¿Cuál es el valor del término número 30 de esta sucesión?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 175</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 181</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 187</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 193</div>
+  </div>
+  <div class="toggles">
+    <button class="pista-toggle" onclick="togglePista('pista-p4')" aria-controls="pista-p4" aria-expanded="false">Mostrar pista</button>
+    <button class="respuesta-toggle" onclick="toggleRta('rta-p4')" aria-controls="rta-p4" aria-expanded="false">Mostrar respuesta y solución</button>
+  </div>
+  <div class="pista" id="pista-p4" hidden>
+    <strong>Pista:</strong> es una progresión aritmética con primer término 7 y diferencia 6. La fórmula del término que ocupa la posición n es a sub n igual a a sub uno más (n menos uno) por d, donde a sub uno es el primer término y d es la diferencia. Cuidado: del primer término al término número 30 hay 29 saltos, no 30.
+  </div>
+  <div class="respuesta" id="rta-p4" hidden>
+    <strong>Respuesta correcta: opción B, 181.</strong>
+    <br><br>
+    <strong>Solución por la fórmula del término general.</strong>
+    <br>
+    a sub uno igual a 7 (el primer término).
+    <br>
+    d igual a 6 (la diferencia común entre términos consecutivos).
+    <br>
+    a sub n igual a a sub uno más (n menos uno) por d.
+    <br>
+    a sub 30 igual a 7 más (30 menos uno) por 6.
+    <br>
+    a sub 30 igual a 7 más 29 por 6.
+    <br>
+    a sub 30 igual a 7 más 174.
+    <br>
+    a sub 30 igual a 181.
+    <br><br>
+    <strong>Verificación rápida.</strong>
+    <br>
+    Del primer término (7) hasta el segundo (13) hay 1 salto. Hasta el tercero (19), 2 saltos. Hasta el término 30, 29 saltos. Cada salto suma 6, así que el aumento total es 29 por 6 igual a 174. Sumado al primer término: 7 más 174 igual a 181. Coincide.
+    <br><br>
+    <strong>Pista verbal para el examen:</strong> en una progresión aritmética, el término número n está a (n menos uno) saltos del primero. El error más común es contar n saltos en lugar de (n menos uno). Otro error: usar como primer término el segundo de la lista. Lee con calma cuál es a sub uno.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 5 — PROGRESIÓN GEOMÉTRICA ═══════════════ -->
+<div class="card" id="p5" data-block="p5">
+  <div class="card-tag">PROBLEMA 5 · PROGRESIÓN GEOMÉTRICA · SESIÓN 3</div>
+  <h3>Bacterias que se duplican</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    En un cultivo de laboratorio, una colonia de bacterias se duplica cada hora exacta. Al iniciar el experimento se cuentan 250 bacterias. ¿Cuántas bacterias habrá en el cultivo después de 5 horas, suponiendo que ninguna muere?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 4.000</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 6.000</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 8.000</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 12.500</div>
+  </div>
+  <div class="toggles">
+    <button class="pista-toggle" onclick="togglePista('pista-p5')" aria-controls="pista-p5" aria-expanded="false">Mostrar pista</button>
+    <button class="respuesta-toggle" onclick="toggleRta('rta-p5')" aria-controls="rta-p5" aria-expanded="false">Mostrar respuesta y solución</button>
+  </div>
+  <div class="pista" id="pista-p5" hidden>
+    <strong>Pista:</strong> es una progresión geométrica de razón 2 (porque se duplica). Después de 5 horas hay 5 duplicaciones. La fórmula directa es: cantidad final igual a cantidad inicial por 2 elevado al número de duplicaciones. 2 elevado a la 5 es 32.
+  </div>
+  <div class="respuesta" id="rta-p5" hidden>
+    <strong>Respuesta correcta: opción C, 8.000 bacterias.</strong>
+    <br><br>
+    <strong>Solución por duplicaciones sucesivas.</strong>
+    <br>
+    Hora 0: 250 bacterias (al iniciar).
+    <br>
+    Hora 1: 250 por 2 igual a 500.
+    <br>
+    Hora 2: 500 por 2 igual a 1.000.
+    <br>
+    Hora 3: 1.000 por 2 igual a 2.000.
+    <br>
+    Hora 4: 2.000 por 2 igual a 4.000.
+    <br>
+    Hora 5: 4.000 por 2 igual a 8.000.
+    <br><br>
+    <strong>Solución por la fórmula directa.</strong>
+    <br>
+    Tras 5 horas, hay 5 duplicaciones, así que la cantidad final es:
+    <br>
+    250 por 2 elevado a la 5 igual a 250 por 32 igual a 8.000. Coincide.
+    <br><br>
+    <strong>Pista verbal para el examen:</strong> en una progresión geométrica, en lugar de sumar la diferencia se multiplica por la razón. La fórmula del término general es a sub n igual a a sub uno por r elevado a (n menos uno). Cuidado: si te preguntan por el número de cantidad después de t periodos (como aquí, 5 horas), la fórmula es a sub uno por r elevado a t, no a la t menos uno. Las palabras "después de" sugieren contar desde cero; "el término número" sugiere contar desde uno.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 6 — DIVISIBILIDAD ═══════════════ -->
+<div class="card" id="p6" data-block="p6">
+  <div class="card-tag">PROBLEMA 6 · CRITERIO DE DIVISIBILIDAD POR 11 · SESIÓN 6</div>
+  <h3>¿Cuál de los siguientes números es divisible por 11?</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Sin hacer la división completa, indica cuál de los siguientes números de cuatro cifras es divisible por 11.
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 1.234</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 5.940</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 7.215</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 8.061</div>
+  </div>
+  <div class="toggles">
+    <button class="pista-toggle" onclick="togglePista('pista-p6')" aria-controls="pista-p6" aria-expanded="false">Mostrar pista</button>
+    <button class="respuesta-toggle" onclick="toggleRta('rta-p6')" aria-controls="rta-p6" aria-expanded="false">Mostrar respuesta y solución</button>
+  </div>
+  <div class="pista" id="pista-p6" hidden>
+    <strong>Pista:</strong> el criterio de divisibilidad por 11 es la "suma alternada". Empezando por la cifra de la derecha, se va sumando y restando alternadamente: la primera cifra suma, la segunda resta, la tercera suma, la cuarta resta. Si el resultado es 0 o múltiplo de 11 (positivo o negativo), el número es divisible por 11.
+  </div>
+  <div class="respuesta" id="rta-p6" hidden>
+    <strong>Respuesta correcta: opción B, 5.940.</strong>
+    <br><br>
+    <strong>Aplicación del criterio (suma alternada de derecha a izquierda).</strong>
+    <div class="tabla-verbal">
+    A) 1.234 → 4 menos 3 más 2 menos 1 igual a 2. No es 0 ni múltiplo de 11. NO divisible.<br>
+    B) 5.940 → 0 menos 4 más 9 menos 5 igual a 0. Múltiplo de 11. SÍ divisible.<br>
+    C) 7.215 → 5 menos 1 más 2 menos 7 igual a menos 1. No es múltiplo de 11. NO divisible.<br>
+    D) 8.061 → 1 menos 6 más 0 menos 8 igual a menos 13. No es múltiplo de 11. NO divisible.
+    </div>
+    <strong>Verificación de la opción B.</strong> 5.940 dividido entre 11 igual a 540 exacto. Confirmado.
+    <br><br>
+    <strong>Pista verbal para el examen:</strong> los criterios rápidos del examen UdeA son los de divisibilidad por 2, 3, 5 y 9 (los más comunes), y por 4, 8, 11 (menos comunes pero importantes). Memoriza la suma alternada del 11 con la frase "suma una, resta la siguiente, y así". Si te dan números de muchas cifras, este criterio ahorra mucho tiempo.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 7 — MCD APLICADO ═══════════════ -->
+<div class="card" id="p7" data-block="p7">
+  <div class="card-tag">PROBLEMA 7 · MÁXIMO COMÚN DIVISOR APLICADO · SESIÓN 6</div>
+  <h3>Cortar listones de madera del mismo tamaño</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Pedro tiene tres listones de madera de longitudes diferentes: uno de 84 centímetros, otro de 126 centímetros y otro de 168 centímetros. Quiere cortarlos en pedazos del mismo tamaño, sin que sobre madera de ningún listón, y desea que cada pedazo sea lo más largo posible. ¿De qué tamaño debe ser cada pedazo?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 12 centímetros</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 21 centímetros</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 28 centímetros</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 42 centímetros</div>
+  </div>
+  <div class="toggles">
+    <button class="pista-toggle" onclick="togglePista('pista-p7')" aria-controls="pista-p7" aria-expanded="false">Mostrar pista</button>
+    <button class="respuesta-toggle" onclick="toggleRta('rta-p7')" aria-controls="rta-p7" aria-expanded="false">Mostrar respuesta y solución</button>
+  </div>
+  <div class="pista" id="pista-p7" hidden>
+    <strong>Pista:</strong> "el más grande que reparte exacto a los tres" pide el máximo común divisor de las tres longitudes. Descompón cada longitud en factores primos y toma los primos comunes con el menor exponente.
+  </div>
+  <div class="respuesta" id="rta-p7" hidden>
+    <strong>Respuesta correcta: opción D, 42 centímetros.</strong>
+    <br><br>
+    <strong>Descomposición en factores primos.</strong>
+    <br>
+    84: 84 dividido entre 2 igual a 42; 42 dividido entre 2 igual a 21; 21 dividido entre 3 igual a 7. Entonces 84 igual a 2 al cuadrado por 3 por 7.
+    <br>
+    126: 126 dividido entre 2 igual a 63; 63 dividido entre 3 igual a 21; 21 dividido entre 3 igual a 7. Entonces 126 igual a 2 por 3 al cuadrado por 7.
+    <br>
+    168: 168 dividido entre 2 igual a 84; 84 dividido entre 2 igual a 42; 42 dividido entre 2 igual a 21; 21 dividido entre 3 igual a 7. Entonces 168 igual a 2 al cubo por 3 por 7.
+    <br><br>
+    <strong>Cálculo del MCD: primos comunes con menor exponente.</strong>
+    <br>
+    Primo 2: exponentes 2, 1, 3. Menor es 1. Tomamos 2 a la 1.
+    <br>
+    Primo 3: exponentes 1, 2, 1. Menor es 1. Tomamos 3 a la 1.
+    <br>
+    Primo 7: exponentes 1, 1, 1. Tomamos 7 a la 1.
+    <br>
+    Otros primos no aparecen en los tres. MCD igual a 2 por 3 por 7 igual a 42.
+    <br><br>
+    <strong>Verificación.</strong> 84 dividido entre 42 igual a 2 (sale 2 pedazos de 42 cm). 126 dividido entre 42 igual a 3. 168 dividido entre 42 igual a 4. En total, 2 más 3 más 4 igual a 9 pedazos, todos de 42 cm. Sin desperdicio.
+    <br><br>
+    <strong>Pista verbal para el examen:</strong> palabras clave que sugieren MCD: "el más grande que reparte", "el mayor tamaño posible", "sin desperdicio", "en partes iguales". Si el problema dice "lo más grande / mayor / máximo" más "exacto / sin que sobre", es MCD. Si dice "el primer instante en que coinciden / vuelven a sincronizarse", es MCM (lo veremos en el siguiente problema).
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 8 — MCM APLICADO ═══════════════ -->
+<div class="card" id="p8" data-block="p8">
+  <div class="card-tag">PROBLEMA 8 · MÍNIMO COMÚN MÚLTIPLO APLICADO · SESIÓN 6</div>
+  <h3>Tres semáforos que vuelven a coincidir</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    En una avenida hay tres semáforos que en este momento, las 7 en punto de la mañana, acaban de cambiar a verde al mismo tiempo. El primero cambia a verde cada 24 segundos, el segundo cada 36 segundos y el tercero cada 60 segundos. ¿En cuánto tiempo, expresado en minutos, los tres semáforos volverán a coincidir simultáneamente en verde?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 1 minuto</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 2 minutos</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 6 minutos</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 12 minutos</div>
+  </div>
+  <div class="toggles">
+    <button class="pista-toggle" onclick="togglePista('pista-p8')" aria-controls="pista-p8" aria-expanded="false">Mostrar pista</button>
+    <button class="respuesta-toggle" onclick="toggleRta('rta-p8')" aria-controls="rta-p8" aria-expanded="false">Mostrar respuesta y solución</button>
+  </div>
+  <div class="pista" id="pista-p8" hidden>
+    <strong>Pista:</strong> "primer instante en que vuelven a coincidir" pide el mínimo común múltiplo de los tres tiempos. Calcula primero en segundos y al final convierte a minutos. Recuerda: para MCM, primos comunes y no comunes, todos con el mayor exponente.
+  </div>
+  <div class="respuesta" id="rta-p8" hidden>
+    <strong>Respuesta correcta: opción C, 6 minutos.</strong>
+    <br><br>
+    <strong>Descomposición en factores primos.</strong>
+    <br>
+    24: 24 dividido entre 2 igual a 12; 12 dividido entre 2 igual a 6; 6 dividido entre 2 igual a 3; 3 dividido entre 3 igual a 1. Entonces 24 igual a 2 al cubo por 3.
+    <br>
+    36: 36 dividido entre 2 igual a 18; 18 dividido entre 2 igual a 9; 9 dividido entre 3 igual a 3; 3 dividido entre 3 igual a 1. Entonces 36 igual a 2 al cuadrado por 3 al cuadrado.
+    <br>
+    60: 60 dividido entre 2 igual a 30; 30 dividido entre 2 igual a 15; 15 dividido entre 3 igual a 5; 5 dividido entre 5 igual a 1. Entonces 60 igual a 2 al cuadrado por 3 por 5.
+    <br><br>
+    <strong>Cálculo del MCM: todos los primos con mayor exponente.</strong>
+    <br>
+    Primo 2: exponentes 3, 2, 2. Mayor es 3. Tomamos 2 al cubo igual a 8.
+    <br>
+    Primo 3: exponentes 1, 2, 1. Mayor es 2. Tomamos 3 al cuadrado igual a 9.
+    <br>
+    Primo 5: exponentes 0, 0, 1. Mayor es 1. Tomamos 5.
+    <br>
+    MCM igual a 8 por 9 por 5 igual a 360 segundos.
+    <br><br>
+    <strong>Conversión a minutos.</strong> 360 segundos dividido entre 60 igual a 6 minutos.
+    <br><br>
+    <strong>Verificación.</strong> 360 dividido entre 24 igual a 15 (el primer semáforo cambia 15 veces en ese tiempo). 360 dividido entre 36 igual a 10 (el segundo cambia 10 veces). 360 dividido entre 60 igual a 6 (el tercero cambia 6 veces). Los tres cambios se alinean exactos en 360 segundos.
+    <br><br>
+    <strong>Pista verbal para el examen:</strong> palabras clave que sugieren MCM: "vuelven a coincidir", "se sincronizan", "se reinician al mismo tiempo", "ambos llegan al mismo punto". Cuidado con la unidad: si los datos vienen en segundos, calcula en segundos y convierte al final a minutos u horas según pida el examen. Una conversión equivocada cambia tu respuesta.
+  </div>
+</div>
+
+<footer>
+  UdeA Posible · Razonamiento lógico para aspirantes con discapacidad visual<br>
+  Taller de repaso integral · Sesiones 1 a 6 · Mayo de 2026<br>
+  Problemas calibrados al examen de admisión Universidad de Antioquia
+</footer>
+
+</div>
+
+<script src="tts_helper.js"></script>
+<script>
+  TTS.bindSpeedSlider('speedSlider', 'speedVal');
+  TTS.buildVoiceSelector('voiceSelect');
+  TTS.setupResume('btnResume');
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var como = document.getElementById('como-usar-section');
+    if (como) como.focus();
+  });
+
+  function toggleSection(id, mostrarLabel, ocultarLabel) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var btn = document.querySelector('[aria-controls="' + id + '"]');
+    var hidden = el.hasAttribute('hidden');
+    if (hidden) {
+      el.removeAttribute('hidden');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'true');
+        btn.textContent = ocultarLabel;
+      }
+    } else {
+      el.setAttribute('hidden', '');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'false');
+        btn.textContent = mostrarLabel;
+      }
+    }
+  }
+
+  function togglePista(id) { toggleSection(id, 'Mostrar pista', 'Ocultar pista'); }
+  function toggleRta(id) { toggleSection(id, 'Mostrar respuesta y solución', 'Ocultar respuesta y solución'); }
+</script>
+</body>
+</html>

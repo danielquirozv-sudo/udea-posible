@@ -1,0 +1,19 @@
+.DS_Store
+.claude/
+*~
+~$*
+
+# Material interno (guías docentes, bitácoras, scripts de generación) — NUNCA publicar.
+# Este repo solo contiene material accesible para estudiantes: HTML, JS.
+Guia_Docente_*
+Guia_Profesor_*
+guia_profesor_*
+bitacora_*
+gen_*.py
+*.docx
+*.pdf
+*.tex
+
+# Respaldos locales del historial anterior
+historial-viejo-completo.bundle
+.git-viejo-tmp/

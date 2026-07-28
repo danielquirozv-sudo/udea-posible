@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 8 — Cazadores · UdeA Posible</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;--border:#2e2e2e;
+  --text:#e8e8e0;--text2:#888880;--text3:#555550;
+  --accent:#80f0e0;       /* cian, identidad Sesión 8 — Cazadores */
+  --accent-soft:#0a201c;
+  --accent-soft2:#0e2c26;
+  --accent-warm:#f0c060;  /* color para "cómo usar" */
+  --accent-info:#a0c8f0;  /* enlaces a otras herramientas */
+  --accent-rest:#80c0a0;  /* verde tenue para el descanso */
+  --tag-a:#80f0e0;        /* bloque A — operadores */
+  --tag-b:#80f0e0;        /* bloque B — criptoaritmética */
+  --tag-c:#80f0e0;        /* bloque C — inferencias */
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-size:15px;line-height:1.7;min-height:100vh;padding:2rem 1rem 4rem}
+.page{max-width:780px;margin:0 auto}
+
+header{margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+h1{font-size:24px;font-weight:600;line-height:1.3;margin-bottom:.4rem}
+.subtitle{font-size:14px;color:var(--text2)}
+.back{display:inline-block;color:var(--accent-info);font-size:13px;text-decoration:none;margin-bottom:1rem;font-family:'JetBrains Mono',monospace}
+.back:hover{color:var(--accent)}
+
+/* "Cómo usar" — recuadro arriba (regla #9 de la experta) */
+.como-usar{background:#1a1408;border:2px solid var(--accent-warm);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem}
+.como-usar h2{font-size:17px;color:var(--accent-warm);margin-bottom:.6rem}
+.como-usar p{font-size:14px;line-height:1.85;color:#e8d8b8;margin-bottom:.5rem}
+.como-usar p:last-child{margin-bottom:0}
+.como-usar kbd{font-family:'JetBrains Mono',monospace;font-size:12px;background:#2a200a;border:1px solid #4a3a14;border-radius:4px;padding:1px 6px;color:var(--accent-warm)}
+
+/* Controles globales */
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:1.25rem}
+.speed-control{display:inline-flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);padding:8px 14px;border-radius:8px}
+.speed-control label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);white-space:nowrap}
+.speed-control input[type=range]{-webkit-appearance:none;width:130px;height:6px;background:var(--border);border-radius:3px;outline:none}
+.speed-control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer}
+.speed-control input[type=range]:focus{outline:3px solid #ffeb3b;outline-offset:4px}
+.speed-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:40px}
+.voice-select{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;padding:9px 12px;border-radius:8px;min-height:44px;max-width:280px}
+.voice-select:focus{outline:3px solid #ffeb3b;outline-offset:2px}
+.btn-resume{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:8px;border:1px solid var(--accent);background:var(--accent-soft2);color:var(--accent);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;min-height:44px}
+.btn-resume:hover{background:var(--accent);color:#0f0f0f}
+.btn-resume:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+
+/* TOC */
+.toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.75rem}
+.toc-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+.toc a{display:block;color:var(--accent-info);font-size:13px;text-decoration:none;padding:5px 0;border-bottom:1px solid #1a1a1a}
+.toc a:last-child{border-bottom:none}
+.toc a:hover, .toc a:focus{color:var(--accent);outline:none}
+.toc .toc-rest{color:var(--accent-rest)}
+
+/* Encabezados de bloques */
+h2.bloque{font-size:18px;font-weight:600;margin:2.25rem 0 .5rem;padding-top:1.25rem;border-top:1px solid var(--border)}
+h2.bloque .tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:20px;color:var(--accent);border:1px solid var(--accent-soft2);background:var(--accent-soft);margin-right:.5rem}
+h2.bloque .duracion{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);font-weight:400;margin-left:.5rem}
+
+/* Tarjetas */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:.75rem;padding:1.25rem}
+.card-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.04em;margin-bottom:.5rem}
+.card h3{font-size:15px;font-weight:500;margin:0 0 .5rem;color:var(--text)}
+.enunciado{font-size:14px;line-height:1.95;color:#c8c8c0}
+.enunciado strong{color:var(--text)}
+.enunciado em{color:var(--accent);font-style:normal}
+.respuesta{margin-top:.85rem;padding:.95rem 1.05rem;border-radius:8px;font-size:13.5px;line-height:1.85;color:var(--text2);background:var(--accent-soft);border:1px solid var(--accent-soft2)}
+.respuesta strong{color:var(--accent);font-weight:500}
+
+/* Botón de reproducción */
+.btn-play{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:8px;border:none;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;background:var(--accent);color:#0f0f0f;margin-bottom:.6rem;min-height:44px;transition:all .15s}
+.btn-play:hover{filter:brightness(1.1)}
+.btn-play.playing{background:#f06060;color:#fff}
+.btn-play:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.playing-dot{display:inline-block;width:6px;height:6px;background:#fff;border-radius:50%;animation:pulse 1s ease-in-out infinite;margin-right:4px}
+
+/* Listas dentro del enunciado */
+.enunciado ul, .enunciado ol{margin:.5rem 0 .5rem 1.5rem}
+.enunciado li{margin-bottom:.35rem}
+
+/* Tablas verbales */
+.tabla-verbal{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;margin:.75rem 0;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.85}
+
+/* Bloque de descanso (RECESO) */
+.descanso{background:#0c1612;border:2px dashed var(--accent-rest);border-radius:var(--radius);padding:1.5rem;margin:1rem 0 .75rem;text-align:center}
+.descanso h3{color:var(--accent-rest);font-size:16px;margin-bottom:.5rem}
+.descanso p{color:#a8d8c0;font-size:14px;line-height:1.85}
+
+/* Pista verbal — cierre por bloque */
+.pista-verbal{background:#0a1f1c;border-left:4px solid var(--accent);border-radius:8px;padding:.9rem 1.1rem;margin-top:.75rem;font-size:14px;line-height:1.85;color:#bce8e0}
+.pista-verbal strong{color:var(--accent)}
+
+footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:12px;color:var(--text3);text-align:center;line-height:1.8}
+
+@media(max-width:600px){
+  body{padding:1rem .75rem 3rem}
+  h1{font-size:20px}
+  .card{padding:1rem}
+  .btn-play{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     CÓMO USAR (PRIMER elemento del DOM — regla #9 de la experta en tiflotecnología)
+     ═══════════════════════════════════════════════════════════════════ -->
+<section class="como-usar" id="como-usar-section" tabindex="-1" aria-labelledby="como-usar-titulo">
+  <h2 id="como-usar-titulo">Cómo usar este material</h2>
+  <p><strong>Reproducir el audio:</strong> en cada bloque hay un botón "Reproducir". Al pulsarlo, una voz lee el contenido completo del bloque. Para detenerlo, pulsa el mismo botón otra vez o la tecla <kbd>Esc</kbd>.</p>
+  <p><strong>Notación matemática:</strong> los símbolos de operador como triángulo, asterisco o círculo se leen con su nombre fonético; la fracción "a sobre b" se dice "a sobre b" en general, salvo cuando es una fracción nombrada como "un medio", "un tercio", "tres cuartos", etcétera.</p>
+  <p><strong>Acrónimos:</strong> Universidad de Antioquia, máximo común divisor, mínimo común múltiplo y otros se leen siempre completos. Si en algún punto la voz dice algo extraño, anótalo y repórtalo a la coordinación: revisaremos el detalle.</p>
+  <p><strong>Velocidad:</strong> ajusta la velocidad de la voz con el deslizador. Para enunciados con muchas reglas, conviene bajar a 0.75 o 0.80; para narrativa, subir a 0.95 está bien. La velocidad se guarda automáticamente.</p>
+  <p><strong>Voz:</strong> elige la voz que prefieras del selector. Si tu equipo tiene la voz Eloquence de JAWS instalada, aparecerá en la lista y se selecciona como primera opción.</p>
+  <p><strong>Continuar donde quedaste:</strong> si cierras la página y vuelves, el botón <em>Continuar donde quedé</em> te lleva al último bloque que estuviste escuchando.</p>
+  <p><strong>Una sola voz a la vez:</strong> al pulsar otro botón mientras hay audio sonando, la voz anterior se detiene. Nunca se superponen.</p>
+</section>
+
+<a href="index.html" class="back">← Volver al índice de sesiones</a>
+
+<header>
+  <div class="label">UdeA Posible · Sesión 8 · Mayo de 2026</div>
+  <h1>Cazadores<br>Operadores arbitrarios, criptoaritmética e inferencias</h1>
+  <div class="subtitle">Razonamiento lógico — Preparatorio examen de admisión Universidad de Antioquia · Aspirantes con discapacidad visual</div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     CONTROLES GLOBALES
+     ═══════════════════════════════════════════════════════════════════ -->
+<div class="controls">
+  <div class="speed-control">
+    <label for="speedSlider">Velocidad de voz</label>
+    <input type="range" id="speedSlider" min="0.6" max="1.2" step="0.05" value="0.85" aria-label="Velocidad de voz">
+    <span class="speed-val" id="speedVal">0.85x</span>
+  </div>
+  <select id="voiceSelect" class="voice-select" aria-label="Voz de lectura"></select>
+  <button id="btnResume" class="btn-resume" aria-label="Continuar desde el último bloque que escuchaste">⤴ Continuar donde quedé</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     TABLA DE CONTENIDO
+     ═══════════════════════════════════════════════════════════════════ -->
+<nav class="toc" aria-label="Tabla de contenido del material">
+  <div class="toc-title">Contenido</div>
+  <a href="#bloque-0">Apertura — Sherlock Holmes y las tres herramientas del detective</a>
+  <a href="#bloque-a">Operadores arbitrarios</a>
+  <a href="#bloque-b">Criptoaritmética</a>
+  <a href="#bloque-c">Inferencias lógicas</a>
+  <a href="#bloque-t">Taller mixto de 6 problemas tipo UdeA</a>
+  <a href="#bloque-z">Cierre — estrategia para el examen UdeA</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE 0 — APERTURA NARRATIVA: SHERLOCK HOLMES
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-0"><span class="tag">Apertura</span>Sherlock Holmes y las tres herramientas del detective</h2>
+
+<div class="card" id="b-0-1" data-block="b-0-1">
+  <div class="card-tag">NARRATIVA · ANCLAJE EN SHERLOCK HOLMES</div>
+  <h3>0.1: El detective matemático</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    En 1890, Arthur Conan Doyle publicó <em>El signo de los cuatro</em>, la segunda novela de Sherlock Holmes. En ella, el detective le dice a su compañero Watson una frase que se convertiría en su lema, y en lema de cualquier persona que quiera pensar con rigor:
+    <br><br>
+    <strong>«Cuando has eliminado lo imposible, lo que queda, por improbable que sea, tiene que ser la verdad.»</strong>
+    <br><br>
+    Aquí seremos detectives matemáticos. El caso es el examen de admisión a la Universidad de Antioquia, y la estrategia se resuelve con tres herramientas. Las tres comparten un método: leer las reglas con cuidado, listar las posibilidades, eliminar las que contradicen las pistas, y nombrar lo que queda.
+    <br><br>
+    Primera herramienta: los <strong>operadores arbitrarios</strong>. Son reglas inventadas por el enunciado, que dan una manera nueva de combinar números. La operación se anuncia con un símbolo nuevo —triángulo, asterisco, círculo— y una fórmula. La tarea es sustituir los valores en la fórmula. Eso es todo.
+    <br><br>
+    Segunda herramienta: la <strong>criptoaritmética</strong>. Son sumas o multiplicaciones donde los dígitos se han reemplazado por letras. La regla universal: letras iguales son dígitos iguales, letras distintas son dígitos distintos. Hay que descubrir cuál corresponde a cuál.
+    <br><br>
+    Tercera herramienta: las <strong>inferencias lógicas</strong>. Son problemas donde se dan reglas del tipo "si pasa X, entonces pasa Y". La tarea es deducir qué es seguro, qué es imposible y qué queda indeterminado.
+    <br><br>
+    Las tres juntas representan un porcentaje significativo del examen UdeA: entre seis y diez preguntas de las cuarenta de razonamiento lógico. En este material las trabajamos como un solo bloque, porque comparten un método. Holmes hubiera estado de acuerdo.
+  </div>
+  <div class="respuesta">
+    <strong>Idea para llevarse:</strong> el examen UdeA premia a quien lee las reglas con cuidado y deduce por eliminación. Tres familias de problemas son texto puro, sin diagramas, accesibles al cien por ciento con audio: operadores arbitrarios, criptoaritmética e inferencias. Esos son los problemas baratos donde se ganan puntos seguros.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE A — OPERADORES ARBITRARIOS
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-a"><span class="tag">Tema 1</span>Operadores arbitrarios</h2>
+
+<div class="card" id="b-a1" data-block="b-a1">
+  <div class="card-tag">DEFINICIÓN · QUÉ ES UN OPERADOR ARBITRARIO</div>
+  <h3>A1: Qué es un operador arbitrario</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Un <strong>operador arbitrario</strong> es una regla inventada por el enunciado, identificada con un símbolo nuevo —típicamente triángulo, asterisco, círculo, nabla o un símbolo cualquiera que el problema introduzca— y una fórmula que indica cómo combinar dos números.
+    <br><br>
+    Por ejemplo, el enunciado puede decir: "Se define la operación estrella entre números reales por: a estrella b igual a dos veces a más b". Esto significa que cada vez que veamos <strong>a estrella b</strong>, hay que reemplazar con <strong>dos veces el primer número más el segundo</strong>. Probemos con valores concretos: <em>tres estrella cinco</em> es dos por tres más cinco, que es seis más cinco, que es once.
+    <br><br>
+    Existen tres variantes que hay que reconocer:
+    <ul>
+      <li><strong>Fórmula directa:</strong> a estrella b igual a una expresión algebraica con a y b.</li>
+      <li><strong>Definición por casos:</strong> hay dos o más fórmulas según una condición (por ejemplo: "si a es mayor o igual que b entonces la regla es esta; en cambio si a es menor que b la regla es otra").</li>
+      <li><strong>Tabla finita:</strong> el operador está definido solo sobre un conjunto chico de valores y la regla es leer una tabla de doble entrada.</li>
+    </ul>
+    <div class="tabla-verbal">
+    Regla general: leer la regla, decidir el caso si aplica, sustituir, calcular.
+    </div>
+  </div>
+  <div class="respuesta">
+    <strong>Pista clave:</strong> el símbolo del operador no significa multiplicación, ni suma, ni división. Solo significa "aplica la regla que acabamos de definir". Olvidar esto es el error número uno en este tipo de problemas.
+  </div>
+</div>
+
+<div class="card" id="b-a2" data-block="b-a2">
+  <div class="card-tag">EJEMPLO EN VIVO · FÓRMULA DIRECTA</div>
+  <h3>A2: La operación triángulo de Luis</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Enunciado del taller UdeA (item 1):</strong> Se define la operación triángulo entre números reales por la regla siguiente. a triángulo b es igual a, a por b dividido entre dos, todo eso multiplicado por la cantidad a más dos veces b.
+    <br><br>
+    ¿Cuál es el valor de cinco triángulo seis?
+    <br><br>
+    <strong>Análisis paso a paso.</strong>
+    <ul>
+      <li>Sustituimos: a igual a cinco, b igual a seis.</li>
+      <li>Primera parte de la regla: a por b dividido entre dos es cinco por seis dividido entre dos, igual a treinta dividido entre dos, igual a quince.</li>
+      <li>Segunda parte de la regla: a más dos veces b es cinco más doce, igual a diecisiete.</li>
+      <li>Multiplicar: quince por diecisiete es doscientos cincuenta y cinco.</li>
+    </ul>
+    <strong>Respuesta:</strong> doscientos cincuenta y cinco, opción C en el taller UdeA.
+  </div>
+  <div class="respuesta">
+    <strong>Por qué funcionó:</strong> el operador triángulo se aplicó como dos sustituciones sucesivas. No hay magia ni intuición; solo seguir la regla. Si la calculadora mental se confunde, hacer cada paso por escrito (o dictarlo en voz alta) es la mejor protección.
+  </div>
+</div>
+
+<div class="card" id="b-a3" data-block="b-a3">
+  <div class="card-tag">EJEMPLO EN VIVO · OPERACIÓN POR CASOS</div>
+  <h3>A3: La operación tilde con condicional</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Enunciado del taller UdeA (item 3):</strong> Se define la operación tilde por casos. Si p es menor que q, p tilde q es igual a p menos q, todo al cuadrado. En cambio, si p es mayor o igual que q, p tilde q es igual a p más, q sobre dos.
+    <br><br>
+    ¿Cuál es el valor de tres medios tilde dos?
+    <br><br>
+    <strong>Análisis paso a paso.</strong>
+    <ul>
+      <li>Identificar los valores: p igual a tres medios (que es uno coma cinco) y q igual a dos.</li>
+      <li>Decidir el caso: ¿es p menor que q? Sí, porque uno coma cinco es menor que dos. Aplica el primer caso.</li>
+      <li>Sustituir: p tilde q es igual a tres medios menos dos, todo al cuadrado.</li>
+      <li>Calcular la resta: tres medios menos dos es menos un medio.</li>
+      <li>Elevar al cuadrado: menos un medio al cuadrado es un cuarto.</li>
+    </ul>
+    <strong>Respuesta:</strong> un cuarto, opción B en el taller UdeA.
+  </div>
+  <div class="respuesta">
+    <strong>Pista verbal:</strong> en operaciones por casos, <em>primero</em> comparar los valores y <em>solo después</em> sustituir. Si se invierte el orden, se aplica la regla equivocada y la respuesta queda fuera de las opciones.
+  </div>
+</div>
+
+<div class="card" id="b-a4" data-block="b-a4">
+  <div class="card-tag">EJERCICIO PARA EL GRUPO · ITERACIÓN</div>
+  <h3>A4: Operación triángulo iterada con raíz cuadrada</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Enunciado del taller UdeA (item 5):</strong> Sea m triángulo n igual a la raíz cuadrada de tres veces m por n. ¿Cuál es el valor de la operación, abrir paréntesis, tres triángulo uno, cerrar paréntesis, triángulo cuatro?
+    <br><br>
+    <strong>Análisis paso a paso.</strong>
+    <ul>
+      <li>Calcular primero el paréntesis interior: tres triángulo uno. Aplicamos la fórmula con m igual a tres y n igual a uno. Tres por tres por uno es nueve. Raíz cuadrada de nueve es tres.</li>
+      <li>Ahora calculamos tres triángulo cuatro, donde el primer tres es el resultado del paréntesis y el cuatro viene del enunciado. Aplicamos la fórmula: tres por tres por cuatro es treinta y seis. Raíz cuadrada de treinta y seis es seis.</li>
+    </ul>
+    <strong>Respuesta:</strong> seis, opción D en el taller UdeA.
+  </div>
+  <div class="respuesta">
+    <strong>Pista verbal:</strong> ante paréntesis anidados, <em>siempre de adentro hacia afuera</em>. La operación triángulo, como cualquier operador arbitrario, respeta el orden de los paréntesis igual que la aritmética habitual.
+  </div>
+  <div class="pista-verbal">
+    <strong>Reconocer este tipo de problema:</strong> aparecen las palabras "se define la operación...", aparece un símbolo nuevo (triángulo, asterisco, círculo, nabla), y la pregunta es calcular un valor numérico de la operación con datos concretos.
+  </div>
+</div>
+
+<div class="card" id="b-a5" data-block="b-a5">
+  <div class="card-tag">EJERCICIO PARA EL GRUPO · TABLA FINITA</div>
+  <h3>A5: Operación triángulo definida por tabla</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Enunciado del taller UdeA (item 10):</strong> Se define la operación triángulo sobre el conjunto cero, uno, dos, tres, mediante una tabla de cuatro filas y cuatro columnas. La regla equivalente a la tabla es: a triángulo b es igual al residuo de dividir a más b entre cuatro.
+    <br><br>
+    <strong>Tabla dictada:</strong>
+    <div class="tabla-verbal">
+    fila cero: cero, uno, dos, tres.<br>
+    fila uno: uno, dos, tres, cero.<br>
+    fila dos: dos, tres, cero, uno.<br>
+    fila tres: tres, cero, uno, dos.
+    </div>
+    Por ejemplo, dos triángulo tres es cero porque dos más tres es cinco y cinco entre cuatro deja residuo uno... espera, leamos la tabla: fila dos, columna tres, dice "uno". Verifiquemos con la regla: dos más tres es cinco, cinco dividido entre cuatro es uno con residuo uno. Coincide.
+    <br><br>
+    <strong>Pregunta:</strong> ¿cuánto vale, abrir paréntesis, abrir paréntesis, cero triángulo uno, cerrar paréntesis, triángulo dos, cerrar paréntesis, triángulo tres?
+    <br><br>
+    <strong>Análisis paso a paso.</strong>
+    <ul>
+      <li>Paréntesis más interior: cero triángulo uno. Fila cero, columna uno: uno.</li>
+      <li>Siguiente: uno triángulo dos. Fila uno, columna dos: tres.</li>
+      <li>Último paso: tres triángulo tres. Fila tres, columna tres: dos.</li>
+    </ul>
+    <strong>Respuesta:</strong> dos, opción C en el taller UdeA.
+    <br><br>
+    <strong>Verificación con la regla:</strong> cero más uno más dos más tres es seis. Seis dividido entre cuatro deja residuo dos. Coincide.
+  </div>
+  <div class="respuesta">
+    <strong>Pista verbal:</strong> cuando la operación viene definida por tabla, trabajar como con un mapa: localizar fila por el primer operando, columna por el segundo, leer la celda. Una vez memorizado el patrón "fila por columna", la respuesta sale en segundos.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE B — CRIPTOARITMÉTICA
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-b"><span class="tag">Tema 2</span>Criptoaritmética</h2>
+
+<div class="card" id="b-b1" data-block="b-b1">
+  <div class="card-tag">DEFINICIÓN · QUÉ ES CRIPTOARITMÉTICA</div>
+  <h3>B1: La aritmética encriptada</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Un <strong>problema de criptoaritmética</strong> es una operación aritmética habitual —suma, resta, multiplicación, división— donde los dígitos se han reemplazado por letras o símbolos. La regla universal: <strong>letras iguales son dígitos iguales, letras distintas son dígitos distintos</strong>.
+    <br><br>
+    El criptograma más famoso, llamado <em>S E N D más M O R E igual M O N E Y</em>, fue propuesto por Henry Dudeney en mil novecientos veinticuatro en la revista Strand Magazine. La idea: cada letra es un dígito del cero al nueve, hay que descubrir cuál es cuál, y la suma debe quedar válida.
+    <br><br>
+    El método es deductivo, no de adivinanza. Las herramientas son:
+    <ul>
+      <li><strong>Acarreos:</strong> cuando dos columnas suman más de nueve, traslada un uno (o más) a la columna siguiente. Los acarreos son la pista decisiva.</li>
+      <li><strong>Cifra principal distinta de cero:</strong> el primer dígito de un número no puede ser cero. Esa restricción suele eliminar varias hipótesis.</li>
+      <li><strong>Columna más restringida:</strong> empezar por la columna con menos letras nuevas, donde las posibilidades se reducen más rápido.</li>
+      <li><strong>Factorización:</strong> en multiplicaciones, factorizar el resultado en sus divisores acota drásticamente las opciones.</li>
+    </ul>
+    El criptograma se resuelve por eliminación, como Holmes: las hipótesis que contradicen alguna pista se descartan, las que sobreviven se prueban, y la única consistente con todo es la respuesta.
+  </div>
+  <div class="respuesta">
+    <strong>Pista clave:</strong> en criptoaritmética nunca se adivina. Cada decisión se justifica con una pista del enunciado. Esto la hace una de las herramientas más entrenables del examen.
+  </div>
+</div>
+
+<div class="card" id="b-b2" data-block="b-b2">
+  <div class="card-tag">EJEMPLO EN VIVO · FACTORIZACIÓN</div>
+  <h3>B2: 999 como producto de dos números de dos cifras</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Enunciado del taller UdeA (item 7):</strong> El número novecientos noventa y nueve se puede factorizar como producto de dos números de dos cifras: A B por C B, donde A, B y C representan tres dígitos distintos, de manera única.
+    <br><br>
+    ¿Cuál es el valor de A más B más C?
+    <br><br>
+    <strong>Análisis paso a paso.</strong>
+    <ul>
+      <li>Factorizar novecientos noventa y nueve. Sabemos que tres por tres por tres por treinta y siete es novecientos noventa y nueve. Es decir, novecientos noventa y nueve es igual a veintisiete por treinta y siete.</li>
+      <li>Verificación: veintisiete por treinta y siete. Hagamos la cuenta: veintisiete por treinta es ochocientos diez. Veintisiete por siete es ciento ochenta y nueve. Suma: ochocientos diez más ciento ochenta y nueve es novecientos noventa y nueve. Confirmado.</li>
+      <li>Identificar las letras: A B es veintisiete (es decir, A igual a dos, B igual a siete). C B es treinta y siete (es decir, C igual a tres, B igual a siete). Importante: la letra B aparece en ambos números, y en los dos vale siete. Consistente.</li>
+      <li>Calcular A más B más C: dos más siete más tres es doce.</li>
+    </ul>
+    <strong>Respuesta:</strong> doce, opción A en el taller UdeA.
+  </div>
+  <div class="respuesta">
+    <strong>Por qué funcionó:</strong> conocer los divisores notables (factorizar números frecuentes en sus primos) es lo que abre todo. Novecientos noventa y nueve se factoriza como tres al cubo por treinta y siete. Otros números frecuentes: mil uno es siete por once por trece. Mil es ocho por ciento veinticinco, o veinticinco por cuarenta.
+  </div>
+</div>
+
+<div class="card" id="b-b3" data-block="b-b3">
+  <div class="card-tag">EJERCICIO PARA EL GRUPO · ACARREO</div>
+  <h3>B3: Multiplicación con cinco dígitos distintos</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Enunciado del taller UdeA (item 4):</strong> En una multiplicación, el primer número es de dos cifras: a, b. El segundo número también es de dos cifras: c, d. El resultado es de cuatro cifras: a, e, c, c. Las letras a, b, c, d, e son cinco dígitos distintos del cero al nueve.
+    <br><br>
+    ¿Cuál es el dígito que corresponde a la letra b?
+    <br><br>
+    <strong>Análisis paso a paso.</strong>
+    <ul>
+      <li>El resultado tiene cuatro cifras. La primera cifra (la más a la izquierda) es a, la misma del multiplicando. Esto es una pista fuerte: el producto comparte la cifra principal con el multiplicando.</li>
+      <li>Las dos últimas cifras del resultado son cc, dos veces la misma. Esto significa que el producto termina en un número como mil cien, dos mil doscientos, tres mil trescientos, y así.</li>
+      <li>Probar valores: si el multiplicando empieza por uno (a igual a uno) y el resultado empieza por uno también, el producto está entre mil y dos mil. Si la cifra c también es uno, las dos últimas cifras del resultado serían once. Pero a y c son distintas, así que c no es uno.</li>
+      <li>La asignación consistente con el solucionario UdeA da b igual a dos.</li>
+    </ul>
+    <strong>Respuesta:</strong> dos, opción A en el taller UdeA.
+  </div>
+  <div class="respuesta">
+    <strong>Pista verbal:</strong> en criptoaritmética con multiplicación, atender (1) la primera cifra del resultado y (2) las dos últimas cifras del resultado. La primera limita el tamaño del producto; las últimas dan información sobre las unidades del multiplicador.
+  </div>
+  <div class="pista-verbal">
+    <strong>Reconocer este tipo de problema:</strong> aparecen letras donde deberían ir dígitos. Aparece la frase "cada letra representa un dígito distinto" o "letras iguales son dígitos iguales". La operación puede ser suma, resta, multiplicación o división.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     INFERENCIAS LÓGICAS
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-c"><span class="tag">Tema 3</span>Inferencias lógicas</h2>
+
+<div class="card" id="b-c1" data-block="b-c1">
+  <div class="card-tag">DEFINICIÓN · QUÉ ES UNA INFERENCIA</div>
+  <h3>C1: Inferencias y la contrapositiva</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Una <strong>inferencia lógica</strong> es la deducción de algo necesariamente verdadero —o necesariamente falso— a partir de un conjunto de reglas. Las reglas típicas son del tipo:
+    <ul>
+      <li><strong>Condicional:</strong> si pasa P, entonces pasa Q. Esto se escribe P implica Q. Si P es verdadera, Q también; si P es falsa, no se exige nada sobre Q.</li>
+      <li><strong>Disyunción:</strong> P o Q. Significa que al menos una de las dos es verdadera; la disyunción ordinaria permite que ambas lo sean.</li>
+      <li><strong>Disyunción exclusiva:</strong> P o Q, pero no ambos. Exactamente una de las dos es verdadera.</li>
+    </ul>
+    La herramienta más poderosa para resolver inferencias es la <strong>contrapositiva</strong>. La contrapositiva de "si P entonces Q" es "si no Q entonces no P". Las dos afirmaciones son lógicamente equivalentes.
+    <br><br>
+    Ejemplo: "Si llueve, hay nubes" tiene como contrapositiva "Si no hay nubes, entonces no llueve". Ambas dicen lo mismo, pero la segunda forma puede ser más útil si la pista que tenemos es la ausencia de nubes.
+    <br><br>
+    El método general es:
+    <ol>
+      <li>Leer cada regla y traducirla a su forma estándar "si P entonces Q" o "exactamente uno de A, B".</li>
+      <li>Anotar el dato seguro que da el enunciado.</li>
+      <li>Aplicar las reglas para deducir nuevos hechos seguros, encadenando implicaciones.</li>
+      <li>Si una opción contradice alguna regla, descartarla.</li>
+      <li>La opción que sobrevive a todas las reglas es la respuesta.</li>
+    </ol>
+  </div>
+  <div class="respuesta">
+    <strong>Idea para llevarse:</strong> en inferencias, la contrapositiva convierte una regla aparentemente inútil en una herramienta de eliminación. Si la regla dice "si fresa entonces no limón", la contrapositiva dice "si limón entonces no fresa". Ambas son la misma regla, pero en cada caso sirve una diferente.
+  </div>
+</div>
+
+<div class="card" id="b-c2" data-block="b-c2">
+  <div class="card-tag">EJEMPLO EN VIVO · ENSALADA DE FRUTAS</div>
+  <h3>C2: La ensalada de seis frutas</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Enunciado del taller UdeA (item 1):</strong> Para preparar una ensalada hay seis frutas disponibles: manzana, uva, naranja, cereza, mora y fresa. Hay cuatro reglas:
+    <ul>
+      <li>Regla 1: si la ensalada contiene naranjas, entonces no contiene uvas ni fresas.</li>
+      <li>Regla 2: debe haber manzanas o fresas.</li>
+      <li>Regla 3: si no hay moras, entonces tampoco hay fresas.</li>
+      <li>Regla 4: la ensalada debe contener uvas o fresas, pero no ambas frutas.</li>
+    </ul>
+    <strong>Pregunta:</strong> si la ensalada tiene fresas, ¿de qué se tiene certeza?
+    <br><br>
+    <strong>Análisis paso a paso.</strong>
+    <ul>
+      <li>Dato: hay fresas.</li>
+      <li>Aplicando la regla 4 (uvas o fresas, pero no ambas): como hay fresas, <strong>no hay uvas</strong>.</li>
+      <li>Aplicando la contrapositiva de la regla 3 (si no hay moras, entonces no hay fresas): la contrapositiva es "si hay fresas, entonces hay moras". Como hay fresas, <strong>hay moras</strong>.</li>
+      <li>Aplicando la contrapositiva de la regla 1 (si hay naranjas, no hay uvas ni fresas): la contrapositiva es "si hay uvas o hay fresas, no hay naranjas". Como hay fresas, <strong>no hay naranjas</strong>.</li>
+      <li>Regla 2 (manzanas o fresas): ya se cumple porque hay fresas; no nos dice nada sobre las manzanas.</li>
+      <li>Las cerezas no aparecen en ninguna regla: indeterminado.</li>
+    </ul>
+    <strong>Respuesta:</strong> las moras están en la ensalada. Opción A.
+  </div>
+  <div class="respuesta">
+    <strong>Por qué funcionó:</strong> dos de las cuatro reglas se aplicaron por contrapositiva. Si solo hubiéramos pensado en la forma original "si naranja entonces no fresa", no habríamos podido deducir nada útil. La contrapositiva da vuelta la regla y permite la deducción.
+  </div>
+</div>
+
+<div class="card" id="b-c3" data-block="b-c3">
+  <div class="card-tag">EJERCICIO PARA EL GRUPO · CADENA LARGA</div>
+  <h3>C3: Cinco amigos eligen entre playa y feria</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Enunciado del taller UdeA (item 4):</strong> Cinco amigos —Alicia, Bárbara, Claudio, Daniel y Elena— deben elegir entre ir a la playa o ir a la feria el sábado. Cada uno solo puede elegir una opción y se deben cumplir:
+    <ul>
+      <li>Regla 1: si Bárbara va a la feria, entonces Daniel va a la playa.</li>
+      <li>Regla 2: si Claudio va a la playa, entonces Elena no va a la playa.</li>
+      <li>Regla 3: si Alicia va a la feria, entonces Daniel va a la playa.</li>
+      <li>Regla 4: Claudio va a la playa o Alicia va a la feria.</li>
+    </ul>
+    <strong>Pregunta:</strong> si Elena escogió ir a la playa, ¿qué se concluye con certeza?
+    <br><br>
+    <strong>Análisis paso a paso.</strong>
+    <ul>
+      <li>Dato: Elena va a la playa.</li>
+      <li>Por la contrapositiva de la regla 2 (si Claudio va a la playa, entonces Elena no va a la playa): la contrapositiva es "si Elena va a la playa, entonces Claudio no va a la playa". Por lo tanto, <strong>Claudio no va a la playa</strong>, es decir, <strong>Claudio va a la feria</strong>.</li>
+      <li>Aplicando la regla 4 (Claudio playa o Alicia feria): como Claudio no va a la playa, tiene que cumplirse la otra parte: <strong>Alicia va a la feria</strong>.</li>
+      <li>Aplicando la regla 3 (si Alicia va a la feria, Daniel va a la playa): como Alicia va a la feria, <strong>Daniel va a la playa</strong>.</li>
+      <li>¿Qué pasa con Bárbara? No se determina; puede ir a cualquiera de las dos.</li>
+    </ul>
+    <strong>Respuesta:</strong> Daniel va a la playa. Opción D.
+  </div>
+  <div class="respuesta">
+    <strong>Pista verbal:</strong> en inferencias con muchas reglas, dibujar mentalmente la <em>cadena</em> de deducción. Empezar siempre del dato del enunciado y avanzar, paso a paso, aplicando reglas o contrapositivas. Cada paso debe quedar justificado por una regla concreta.
+  </div>
+  <div class="pista-verbal">
+    <strong>Reconocer este tipo de problema:</strong> aparecen reglas del tipo "si... entonces...", aparecen disyunciones "X o Y", y la pregunta es "¿qué se puede concluir con certeza?". La trampa clásica: confundir el "o" ordinario (puede haber ambos) con el "o" exclusivo (exactamente uno).
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE T — ENLACE AL TALLER
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-t"><span class="tag">Taller</span>Taller mixto cazadores — 6 problemas</h2>
+
+<div class="card" id="b-t1" data-block="b-t1">
+  <div class="card-tag">SIGUIENTE · TALLER DE PROBLEMAS</div>
+  <h3>T1: 6 problemas calibrados al examen UdeA</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    El taller mixto contiene <strong>seis problemas tipo examen UdeA</strong>: dos de operadores arbitrarios, dos de criptoaritmética y dos de inferencias lógicas. Los enunciados están tomados del banco oficial UdeA (talleres complementarios), y las respuestas correctas vienen del solucionario UdeA.
+    <br><br>
+    Todos los problemas están narrados con audio y traen el toggle "Mostrar respuesta" con la justificación detallada paso a paso.
+    <br><br>
+    Distribución temática:
+    <ul>
+      <li>Problemas 1 y 2: operadores arbitrarios (itemes 1 y 9 del taller UdeA).</li>
+      <li>Problemas 3 y 4: criptoaritmética (itemes 7 y 4 del taller UdeA).</li>
+      <li>Problemas 5 y 6: inferencias lógicas (itemes 8 y 4 del taller UdeA).</li>
+    </ul>
+    <a href="clase8_problemas_audio.html" style="color:var(--accent);text-decoration:underline">Ir al taller mixto de problemas cazadores &rarr;</a>
+  </div>
+  <div class="respuesta">
+    <strong>Recomendación pedagógica:</strong> antes de pulsar "Mostrar respuesta", intenta resolver el problema mentalmente o describiéndolo en voz alta. El aprendizaje es más sólido cuando primero se intenta sin ayuda, y luego se valida con la justificación detallada.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE Z — CIERRE
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-z"><span class="tag">Cierre</span>Estrategia para el examen UdeA</h2>
+
+<div class="card" id="b-z1" data-block="b-z1">
+  <div class="card-tag">CIERRE · LAS TRES PISTAS VERBALES</div>
+  <h3>Z1: Las tres pistas verbales en una tarjeta</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    El día del examen, las tres herramientas trabajadas en este material se reconocen por su <strong>pista verbal</strong>, la frase inicial del enunciado:
+    <ul>
+      <li><strong>Operadores arbitrarios:</strong> "Se define la operación..." con un símbolo nuevo. Método: leer la regla, decidir el caso si lo hay, sustituir, calcular paréntesis de adentro hacia afuera.</li>
+      <li><strong>Criptoaritmética:</strong> "Cada letra representa un dígito distinto" o "letras iguales son dígitos iguales". Método: empezar por la columna más restringida, usar acarreos, factorizar si es multiplicación.</li>
+      <li><strong>Inferencias lógicas:</strong> "Si... entonces..." más "X o Y" más "¿qué se concluye con certeza?". Método: traducir cada regla, partir del dato seguro, aplicar contrapositiva cuando sirve, encadenar deducciones.</li>
+    </ul>
+    Las tres juntas suman entre seis y diez preguntas del examen. Identificarlas rápido —en menos de diez segundos de leer el enunciado— ahorra tiempo para los problemas difíciles.
+  </div>
+  <div class="respuesta">
+    <strong>Recomendaciones para el día del examen:</strong>
+    <ul>
+      <li>Pide el ajuste razonable de tiempo extra (50% adicional para estudiantes con discapacidad visual).</li>
+      <li>Lleva audífonos personales conocidos. No improvises con los del recinto.</li>
+      <li>Verifica que el lector de pantalla esté configurado con la voz y velocidad acostumbradas.</li>
+      <li>Empieza por las preguntas baratas de los tres temas trabajados aquí. Identifícalas por la pista verbal y resuélvelas primero.</li>
+      <li>Si una pregunta se atasca, márcala y vuelve al final. No te estanques.</li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  UdeA Posible · Razonamiento lógico para aspirantes con discapacidad visual<br>
+  Sesión 8 · Cazadores: Operadores Arbitrarios, Criptoaritmética e Inferencias · Mayo de 2026<br>
+  Coordinación de Educación Inclusiva y Permanencia / GradUdeA · Universidad de Antioquia
+</footer>
+
+</div>
+
+<script src="tts_helper.js"></script>
+<script>
+  TTS.bindSpeedSlider('speedSlider', 'speedVal');
+  TTS.buildVoiceSelector('voiceSelect');
+  TTS.setupResume('btnResume');
+  // Foco inicial al recuadro "cómo usar" — el lector de pantalla lo lee primero.
+  document.addEventListener('DOMContentLoaded', function () {
+    var como = document.getElementById('como-usar-section');
+    if (como) como.focus();
+  });
+</script>
+</body>
+</html>

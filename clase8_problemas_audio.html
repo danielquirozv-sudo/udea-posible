@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 8 — Taller mixto cazadores · UdeA Posible</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;--border:#2e2e2e;
+  --text:#e8e8e0;--text2:#888880;--text3:#555550;
+  --accent:#80f0e0;       /* cian, identidad Sesión 8 */
+  --accent-soft:#0a201c;
+  --accent-soft2:#0e2c26;
+  --accent-warm:#f0c060;
+  --accent-info:#a0c8f0;
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-size:15px;line-height:1.7;min-height:100vh;padding:2rem 1rem 4rem}
+.page{max-width:780px;margin:0 auto}
+header{margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+h1{font-size:24px;font-weight:600;line-height:1.3;margin-bottom:.4rem}
+.subtitle{font-size:14px;color:var(--text2)}
+.back{display:inline-block;color:var(--accent-info);font-size:13px;text-decoration:none;margin-bottom:1rem;font-family:'JetBrains Mono',monospace}
+.back:hover{color:var(--accent)}
+
+.como-usar{background:#1a1408;border:2px solid var(--accent-warm);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem}
+.como-usar h2{font-size:17px;color:var(--accent-warm);margin-bottom:.6rem}
+.como-usar p{font-size:14px;line-height:1.85;color:#e8d8b8;margin-bottom:.5rem}
+.como-usar p:last-child{margin-bottom:0}
+.como-usar kbd{font-family:'JetBrains Mono',monospace;font-size:12px;background:#2a200a;border:1px solid #4a3a14;border-radius:4px;padding:1px 6px;color:var(--accent-warm)}
+
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:1.25rem}
+.speed-control{display:inline-flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);padding:8px 14px;border-radius:8px}
+.speed-control label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);white-space:nowrap}
+.speed-control input[type=range]{-webkit-appearance:none;width:130px;height:6px;background:var(--border);border-radius:3px;outline:none}
+.speed-control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer}
+.speed-control input[type=range]:focus{outline:3px solid #ffeb3b;outline-offset:4px}
+.speed-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:40px}
+.voice-select{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;padding:9px 12px;border-radius:8px;min-height:44px;max-width:280px}
+.voice-select:focus{outline:3px solid #ffeb3b;outline-offset:2px}
+.btn-resume{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:8px;border:1px solid var(--accent);background:var(--accent-soft2);color:var(--accent);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;min-height:44px}
+.btn-resume:hover{background:var(--accent);color:#0f0f0f}
+.btn-resume:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1rem;padding:1.25rem}
+.card-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.04em;margin-bottom:.5rem}
+.card h3{font-size:15px;font-weight:500;margin:0 0 .5rem;color:var(--text)}
+.enunciado{font-size:14px;line-height:1.95;color:#c8c8c0;margin-bottom:.75rem}
+.enunciado strong{color:var(--text)}
+.opciones{display:flex;flex-direction:column;gap:6px;margin-bottom:.75rem}
+.opcion{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);font-size:14px;color:#b8b8b0;line-height:1.5;min-height:44px}
+.opcion-letra{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:4px;background:var(--border);color:var(--text2);flex-shrink:0}
+.respuesta-toggle{display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;min-height:44px;margin-right:.5rem}
+.respuesta-toggle:hover{border-color:var(--accent)}
+.respuesta-toggle:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+.respuesta{margin-top:.75rem;padding:.95rem 1.05rem;border-radius:8px;font-size:13.5px;line-height:1.85;color:var(--text2);background:var(--accent-soft);border:1px solid var(--accent-soft2)}
+.respuesta strong{color:var(--accent)}
+.respuesta[hidden]{display:none}
+
+.tabla-verbal{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;margin:.75rem 0;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.85}
+
+.btn-play{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:8px;border:none;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;background:var(--accent);color:#0f0f0f;margin-bottom:.6rem;min-height:44px;transition:all .15s}
+.btn-play:hover{filter:brightness(1.1)}
+.btn-play.playing{background:#f06060;color:#fff}
+.btn-play:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.playing-dot{display:inline-block;width:6px;height:6px;background:#fff;border-radius:50%;animation:pulse 1s ease-in-out infinite;margin-right:4px}
+
+footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:12px;color:var(--text3);text-align:center;line-height:1.8}
+
+@media(max-width:600px){
+  body{padding:1rem .75rem 3rem}
+  h1{font-size:20px}
+  .card{padding:1rem}
+  .btn-play{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<section class="como-usar" id="como-usar-section" tabindex="-1" aria-labelledby="como-usar-titulo">
+  <h2 id="como-usar-titulo">Cómo trabajar este taller</h2>
+  <p><strong>Orden:</strong> trabájalos en orden. Los problemas 1 y 2 entrenan operadores arbitrarios. Los problemas 3 y 4, criptoaritmética. Los problemas 5 y 6, inferencias lógicas. Los enunciados están extraídos del banco oficial UdeA y las respuestas vienen del solucionario oficial.</p>
+  <p><strong>Antes de oír la respuesta:</strong> intenta resolver mentalmente o describiendo tu razonamiento en voz alta. Solo después pulsa "Mostrar respuesta" para comparar con la justificación detallada paso a paso.</p>
+  <p><strong>Audio:</strong> el botón "Reproducir" lee enunciado y opciones con la notación matemática expandida. La tecla <kbd>Esc</kbd> detiene la voz.</p>
+  <p><strong>Continuar donde quedaste:</strong> al volver, el botón <em>Continuar donde quedé</em> te lleva al último problema escuchado.</p>
+</section>
+
+<a href="Clase8_Operadores_Cripto_Inferencias.html" class="back">← Volver a la sesión 8</a>
+
+<header>
+  <div class="label">UdeA Posible · Sesión 8 · Taller mixto</div>
+  <h1>Taller mixto cazadores<br>6 problemas tipo examen UdeA</h1>
+  <div class="subtitle">2 de operadores arbitrarios · 2 de criptoaritmética · 2 de inferencias lógicas</div>
+</header>
+
+<div class="controls">
+  <div class="speed-control">
+    <label for="speedSlider">Velocidad de voz</label>
+    <input type="range" id="speedSlider" min="0.6" max="1.2" step="0.05" value="0.85" aria-label="Velocidad de voz">
+    <span class="speed-val" id="speedVal">0.85x</span>
+  </div>
+  <select id="voiceSelect" class="voice-select" aria-label="Voz de lectura"></select>
+  <button id="btnResume" class="btn-resume" aria-label="Continuar desde el último problema">⤴ Continuar donde quedé</button>
+</div>
+
+<!-- ═══════════════ PROBLEMA 1 ═══════════════ -->
+<div class="card" id="p1" data-block="p1">
+  <div class="card-tag">PROBLEMA 1 · OPERADORES ARBITRARIOS · TALLER UDEA ITEM 1</div>
+  <h3>La operación triángulo con producto</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Se define la operación triángulo entre los números reales a y b así: a triángulo b es igual a, a por b dividido entre dos, todo eso multiplicado por la cantidad a más dos b.
+    <br><br>
+    ¿Cuál es el valor de cinco triángulo seis?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 200</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 15</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 255</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 17</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p1')" aria-controls="rta-p1" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p1" hidden>
+    <strong>Respuesta correcta: opción C, 255.</strong>
+    <br><br>
+    <strong>Análisis del método.</strong> Es un problema de operador arbitrario con fórmula directa. Hay que sustituir a igual a cinco y b igual a seis en la regla y calcular.
+    <br><br>
+    <strong>Paso 1.</strong> Primera parte de la regla: a por b dividido entre dos. Cinco por seis es treinta. Treinta dividido entre dos es quince.
+    <br><br>
+    <strong>Paso 2.</strong> Segunda parte de la regla: a más dos veces b. Cinco más dos por seis es cinco más doce, igual a diecisiete.
+    <br><br>
+    <strong>Paso 3.</strong> Multiplicar las dos partes: quince por diecisiete. Hagamos la cuenta: quince por diecisiete es quince por diez más quince por siete, igual a ciento cincuenta más ciento cinco, igual a doscientos cincuenta y cinco.
+    <br><br>
+    <strong>Verificación.</strong> Quince por diecisiete también es quince por dieciséis más quince. Quince por dieciséis es doscientos cuarenta. Más quince, da doscientos cincuenta y cinco. Coincide.
+    <br><br>
+    <strong>Pista verbal para el examen.</strong> Cuando la regla incluye una fracción como "a por b dividido entre dos", muchas veces la fracción se simplifica antes del producto final. Aquí no fue el caso, pero conviene calcularla primero. Si te parece que va a salir un número muy grande, revisa la simplificación.
+    <br><br>
+    <strong>Por qué los distractores son incorrectos.</strong>
+    <br>
+    A (200): no corresponde a una sustitución directa. Posible confusión: cinco por cuarenta, o cinco por seis por algún número.
+    <br>
+    B (15): es solo la primera parte de la regla (a por b dividido entre dos). Olvida multiplicar por la segunda parte.
+    <br>
+    D (17): es solo la segunda parte de la regla (a más dos b). Olvida multiplicar por la primera parte.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 2 ═══════════════ -->
+<div class="card" id="p2" data-block="p2">
+  <div class="card-tag">PROBLEMA 2 · OPERADORES ARBITRARIOS · TALLER UDEA ITEM 14</div>
+  <h3>Operación delta funcional</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Una operación delta se aplica sobre los números reales positivos y se cumple que delta de a por b es igual a delta de a, dividido entre b, donde a y b representan dos números reales cualesquiera y a por b representa el producto entre los números a y b.
+    <br><br>
+    Si delta de cien es igual a veinte, ¿cuánto vale delta de cuatrocientos?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 80</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 100</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 5</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 20</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p2')" aria-controls="rta-p2" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p2" hidden>
+    <strong>Respuesta correcta: opción C, 5.</strong>
+    <br><br>
+    <strong>Análisis del método.</strong> Este es un operador arbitrario con una regla funcional: la operación delta cumple una propiedad que relaciona delta del producto con delta del primer factor dividido entre el segundo. La estrategia es elegir un par a, b tal que su producto sea cuatrocientos y delta de a sea un valor que ya conocemos.
+    <br><br>
+    <strong>Paso 1.</strong> Descomponer cuatrocientos como un producto donde uno de los factores sea cien (porque conocemos delta de cien). Cuatrocientos es igual a cien por cuatro. Es decir, tomamos a igual a cien y b igual a cuatro.
+    <br><br>
+    <strong>Paso 2.</strong> Aplicar la regla con esa descomposición. La regla dice: delta de a por b es igual a delta de a, dividido entre b. Sustituyendo: delta de cien por cuatro es igual a delta de cien, dividido entre cuatro.
+    <br><br>
+    <strong>Paso 3.</strong> Sustituir el valor conocido: delta de cien es veinte. Por lo tanto, delta de cuatrocientos es veinte dividido entre cuatro, igual a cinco.
+    <br><br>
+    <strong>Verificación con otra descomposición.</strong> Cuatrocientos también es cien por dos por dos. Aplicando la regla en dos pasos: delta de cien por dos es delta de cien dividido entre dos, igual a diez. Luego delta de doscientos por dos es delta de doscientos dividido entre dos, igual a cinco. Coincide.
+    <br><br>
+    <strong>Pista verbal para el examen.</strong> Cuando un operador arbitrario tiene una propiedad funcional como delta de a por b igual a delta de a dividido entre b, hay que descomponer el argumento del problema como un producto donde uno de los factores tenga delta conocido. Esa descomposición es la clave.
+    <br><br>
+    <strong>Por qué los distractores son incorrectos.</strong>
+    <br>
+    A (80): es veinte multiplicado por cuatro. Aplica la regla al revés (multiplicación en vez de división) o confunde producto interno con la operación delta.
+    <br>
+    B (100): es el valor original que sirvió de base, no la respuesta a la pregunta.
+    <br>
+    D (20): es el valor de delta de cien, no de delta de cuatrocientos.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 3 ═══════════════ -->
+<div class="card" id="p3" data-block="p3">
+  <div class="card-tag">PROBLEMA 3 · CRIPTOARITMÉTICA · TALLER UDEA ITEM 7</div>
+  <h3>999 como producto de dos números de dos cifras</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    El número novecientos noventa y nueve se puede factorizar como producto de dos números de dos cifras, A B por C B, donde A, B y C representan tres dígitos distintos, de manera única.
+    <br><br>
+    ¿Cuál es el valor de A más B más C?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 12</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 10</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 13</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 15</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p3')" aria-controls="rta-p3" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p3" hidden>
+    <strong>Respuesta correcta: opción A, 12.</strong>
+    <br><br>
+    <strong>Análisis del método.</strong> Es criptoaritmética con multiplicación. La técnica es factorizar el número objetivo.
+    <br><br>
+    <strong>Paso 1.</strong> Factorizar novecientos noventa y nueve. Sabemos que es divisible por tres porque la suma de sus cifras (nueve más nueve más nueve igual a veintisiete) es divisible por nueve. Dividir: novecientos noventa y nueve dividido entre tres es trescientos treinta y tres. Trescientos treinta y tres dividido entre tres es ciento once. Ciento once es tres por treinta y siete. Por lo tanto, novecientos noventa y nueve es igual a tres al cubo, por treinta y siete.
+    <br><br>
+    <strong>Paso 2.</strong> Buscar dos divisores de novecientos noventa y nueve, ambos de dos cifras. Los divisores son: uno, tres, nueve, veintisiete, treinta y siete, ciento once, trescientos treinta y tres, novecientos noventa y nueve. De estos, los que son de dos cifras: veintisiete y treinta y siete. Multiplicación: veintisiete por treinta y siete. Verificar: veintisiete por treinta es ochocientos diez. Veintisiete por siete es ciento ochenta y nueve. Suma: ochocientos diez más ciento ochenta y nueve es novecientos noventa y nueve. Coincide.
+    <br><br>
+    <strong>Paso 3.</strong> Identificar las letras. A B es veintisiete: A igual a dos, B igual a siete. C B es treinta y siete: C igual a tres, B igual a siete. La letra B coincide en ambos (siete), lo cual valida la asignación.
+    <br><br>
+    <strong>Paso 4.</strong> Calcular A más B más C: dos más siete más tres es doce.
+    <br><br>
+    <strong>Pista verbal para el examen.</strong> Cuando un problema de criptoaritmética dice "producto de dos números de dos cifras", la primera herramienta es factorizar. Memorizar las factorizaciones de números frecuentes (novecientos noventa y nueve, mil uno, ciento un mil, etcétera) acelera todo.
+    <br><br>
+    <strong>Por qué los distractores son incorrectos.</strong>
+    <br>
+    B (10): no corresponde a una asignación válida.
+    <br>
+    C (13): correspondería a una asignación diferente donde una letra valdría algo distinto.
+    <br>
+    D (15): correspondería a A más B más C con la asignación dos, tres, diez (que es imposible, los dígitos van del cero al nueve).
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 4 ═══════════════ -->
+<div class="card" id="p4" data-block="p4">
+  <div class="card-tag">PROBLEMA 4 · CRIPTOARITMÉTICA · TALLER UDEA ITEM 4</div>
+  <h3>Multiplicación con cinco dígitos distintos</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    En una multiplicación, el primer número es de dos cifras: a, b. El segundo número es de dos cifras: c, d. El resultado es de cuatro cifras: a, e, c, c. Las letras a, b, c, d, e son cinco dígitos distintos del cero al nueve.
+    <br><br>
+    ¿Cuál es el dígito que corresponde a la letra b?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 2</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 3</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 4</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 5</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p4')" aria-controls="rta-p4" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p4" hidden>
+    <strong>Respuesta correcta: opción C, 4.</strong>
+    <br><br>
+    <strong>Atención.</strong> El solucionario oficial UdeA marca la opción A (dos), pero la búsqueda exhaustiva muestra que el dígito correcto es cuatro. Lección sobre rigor matemático: los solucionarios oficiales pueden contener errores, y la única protección es verificar.
+    <br><br>
+    <strong>Análisis del método.</strong> Criptoaritmética con multiplicación de dos cifras por dos cifras, con resultado de cuatro cifras y restricción de cinco dígitos distintos. Hay que encontrar una asignación a, b, c, d, e que satisfaga la ecuación a-b por c-d igual a a-e-c-c.
+    <br><br>
+    <strong>Paso 1.</strong> Examinar la estructura del resultado: cuatro cifras a, e, c, c. Las dos últimas son iguales. Esto significa que el producto termina en un número como mil cien, dos mil doscientos, tres mil trescientos, y así.
+    <br><br>
+    <strong>Paso 2.</strong> La cifra más a la izquierda del resultado es a, la misma del multiplicando. Esto restringe mucho: el producto comparte primera cifra con el multiplicando.
+    <br><br>
+    <strong>Paso 3.</strong> Búsqueda exhaustiva. Probando todas las asignaciones posibles con la restricción de cinco dígitos distintos, la única solución es: a igual a dos, b igual a cuatro, c igual a ocho, d igual a siete, e igual a cero. Verificación: veinticuatro por ochenta y siete es dos mil ochenta y ocho. Cifras: dos, cero, ocho, ocho. Coincide con la estructura a-e-c-c con a igual a dos, e igual a cero, c igual a ocho.
+    <br><br>
+    <strong>Paso 4.</strong> Verificar restricciones. Los cinco dígitos a igual a dos, b igual a cuatro, c igual a ocho, d igual a siete, e igual a cero son todos distintos entre sí. La primera cifra del multiplicando es dos (distinta de cero). La primera cifra del segundo factor es ocho (distinta de cero). Todas las condiciones se cumplen. Es la única asignación válida.
+    <br><br>
+    <strong>Paso 5.</strong> El valor pedido es b, que vale cuatro. Opción C.
+    <br><br>
+    <strong>Pista verbal para el examen.</strong> En criptoaritmética con multiplicación, dos puntos de partida típicos: (1) la cifra principal del resultado y (2) las dos últimas cifras del resultado. Aquí, además, la repetición de la letra c en las dos últimas cifras del resultado y la coincidencia de a en la primera del multiplicando y la primera del resultado restringen tanto que solo queda una asignación posible. Verificar siempre con la multiplicación completa.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 5 ═══════════════ -->
+<div class="card" id="p5" data-block="p5">
+  <div class="card-tag">PROBLEMA 5 · INFERENCIAS LÓGICAS · TALLER UDEA ITEM 8</div>
+  <h3>Máquina de galletas: sin sandía</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Una máquina empaca galletas con estas reglas:
+    <ul>
+      <li>Regla 1: si se pone una galleta de sandía, se pone una de chocolate.</li>
+      <li>Regla 2: cuando se pone una galleta de fresa, entonces no se empaca una de limón.</li>
+      <li>Regla 3: si se empaca una galleta de limón, se guarda una de naranja.</li>
+      <li>Regla 4: se empaca una galleta de fresa o una de sandía.</li>
+    </ul>
+    Si una caja de galletas no lleva sandía, ¿qué se puede asegurar?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> La caja no tiene una galleta de chocolate</div>
+    <div class="opcion"><span class="opcion-letra">B</span> La caja tiene una galleta de fresa</div>
+    <div class="opcion"><span class="opcion-letra">C</span> Se haya empacado una galleta de limón</div>
+    <div class="opcion"><span class="opcion-letra">D</span> No se haya empacado una galleta de naranja</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p5')" aria-controls="rta-p5" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p5" hidden>
+    <strong>Respuesta correcta: opción B, la caja tiene una galleta de fresa.</strong>
+    <br><br>
+    <strong>Análisis del método.</strong> Inferencia con cuatro reglas y un dato (no sandía). Aplicar las reglas y deducir lo seguro.
+    <br><br>
+    <strong>Paso 1.</strong> Dato del enunciado: la caja no tiene sandía.
+    <br><br>
+    <strong>Paso 2.</strong> Aplicar la regla 4 (se empaca fresa o sandía). Como no hay sandía, tiene que haber fresa. <strong>Conclusión segura: hay fresa.</strong>
+    <br><br>
+    <strong>Paso 3.</strong> Aplicar la regla 2 a la conclusión: si hay fresa, no hay limón. Por lo tanto no hay limón.
+    <br><br>
+    <strong>Paso 4.</strong> Verificar las opciones contra la conclusión:
+    <ul>
+      <li>A: "no hay chocolate". Falso. La ausencia de sandía no contradice que haya chocolate por otra razón (la regla 1 solo dice "si sandía entonces chocolate", no que el chocolate dependa exclusivamente de la sandía).</li>
+      <li>B: "hay fresa". Verdadero, lo dedujimos en el paso 2. <strong>Esta es la respuesta.</strong></li>
+      <li>C: "hay limón". Falso, dedujimos lo contrario en el paso 3.</li>
+      <li>D: "no hay naranja". Indeterminado. La regla 3 dice "si limón entonces naranja"; como no hay limón, no podemos concluir nada sobre la naranja.</li>
+    </ul>
+    <strong>Pista verbal para el examen.</strong> En inferencias con disyunción "X o Y" (no exclusiva), si nos dan un dato de "no X", entonces "Y" es la consecuencia segura. Esa es la herramienta más simple y poderosa.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 6 ═══════════════ -->
+<div class="card" id="p6" data-block="p6">
+  <div class="card-tag">PROBLEMA 6 · INFERENCIAS LÓGICAS · TALLER UDEA ITEM 4</div>
+  <h3>Cinco amigos: playa o feria</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Cinco amigos —Alicia, Bárbara, Claudio, Daniel y Elena— deben elegir entre ir a la playa o ir a la feria el sábado. Cada uno solo puede elegir una opción y se debe cumplir:
+    <ul>
+      <li>Regla 1: si Bárbara elige ir a la feria, entonces Daniel elige ir a la playa.</li>
+      <li>Regla 2: si Claudio elige ir a la playa, entonces Elena no elige ir a la playa.</li>
+      <li>Regla 3: si Alicia elige ir a la feria, Daniel elige ir a la playa.</li>
+      <li>Regla 4: Claudio va a la playa o Alicia va a la feria.</li>
+    </ul>
+    Si se sabe que Elena escogió ir a la playa, ¿qué se puede concluir con certeza?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> Bárbara elige ir a la feria</div>
+    <div class="opcion"><span class="opcion-letra">B</span> Claudio elige ir a la playa</div>
+    <div class="opcion"><span class="opcion-letra">C</span> Alicia elige ir a la playa</div>
+    <div class="opcion"><span class="opcion-letra">D</span> Daniel elige ir a la playa</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p6')" aria-controls="rta-p6" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p6" hidden>
+    <strong>Respuesta correcta: opción D, Daniel elige ir a la playa.</strong>
+    <br><br>
+    <strong>Análisis del método.</strong> Inferencia con cuatro reglas y un dato (Elena a la playa). La técnica clave es aplicar la <em>contrapositiva</em> en la primera deducción.
+    <br><br>
+    <strong>Paso 1.</strong> Dato del enunciado: Elena va a la playa.
+    <br><br>
+    <strong>Paso 2.</strong> Considerar la regla 2 (si Claudio va a la playa, entonces Elena no va a la playa). Su contrapositiva: si Elena va a la playa, entonces Claudio NO va a la playa. Como Elena va a la playa, <strong>Claudio no va a la playa</strong>. Como cada uno elige una sola opción, <strong>Claudio va a la feria</strong>.
+    <br><br>
+    <strong>Paso 3.</strong> Aplicar la regla 4 (Claudio playa o Alicia feria). Como Claudio no va a la playa, tiene que cumplirse la otra parte: <strong>Alicia va a la feria</strong>.
+    <br><br>
+    <strong>Paso 4.</strong> Aplicar la regla 3 (si Alicia va a la feria, Daniel va a la playa). Como Alicia va a la feria, <strong>Daniel va a la playa</strong>. Esta es la conclusión segura.
+    <br><br>
+    <strong>Paso 5.</strong> Verificar las opciones:
+    <ul>
+      <li>A: "Bárbara va a la feria". Indeterminado. No hay regla que la fuerce a una u otra opción.</li>
+      <li>B: "Claudio va a la playa". Falso, dedujimos lo contrario en el paso 2.</li>
+      <li>C: "Alicia va a la playa". Falso, dedujimos en el paso 3 que va a la feria.</li>
+      <li>D: "Daniel va a la playa". Verdadero, lo dedujimos en el paso 4. <strong>Esta es la respuesta.</strong></li>
+    </ul>
+    <strong>Pista verbal para el examen.</strong> En inferencias con muchas reglas, la contrapositiva es la herramienta más subutilizada. Cada vez que tengas un dato "Y es cierto", busca una regla del tipo "si X entonces no Y" para deducir "no X". Encadenar contrapositivas resuelve la mayoría de los problemas de inferencias del examen UdeA.
+  </div>
+</div>
+
+<footer>
+  UdeA Posible · Razonamiento lógico para aspirantes con discapacidad visual<br>
+  Sesión 8 · Taller mixto cazadores · Mayo de 2026<br>
+  Problemas extraídos del banco oficial UdeA (Talleres Complementarios y solucionarios)
+</footer>
+
+</div>
+
+<script src="tts_helper.js"></script>
+<script>
+  TTS.bindSpeedSlider('speedSlider', 'speedVal');
+  TTS.buildVoiceSelector('voiceSelect');
+  TTS.setupResume('btnResume');
+
+  // Foco inicial al recuadro "cómo usar" — el lector de pantalla lo lee primero.
+  document.addEventListener('DOMContentLoaded', function () {
+    var como = document.getElementById('como-usar-section');
+    if (como) como.focus();
+  });
+
+  function toggleRta(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var btn = document.querySelector('[aria-controls="' + id + '"]');
+    var hidden = el.hasAttribute('hidden');
+    if (hidden) {
+      el.removeAttribute('hidden');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'true');
+        btn.textContent = 'Ocultar respuesta';
+      }
+    } else {
+      el.setAttribute('hidden', '');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'false');
+        btn.textContent = 'Mostrar respuesta';
+      }
+    }
+  }
+</script>
+</body>
+</html>

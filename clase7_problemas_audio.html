@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 7 — Taller de problemas tipo UdeA · Conteo y Probabilidad</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;--border:#2e2e2e;
+  --text:#e8e8e0;--text2:#888880;--text3:#555550;
+  --accent:#f0a0c8;       /* rosa-coral, identidad Sesión 7 */
+  --accent-soft:#200a18;
+  --accent-soft2:#2c0e22;
+  --accent-warm:#f0c060;
+  --accent-info:#a0c8f0;
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-size:15px;line-height:1.7;min-height:100vh;padding:2rem 1rem 4rem}
+.page{max-width:780px;margin:0 auto}
+header{margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+h1{font-size:24px;font-weight:600;line-height:1.3;margin-bottom:.4rem}
+.subtitle{font-size:14px;color:var(--text2)}
+.back{display:inline-block;color:var(--accent-info);font-size:13px;text-decoration:none;margin-bottom:1rem;font-family:'JetBrains Mono',monospace}
+.back:hover{color:var(--accent)}
+
+.como-usar{background:#1a1408;border:2px solid var(--accent-warm);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem}
+.como-usar h2{font-size:17px;color:var(--accent-warm);margin-bottom:.6rem}
+.como-usar p{font-size:14px;line-height:1.85;color:#e8d8b8;margin-bottom:.5rem}
+.como-usar p:last-child{margin-bottom:0}
+.como-usar kbd{font-family:'JetBrains Mono',monospace;font-size:12px;background:#2a200a;border:1px solid #4a3a14;border-radius:4px;padding:1px 6px;color:var(--accent-warm)}
+
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:1.25rem}
+.speed-control{display:inline-flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);padding:8px 14px;border-radius:8px}
+.speed-control label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);white-space:nowrap}
+.speed-control input[type=range]{-webkit-appearance:none;width:130px;height:6px;background:var(--border);border-radius:3px;outline:none}
+.speed-control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer}
+.speed-control input[type=range]:focus{outline:3px solid #ffeb3b;outline-offset:4px}
+.speed-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:40px}
+.voice-select{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;padding:9px 12px;border-radius:8px;min-height:44px;max-width:280px}
+.voice-select:focus{outline:3px solid #ffeb3b;outline-offset:2px}
+.btn-resume{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:8px;border:1px solid var(--accent);background:var(--accent-soft2);color:var(--accent);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;min-height:44px}
+.btn-resume:hover{background:var(--accent);color:#0f0f0f}
+.btn-resume:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1rem;padding:1.25rem}
+.card-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.04em;margin-bottom:.5rem}
+.card h3{font-size:15px;font-weight:500;margin:0 0 .5rem;color:var(--text)}
+.enunciado{font-size:14px;line-height:1.95;color:#c8c8c0;margin-bottom:.75rem}
+.enunciado strong{color:var(--text)}
+.opciones{display:flex;flex-direction:column;gap:6px;margin-bottom:.75rem}
+.opcion{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);font-size:14px;color:#b8b8b0;line-height:1.5;min-height:44px}
+.opcion-letra{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:4px;background:var(--border);color:var(--text2);flex-shrink:0}
+.respuesta-toggle{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;min-height:40px;margin-right:.5rem}
+.respuesta-toggle:hover{border-color:var(--accent)}
+.respuesta-toggle:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+.respuesta{margin-top:.75rem;padding:.95rem 1.05rem;border-radius:8px;font-size:13.5px;line-height:1.85;color:var(--text2);background:var(--accent-soft);border:1px solid var(--accent-soft2)}
+.respuesta strong{color:var(--accent)}
+.respuesta[hidden]{display:none}
+
+.tabla-verbal{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;margin:.75rem 0;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.85}
+
+.btn-play{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:8px;border:none;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;background:var(--accent);color:#0f0f0f;margin-bottom:.6rem;min-height:44px;transition:all .15s}
+.btn-play:hover{filter:brightness(1.1)}
+.btn-play.playing{background:#f06060;color:#fff}
+.btn-play:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.playing-dot{display:inline-block;width:6px;height:6px;background:#fff;border-radius:50%;animation:pulse 1s ease-in-out infinite;margin-right:4px}
+
+footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:12px;color:var(--text3);text-align:center;line-height:1.8}
+
+@media(max-width:600px){
+  body{padding:1rem .75rem 3rem}
+  h1{font-size:20px}
+  .card{padding:1rem}
+  .btn-play{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<a href="Clase7_Conteo_Probabilidad.html" class="back">← Volver a la sesión 7</a>
+
+<header>
+  <div class="label">UdeA Posible · Sesión 7 · Taller</div>
+  <h1>Taller de problemas tipo UdeA<br>Conteo y Probabilidad</h1>
+  <div class="subtitle">8 problemas con audio y respuesta justificada · Examen de admisión Universidad de Antioquia</div>
+</header>
+
+<section class="como-usar" id="como-usar-section" tabindex="-1" aria-labelledby="como-usar-titulo">
+  <h2 id="como-usar-titulo">Cómo trabajar este taller</h2>
+  <p><strong>Orden:</strong> trabájalos en orden. Los tres primeros son combinatoria pura (variación, permutación, combinación). Los siguientes dos son probabilidad clásica con espacios muestrales numéricos. Los problemas 6 y 7 introducen restricciones (bloque-juntos y complemento). El problema 8 es un problema invitado: el clásico de Monty Hall, para entrenar la intuición probabilística.</p>
+  <p><strong>Antes de oír la respuesta:</strong> intenta resolver mentalmente o describiendo el espacio muestral en voz alta. Solo después pulsa "Mostrar respuesta" para comparar tu razonamiento con la justificación detallada.</p>
+  <p><strong>Audio:</strong> el botón "Reproducir" lee enunciado y opciones con notación matemática expandida (factorial, combinaciones, variaciones). La tecla <kbd>Esc</kbd> detiene la voz.</p>
+  <p><strong>Continuar donde quedaste:</strong> al volver, el botón <em>Continuar donde quedé</em> te lleva al último problema escuchado.</p>
+</section>
+
+<div class="controls">
+  <div class="speed-control">
+    <label for="speedSlider">Velocidad de voz</label>
+    <input type="range" id="speedSlider" min="0.6" max="1.2" step="0.05" value="0.85" aria-label="Velocidad de voz">
+    <span class="speed-val" id="speedVal">0.85x</span>
+  </div>
+  <select id="voiceSelect" class="voice-select" aria-label="Voz de lectura"></select>
+  <button id="btnResume" class="btn-resume" aria-label="Continuar desde el último problema">⤴ Continuar donde quedé</button>
+</div>
+
+<!-- ═══════════════ PROBLEMA 1 ═══════════════ -->
+<div class="card" id="p1" data-block="p1">
+  <div class="card-tag">PROBLEMA 1 · VARIACIÓN · TALLER UDEA EJ. 35</div>
+  <h3>Luis y las cinco postales</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Luis viajó a Europa y quiere dar a cada uno de sus cuatro hermanos una de las cinco postales de las ciudades que visitó. ¿De cuántas formas distintas puede repartir las postales entre sus hermanos?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 24 formas</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 60 formas</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 120 formas</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 625 formas</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p1')" aria-controls="rta-p1" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p1" hidden>
+    <strong>Respuesta correcta: opción C, 120 formas.</strong>
+    <br><br>
+    <strong>Análisis del problema.</strong> Las postales se distinguen entre sí (cada una de una ciudad distinta) y los hermanos también se distinguen (cada uno recibe una postal específica). Importa el orden, en el sentido de que repartir la postal de París al hermano mayor es distinto a repartirla al menor. Como solo se reparten 4 de las 5 postales, esto es una <em>variación</em> de 5 elementos tomados de 4 en 4: V de 5 en 4.
+    <br><br>
+    <strong>Cálculo por el principio multiplicativo.</strong> Vamos repartiendo, hermano por hermano, contando las postales disponibles en cada paso:
+    <br>
+    Hermano 1: hay 5 postales para elegir. 5 opciones.
+    <br>
+    Hermano 2: queda 4 postales (una ya se entregó). 4 opciones.
+    <br>
+    Hermano 3: quedan 3 postales. 3 opciones.
+    <br>
+    Hermano 4: quedan 2 postales. 2 opciones.
+    <br><br>
+    Total: 5 por 4 por 3 por 2 igual a 120. Sobra una postal sin repartir, lo cual es coherente con el enunciado (4 hermanos, 5 postales).
+    <br><br>
+    <strong>Verificación con la fórmula.</strong> V de n en k igual a n factorial dividido entre (n menos k) factorial. V de 5 en 4 igual a 5 factorial dividido entre 1 factorial igual a 120 dividido entre 1 igual a 120. Coincide.
+    <br><br>
+    <strong>Por qué los distractores son incorrectos.</strong>
+    <br>
+    A (24 formas): es 4 factorial, contaría las permutaciones si solo hubiera 4 postales. No usa la quinta postal disponible.
+    <br>
+    B (60 formas): no corresponde a ninguna fórmula estándar para este caso. Posible distractor por confusión con C de 5 en 3 multiplicado por algo.
+    <br>
+    D (625 formas): es 5 elevado a la 4, lo que correspondería a variaciones <em>con repetición</em> (un mismo hermano podría recibir varias postales o una misma postal podría ir a varios hermanos). El problema dice "una postal a cada hermano", así que no se repite.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 2 ═══════════════ -->
+<div class="card" id="p2" data-block="p2">
+  <div class="card-tag">PROBLEMA 2 · PERMUTACIÓN · TALLER UDEA EJ. 36</div>
+  <h3>Cuatro cartas y todas sus posiciones posibles</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Se tienen cuatro cartas numeradas del 1 al 4, puestas sobre una mesa una al lado de la otra de forma que el número que contienen no se observa, en posición aleatoria. Las cartas se van volteando de izquierda a derecha. ¿Cuántos resultados posibles podrían mostrar las cuatro cartas en esa fila?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 24</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 16</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 12</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 4</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p2')" aria-controls="rta-p2" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p2" hidden>
+    <strong>Respuesta correcta: opción A, 24 resultados.</strong>
+    <br><br>
+    <strong>Análisis del problema.</strong> Hay cuatro cartas distintas (1, 2, 3, 4) y se acomodan todas en una fila. Importa el orden y se usan todas. Esto es una <em>permutación</em> de 4 elementos: P de 4 igual a 4 factorial.
+    <br><br>
+    <strong>Cálculo.</strong> 4 factorial igual a 4 por 3 por 2 por 1 igual a 24.
+    <br><br>
+    <strong>Verificación por el principio multiplicativo.</strong>
+    <br>
+    Posición 1 (la más a la izquierda): 4 cartas posibles.
+    <br>
+    Posición 2: 3 cartas posibles (una se ubicó ya).
+    <br>
+    Posición 3: 2 cartas posibles.
+    <br>
+    Posición 4: 1 carta posible (la que queda).
+    <br><br>
+    Total: 4 por 3 por 2 por 1 igual a 24. Mismo resultado.
+    <br><br>
+    <strong>Lista parcial para fijar la idea.</strong> Las primeras seis permutaciones, por ejemplo, son:
+    <div class="tabla-verbal">
+    1 2 3 4<br>
+    1 2 4 3<br>
+    1 3 2 4<br>
+    1 3 4 2<br>
+    1 4 2 3<br>
+    1 4 3 2
+    </div>
+    Esas son las seis permutaciones que empiezan en 1. Hay otras seis que empiezan en 2, otras seis que empiezan en 3 y otras seis que empiezan en 4: 6 por 4 igual a 24. Coincide.
+    <br><br>
+    <strong>Por qué los distractores son incorrectos.</strong>
+    <br>
+    B (16): es 4 al cuadrado. Sería el conteo si cada posición tuviera 4 opciones independientes con repetición permitida.
+    <br>
+    C (12): es 4 por 3, contaría solo las dos primeras posiciones como variación V de 4 en 2. Ignora las otras dos posiciones.
+    <br>
+    D (4): contaría solo las posiciones para una sola carta.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 3 ═══════════════ -->
+<div class="card" id="p3" data-block="p3">
+  <div class="card-tag">PROBLEMA 3 · COMBINACIÓN · TALLER UDEA EJ. 51</div>
+  <h3>Subconjuntos de dos elementos del conjunto {1, 2, 3, 4, 5, 6}</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Sea el conjunto D igual a {1, 2, 3, 4, 5, 6}. Si se listan todos los subconjuntos diferentes de D con dos elementos distintos, sin importar el orden, ¿cuántos subconjuntos hay?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 30</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 15</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 12</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 36</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p3')" aria-controls="rta-p3" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p3" hidden>
+    <strong>Respuesta correcta: opción B, 15 subconjuntos.</strong>
+    <br><br>
+    <strong>Análisis del problema.</strong> Se eligen 2 elementos de un total de 6. No importa el orden (un subconjunto es lo mismo independientemente del orden de listado). Es una <em>combinación</em> de 6 en 2: C de 6 en 2.
+    <br><br>
+    <strong>Cálculo por la fórmula.</strong>
+    <div class="tabla-verbal">
+    C de 6 en 2 = 6! / (2! · 4!)<br>
+    = (6 · 5 · 4!) / (2! · 4!)<br>
+    = (6 · 5) / 2<br>
+    = 30 / 2<br>
+    = 15.
+    </div>
+    <strong>Cálculo por enumeración exhaustiva.</strong>
+    <div class="tabla-verbal">
+    Pares con 1: {1,2}, {1,3}, {1,4}, {1,5}, {1,6} → 5.<br>
+    Pares con 2 (sin contar el {1,2} ya listado): {2,3}, {2,4}, {2,5}, {2,6} → 4.<br>
+    Pares con 3 nuevos: {3,4}, {3,5}, {3,6} → 3.<br>
+    Pares con 4 nuevos: {4,5}, {4,6} → 2.<br>
+    Pares con 5 nuevos: {5,6} → 1.<br>
+    Total: 5 + 4 + 3 + 2 + 1 = 15. Coincide.
+    </div>
+    <strong>Por qué los distractores son incorrectos.</strong>
+    <br>
+    A (30): es V de 6 en 2 igual a 6 por 5 igual a 30. Eso contaría las parejas <em>con</em> orden, donde {1,2} y {2,1} se cuentan como distintas. El enunciado dice "sin importar el orden", así que se descarta.
+    <br>
+    C (12): no corresponde a ninguna fórmula estándar para 6 elementos.
+    <br>
+    D (36): es 6 al cuadrado, contaría pares ordenados con repetición permitida (incluso {1,1}). El enunciado pide elementos distintos.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 4 ═══════════════ -->
+<div class="card" id="p4" data-block="p4">
+  <div class="card-tag">PROBLEMA 4 · PROBABILIDAD CLÁSICA · TALLER UDEA EJ. 9</div>
+  <h3>Probabilidad de que un número entre 1 y 400 sea cuadrado perfecto</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Un número entero se llama <em>cuadrado perfecto</em> cuando es el resultado de elevar al cuadrado otro entero. Por ejemplo, 1 igual a 1 al cuadrado, 4 igual a 2 al cuadrado, 9 igual a 3 al cuadrado, 16 igual a 4 al cuadrado, son cuadrados perfectos. Si se elige al azar un número entero entre 1 y 400 inclusive, ¿cuál es la probabilidad de que sea cuadrado perfecto?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 1 sobre 20</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 1 sobre 40</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 1 sobre 200</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 1 sobre 400</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p4')" aria-controls="rta-p4" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p4" hidden>
+    <strong>Respuesta correcta: opción A, 1 sobre 20.</strong>
+    <br><br>
+    <strong>Análisis del problema.</strong> Es probabilidad clásica: casos favorables sobre casos totales. El espacio muestral son los 400 enteros del 1 al 400 inclusive. Los casos favorables son los cuadrados perfectos en ese rango.
+    <br><br>
+    <strong>Conteo de casos favorables.</strong> Los cuadrados perfectos entre 1 y 400 son los números de la forma k al cuadrado, donde k es un entero positivo y k al cuadrado es menor o igual que 400.
+    <br>
+    1 al cuadrado igual a 1.
+    <br>
+    2 al cuadrado igual a 4.
+    <br>
+    3 al cuadrado igual a 9.
+    <br>
+    Y así sucesivamente. ¿Hasta dónde llegamos? El último valor de k tal que k al cuadrado no excede 400 satisface raíz cuadrada de 400 igual a 20. Y efectivamente 20 al cuadrado igual a 400 entra en el rango. 21 al cuadrado igual a 441, ya pasa.
+    <br>
+    Lista verbal de los 20 cuadrados perfectos:
+    <div class="tabla-verbal">
+    1, 4, 9, 16, 25, 36, 49, 64, 81, 100,<br>
+    121, 144, 169, 196, 225, 256, 289, 324, 361, 400.
+    </div>
+    Total: <strong>20 casos favorables</strong>.
+    <br><br>
+    <strong>Probabilidad.</strong> 20 sobre 400. Simplificamos dividiendo numerador y denominador por 20: 1 sobre 20.
+    <br><br>
+    <strong>Pista útil para problemas similares.</strong> El número de cuadrados perfectos entre 1 y N es la parte entera de raíz cuadrada de N. Para N igual a 400, raíz cuadrada igual a 20 exacto. Para N igual a 1000, raíz cuadrada está entre 31 y 32 (porque 31 al cuadrado igual a 961 y 32 al cuadrado igual a 1024), parte entera 31.
+    <br><br>
+    <strong>Por qué los distractores son incorrectos.</strong>
+    <br>
+    B (1 sobre 40): la mitad de la respuesta correcta. Un error común es contar solo los pares.
+    <br>
+    C (1 sobre 200): una décima parte de la correcta. Posible confusión con conteo de números primos en lugar de cuadrados.
+    <br>
+    D (1 sobre 400): contaría como si solo hubiera un cuadrado perfecto en el rango.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 5 ═══════════════ -->
+<div class="card" id="p5" data-block="p5">
+  <div class="card-tag">PROBLEMA 5 · DOS DADOS · TALLER UDEA EJ. 46</div>
+  <h3>Probabilidad de que el producto de dos dados sea cuadrado perfecto</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Se lanzan dos dados convencionales de seis caras: uno rojo y otro azul. ¿Cuál es la probabilidad de que el producto del resultado del dado rojo por el del dado azul sea un cuadrado perfecto? (Recuerda: los cuadrados perfectos posibles dentro del rango de productos son 1, 4, 9, 16, 25 y 36.)
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 2 sobre 9</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 1 sobre 6</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 1 sobre 4</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 1 sobre 9</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p5')" aria-controls="rta-p5" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p5" hidden>
+    <strong>Respuesta correcta: opción A, 2 sobre 9.</strong>
+    <br><br>
+    <strong>Análisis del problema.</strong> El espacio muestral son todos los pares ordenados (rojo, azul) con cada componente entre 1 y 6: total 6 por 6 igual a 36 pares igualmente probables.
+    <br><br>
+    <strong>Conteo de casos favorables, por valor del producto.</strong>
+    <div class="tabla-verbal">
+    Producto = 1: solo (1,1). → 1 par.<br>
+    Producto = 4: (1,4), (4,1), (2,2). → 3 pares.<br>
+    Producto = 9: (3,3). → 1 par. (1,9 y 9,1 no son posibles porque el dado no llega a 9.)<br>
+    Producto = 16: (4,4). → 1 par. (2,8 no es posible.)<br>
+    Producto = 25: (5,5). → 1 par.<br>
+    Producto = 36: (6,6). → 1 par.<br>
+    Total: 1 + 3 + 1 + 1 + 1 + 1 = 8 pares favorables.
+    </div>
+    <strong>Probabilidad.</strong> 8 sobre 36. Simplificamos dividiendo numerador y denominador por 4: 2 sobre 9.
+    <br><br>
+    <strong>Verificación verbal.</strong> Imagina la "tabla táctil" de 36 entradas, una por cada par (rojo, azul). De esos 36 pares, hay 8 cuyo producto es cuadrado perfecto. La fracción 8 sobre 36 simplifica a 2 sobre 9. Como 9 es primo con 2, ya no se puede simplificar más.
+    <br><br>
+    <strong>Pista útil.</strong> En problemas con dos dados, el espacio muestral siempre es 36. Lo único que cambia es cuántos pares cumplen la condición.
+    <br><br>
+    <strong>Por qué los distractores son incorrectos.</strong>
+    <br>
+    B (1 sobre 6): correspondería a 6 pares favorables sobre 36. Olvida los pares (1,4), (4,1) que dan producto 4.
+    <br>
+    C (1 sobre 4): correspondería a 9 pares sobre 36. Cuenta uno de más.
+    <br>
+    D (1 sobre 9): correspondería a 4 pares sobre 36. Solo cuenta los productos (1,1), (2,2), (3,3), (4,4)... pero no (4,1) ni (1,4).
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 6 ═══════════════ -->
+<div class="card" id="p6" data-block="p6">
+  <div class="card-tag">PROBLEMA 6 · BLOQUE-JUNTOS · TALLER UDEA EJ. 41</div>
+  <h3>Siete libros con dos de matemáticas que deben quedar juntos</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Juan tiene 7 libros distintos: 2 son de matemáticas y 5 son de literatura. ¿De cuántas maneras diferentes puede acomodar los 7 libros en un estante de manera que los dos libros de matemáticas estén juntos?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 5040</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 720</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 240</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 1440</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p6')" aria-controls="rta-p6" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p6" hidden>
+    <strong>Respuesta correcta: opción D, 1440 maneras.</strong>
+    <br><br>
+    <strong>Análisis del problema.</strong> Sin la restricción "los dos de matemáticas juntos", serían 7 factorial igual a 5040 ordenamientos. Pero la restricción reduce el conteo.
+    <br><br>
+    <strong>Técnica del bloque-juntos.</strong> Tratamos los dos libros de matemáticas como un solo paquete que llamamos M. Entonces, en lugar de 7 elementos, tenemos 6 a ordenar: el paquete M y los 5 libros de literatura.
+    <br>
+    Paso 1: ordenar los 6 elementos en el estante. Son 6 factorial igual a 720 ordenamientos.
+    <br>
+    Paso 2: dentro del paquete M, los dos libros de matemáticas pueden ir en dos órdenes (matemática-1 a la izquierda o matemática-2 a la izquierda). Son 2 factorial igual a 2 ordenamientos internos.
+    <br><br>
+    Por el principio multiplicativo: 720 por 2 igual a <strong>1440</strong>.
+    <br><br>
+    <strong>Verificación intuitiva.</strong> Como 5040 son todos los órdenes posibles sin restricción, y 1440 son los que cumplen la condición, la fracción de órdenes válidos es 1440 sobre 5040 igual a 2 sobre 7. Se interpreta así: si pones los 7 libros al azar, la probabilidad de que los dos de matemáticas queden juntos es 2 sobre 7. Esa lógica también permite resolver el problema "al revés".
+    <br><br>
+    <strong>Por qué los distractores son incorrectos.</strong>
+    <br>
+    A (5040): es 7 factorial. Cuenta todos los ordenamientos posibles, sin la restricción de "juntos".
+    <br>
+    B (720): es 6 factorial. Olvida multiplicar por 2 factorial, los ordenamientos internos del paquete.
+    <br>
+    C (240): no corresponde a ninguna fórmula directa para este problema.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 7 ═══════════════ -->
+<div class="card" id="p7" data-block="p7">
+  <div class="card-tag">PROBLEMA 7 · COMPLEMENTO · TALLER UDEA EJ. 28</div>
+  <h3>Probabilidad de que dos números elegidos no sean consecutivos</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Sea el conjunto A igual a {1, 2, 3, 4, 5, 6}. Si se elige al azar una pareja de elementos distintos de A, ¿cuál es la probabilidad de que los dos números no sean consecutivos? (En este conjunto, las parejas son sin orden: la pareja {1, 6} es la misma que {6, 1}.)
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 1 sobre 3</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 1 sobre 2</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 2 sobre 3</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 5 sobre 6</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p7')" aria-controls="rta-p7" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p7" hidden>
+    <strong>Respuesta correcta: opción C, 2 sobre 3.</strong>
+    <br><br>
+    <strong>Análisis del problema.</strong> Total de parejas posibles en {1, ..., 6}: C de 6 en 2 igual a 15. Parejas consecutivas: {1,2}, {2,3}, {3,4}, {4,5}, {5,6}, son 5. Parejas no consecutivas: 15 menos 5 igual a 10. La probabilidad pedida es 10 sobre 15.
+    <br><br>
+    <strong>Cálculo paso a paso.</strong>
+    <br>
+    Paso 1. Total de parejas distintas (combinaciones de 6 en 2):
+    <div class="tabla-verbal">
+    C de 6 en 2 = 6! / (2! · 4!)<br>
+    = (6 · 5) / 2<br>
+    = 30 / 2<br>
+    = 15.
+    </div>
+    Paso 2. Parejas consecutivas, enumeradas: {1,2}, {2,3}, {3,4}, {4,5}, {5,6}. Son 5.
+    <br><br>
+    Paso 3. Parejas <em>no</em> consecutivas: 15 menos 5 igual a 10.
+    <br><br>
+    Paso 4. Probabilidad de elegir una no consecutiva: 10 sobre 15. Simplificamos dividiendo numerador y denominador por 5: 2 sobre 3.
+    <br><br>
+    <strong>Por qué la técnica del complemento es la mejor.</strong> Contar parejas <em>consecutivas</em> es trivial (solo 5). Contar parejas <em>no consecutivas</em> directamente requiere casos: pares con diferencia 2, con diferencia 3, etcétera. Usar el complemento ahorra trabajo. La identidad usada es: P(no consecutivos) igual a 1 menos P(consecutivos) igual a 1 menos 5 sobre 15 igual a 10 sobre 15 igual a 2 sobre 3.
+    <br><br>
+    <strong>Por qué los distractores son incorrectos.</strong>
+    <br>
+    A (1 sobre 3): correspondería a 5 parejas favorables sobre 15. Es justamente la probabilidad <em>complementaria</em>: la de que sí sean consecutivas.
+    <br>
+    B (1 sobre 2): correspondería a 7.5 parejas sobre 15, que no es entero.
+    <br>
+    D (5 sobre 6): no corresponde a un conteo de parejas en este conjunto.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 8 ═══════════════ -->
+<div class="card" id="p8" data-block="p8">
+  <div class="card-tag">PROBLEMA 8 · MONTY HALL · INVITADO</div>
+  <h3>Las tres puertas y la decisión de cambiar</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    En un concurso de televisión hay tres puertas cerradas. Detrás de una hay un premio, detrás de las otras dos hay una cabra cada una. El concursante elige una puerta sin abrirla. Después, el presentador, que sabe dónde está el premio, abre una de las otras dos puertas, mostrando una cabra. (El presentador siempre elige una puerta con cabra para abrir, nunca la del premio.) Luego ofrece al concursante la opción de cambiar de puerta o quedarse con la elegida originalmente. ¿Cuál es la probabilidad de ganar el premio si el concursante decide <em>cambiar</em>?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 1 sobre 3</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 1 sobre 2</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 2 sobre 3</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 1 (gana siempre)</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p8')" aria-controls="rta-p8" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p8" hidden>
+    <strong>Respuesta correcta: opción C, 2 sobre 3.</strong>
+    <br><br>
+    <strong>Por qué la intuición común dice 1 sobre 2 (y por qué es incorrecta).</strong> Tras abrirse una puerta, quedan dos cerradas. La intuición dice "el premio está detrás de una, así que la probabilidad es 1 sobre 2 para cada una". Pero esa intuición ignora un detalle clave: <em>el presentador sabía dónde estaba el premio y eligió a propósito</em> abrir una puerta con cabra. Esa información cambia las probabilidades.
+    <br><br>
+    <strong>Resolución por enumeración exhaustiva.</strong> Sin pérdida de generalidad, supongamos que el concursante eligió la puerta 1. El premio puede estar en tres lugares, todos igualmente probables:
+    <div class="tabla-verbal">
+    Escenario 1 (probabilidad 1 sobre 3): premio detrás de la puerta 1 (la elegida).<br>
+    El presentador abre la 2 o la 3 (ambas con cabra).<br>
+    Si el concursante CAMBIA: pierde. Si SE QUEDA: gana.<br><br>
+    Escenario 2 (probabilidad 1 sobre 3): premio detrás de la puerta 2.<br>
+    La puerta 1 es del concursante (cabra), la 2 tiene el premio (no se abre), la 3 tiene cabra. El presentador está obligado a abrir la 3. Quedan cerradas la 1 y la 2.<br>
+    Si el concursante CAMBIA a la 2: gana. Si SE QUEDA en la 1: pierde.<br><br>
+    Escenario 3 (probabilidad 1 sobre 3): premio detrás de la puerta 3.<br>
+    Análogo al escenario 2 pero con la 2 y la 3 cambiadas. El presentador abre la 2.<br>
+    Si el concursante CAMBIA a la 3: gana. Si SE QUEDA en la 1: pierde.
+    </div>
+    <strong>Conteo de victorias.</strong>
+    <br>
+    Quedándose con la puerta 1: gana solo en el escenario 1 (probabilidad 1 sobre 3).
+    <br>
+    Cambiando: gana en los escenarios 2 y 3 (probabilidad 2 sobre 3).
+    <br><br>
+    Cambiando, la probabilidad de ganar se duplica. <strong>Conviene cambiar siempre</strong>, lo cual da probabilidad de ganar igual a 2 sobre 3.
+    <br><br>
+    <strong>Lección general.</strong> En problemas de probabilidad, lo que sabe quien actúa importa tanto como el resultado de su acción. La acción del presentador transmite información sobre dónde está el premio. Ignorar esa información lleva a la respuesta equivocada.
+    <br><br>
+    <strong>Pista útil.</strong> Cuando un problema de probabilidad parezca contraintuitivo, recurre a la enumeración exhaustiva. Listar los casos uno por uno casi siempre revela la respuesta correcta sin necesidad de fórmulas avanzadas.
+    <br><br>
+    <strong>Por qué los distractores son incorrectos.</strong>
+    <br>
+    A (1 sobre 3): es la probabilidad de ganar <em>quedándose</em> con la elección original. El enunciado pregunta por la estrategia de cambiar.
+    <br>
+    B (1 sobre 2): es la respuesta intuitiva equivocada. Ignora que el presentador no abre al azar.
+    <br>
+    D (gana siempre): cambiar no garantiza ganar; solo aumenta la probabilidad de un tercio a dos tercios. En el escenario 1, cambiar pierde.
+  </div>
+</div>
+
+<footer>
+  UdeA Posible · Razonamiento lógico para aspirantes con discapacidad visual<br>
+  Sesión 7 · Taller de Conteo y Probabilidad · Mayo de 2026<br>
+  Problemas calibrados al examen de admisión Universidad de Antioquia
+</footer>
+
+</div>
+
+<script src="tts_helper.js"></script>
+<script>
+  TTS.bindSpeedSlider('speedSlider', 'speedVal');
+  TTS.buildVoiceSelector('voiceSelect');
+  TTS.setupResume('btnResume');
+
+  // Foco inicial al recuadro "cómo usar" — el lector de pantalla lo lee primero.
+  document.addEventListener('DOMContentLoaded', function () {
+    var como = document.getElementById('como-usar-section');
+    if (como) como.focus();
+  });
+
+  function toggleRta(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var btn = document.querySelector('[aria-controls="' + id + '"]');
+    var hidden = el.hasAttribute('hidden');
+    if (hidden) {
+      el.removeAttribute('hidden');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'true');
+        btn.textContent = 'Ocultar respuesta';
+      }
+    } else {
+      el.setAttribute('hidden', '');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'false');
+        btn.textContent = 'Mostrar respuesta';
+      }
+    }
+  }
+</script>
+</body>
+</html>

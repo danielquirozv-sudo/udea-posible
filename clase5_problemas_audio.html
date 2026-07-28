@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 5 — Taller de problemas tipo UdeA · Aritmética I</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;--border:#2e2e2e;
+  --text:#e8e8e0;--text2:#888880;--text3:#555550;
+  --accent:#80e0c0;
+  --accent-soft:#0a1a16;
+  --accent-soft2:#10221c;
+  --accent-warm:#f0c060;
+  --accent-info:#a0c8f0;
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-size:15px;line-height:1.7;min-height:100vh;padding:2rem 1rem 4rem}
+.page{max-width:780px;margin:0 auto}
+header{margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+h1{font-size:24px;font-weight:600;line-height:1.3;margin-bottom:.4rem}
+.subtitle{font-size:14px;color:var(--text2)}
+.back{display:inline-block;color:var(--accent-info);font-size:13px;text-decoration:none;margin-bottom:1rem;font-family:'JetBrains Mono',monospace}
+.back:hover{color:var(--accent)}
+
+.como-usar{background:#1a1408;border:2px solid var(--accent-warm);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem}
+.como-usar h2{font-size:17px;color:var(--accent-warm);margin-bottom:.6rem}
+.como-usar p{font-size:14px;line-height:1.85;color:#e8d8b8;margin-bottom:.5rem}
+.como-usar p:last-child{margin-bottom:0}
+.como-usar kbd{font-family:'JetBrains Mono',monospace;font-size:12px;background:#2a200a;border:1px solid #4a3a14;border-radius:4px;padding:1px 6px;color:var(--accent-warm)}
+
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:1.25rem}
+.speed-control{display:inline-flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);padding:8px 14px;border-radius:8px}
+.speed-control label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);white-space:nowrap}
+.speed-control input[type=range]{-webkit-appearance:none;width:130px;height:6px;background:var(--border);border-radius:3px;outline:none}
+.speed-control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer}
+.speed-control input[type=range]:focus{outline:3px solid #ffeb3b;outline-offset:4px}
+.speed-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:40px}
+.voice-select{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;padding:9px 12px;border-radius:8px;min-height:44px;max-width:280px}
+.voice-select:focus{outline:3px solid #ffeb3b;outline-offset:2px}
+.btn-resume{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:8px;border:1px solid var(--accent);background:var(--accent-soft2);color:var(--accent);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;min-height:44px}
+.btn-resume:hover{background:var(--accent);color:#0f0f0f}
+.btn-resume:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1rem;padding:1.25rem}
+.card-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.04em;margin-bottom:.5rem}
+.card h3{font-size:15px;font-weight:500;margin:0 0 .5rem;color:var(--text)}
+.enunciado{font-size:14px;line-height:1.95;color:#c8c8c0;margin-bottom:.75rem}
+.enunciado strong{color:var(--text)}
+.opciones{display:flex;flex-direction:column;gap:6px;margin-bottom:.75rem}
+.opcion{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);font-size:14px;color:#b8b8b0;line-height:1.5;min-height:44px}
+.opcion-letra{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:4px;background:var(--border);color:var(--text2);flex-shrink:0}
+.respuesta-toggle{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;min-height:40px;margin-right:.5rem}
+.respuesta-toggle:hover{border-color:var(--accent)}
+.respuesta-toggle:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+.respuesta{margin-top:.75rem;padding:.95rem 1.05rem;border-radius:8px;font-size:13.5px;line-height:1.85;color:var(--text2);background:var(--accent-soft);border:1px solid var(--accent-soft2)}
+.respuesta strong{color:var(--accent)}
+.respuesta[hidden]{display:none}
+
+.btn-play{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:8px;border:none;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;background:var(--accent);color:#0f0f0f;margin-bottom:.6rem;min-height:44px;transition:all .15s}
+.btn-play:hover{filter:brightness(1.1)}
+.btn-play.playing{background:#f06060;color:#fff}
+.btn-play:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.playing-dot{display:inline-block;width:6px;height:6px;background:#fff;border-radius:50%;animation:pulse 1s ease-in-out infinite;margin-right:4px}
+
+footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:12px;color:var(--text3);text-align:center;line-height:1.8}
+
+@media(max-width:600px){
+  body{padding:1rem .75rem 3rem}
+  h1{font-size:20px}
+  .card{padding:1rem}
+  .btn-play{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<a href="Clase5_Aritmetica_I.html" class="back">← Volver a la sesión 5</a>
+
+<header>
+  <div class="label">UdeA Posible · Sesión 5 · Taller</div>
+  <h1>Taller de problemas tipo UdeA<br>Aritmética I — Divisibilidad, M C D y M C M</h1>
+  <div class="subtitle">8 problemas con audio y respuesta justificada · Examen de admisión Universidad de Antioquia</div>
+</header>
+
+<section class="como-usar" aria-labelledby="como-usar-titulo">
+  <h2 id="como-usar-titulo">Cómo trabajar este taller</h2>
+  <p><strong>Orden:</strong> resuélvelos en orden. Los primeros tres son directos, los siguientes tres aplican un solo concepto a la vez, y los dos últimos integran varios.</p>
+  <p><strong>Antes de oír la respuesta:</strong> intenta resolver mentalmente o con el soroban virtual. Solo después pulsa "Mostrar respuesta" para comparar tu razonamiento con la justificación.</p>
+  <p><strong>Audio:</strong> el botón "Reproducir" lee el enunciado y las opciones. La tecla <kbd>Esc</kbd> detiene la voz.</p>
+  <p><strong>Continuar donde quedaste:</strong> al volver, el botón <em>Continuar donde quedé</em> te lleva al último problema escuchado.</p>
+</section>
+
+<div class="controls">
+  <div class="speed-control">
+    <label for="speedSlider">Velocidad de voz</label>
+    <input type="range" id="speedSlider" min="0.6" max="1.2" step="0.05" value="0.9" aria-label="Velocidad de voz">
+    <span class="speed-val" id="speedVal">0.90x</span>
+  </div>
+  <select id="voiceSelect" class="voice-select" aria-label="Voz de lectura"></select>
+  <button id="btnResume" class="btn-resume" aria-label="Continuar desde el último problema">⤴ Continuar donde quedé</button>
+</div>
+
+<!-- ═══════════════ PROBLEMA 1 ═══════════════ -->
+<div class="card" id="p1" data-block="p1">
+  <div class="card-tag">PROBLEMA 1 · CRITERIO DE DIVISIBILIDAD POR 3</div>
+  <h3>¿Cuál de los siguientes números es divisible por 3?</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Sin hacer la división, indica cuál de los siguientes números es divisible por 3.
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 1.247</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 2.581</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 3.624</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 4.703</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p1')" aria-controls="rta-p1" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p1" hidden>
+    <strong>Respuesta: opción C, el número 3.624.</strong>
+    <br><br>
+    <strong>Justificación:</strong> aplicamos el criterio "suma de cifras divisible por 3".
+    <br>
+    Opción A: 1 más 2 más 4 más 7 igual a 14. 14 no es divisible por 3.
+    <br>
+    Opción B: 2 más 5 más 8 más 1 igual a 16. 16 no es divisible por 3.
+    <br>
+    Opción C: 3 más 6 más 2 más 4 igual a 15. 15 igual a 3 por 5. Divisible por 3. Aquí está.
+    <br>
+    Opción D: 4 más 7 más 0 más 3 igual a 14. 14 no es divisible por 3.
+    <br><br>
+    <strong>Observación:</strong> el método es mental y rapidísimo. En el examen, no pierdas tiempo dividiendo; suma cifras.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 2 ═══════════════ -->
+<div class="card" id="p2" data-block="p2">
+  <div class="card-tag">PROBLEMA 2 · IDENTIFICAR NÚMERO PRIMO</div>
+  <h3>¿Cuál de los siguientes números es primo?</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    De los siguientes, identifica el único que es primo.
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 51</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 57</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 67</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 87</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p2')" aria-controls="rta-p2" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p2" hidden>
+    <strong>Respuesta: opción C, el número 67.</strong>
+    <br><br>
+    <strong>Justificación:</strong> revisamos divisibilidad por primos pequeños hasta la raíz cuadrada del número.
+    <br>
+    Opción A, 51: suma de cifras 5 más 1 igual a 6, divisible por 3. Entonces 51 igual a 3 por 17. No es primo.
+    <br>
+    Opción B, 57: suma 5 más 7 igual a 12, divisible por 3. 57 igual a 3 por 19. No es primo.
+    <br>
+    Opción C, 67: termina en 7 (no por 2 ni por 5). Suma 6 más 7 igual a 13 (no por 3). Probamos por 7: 7 por 9 igual a 63, 7 por 10 igual a 70. No cabe exacto. La raíz cuadrada de 67 está entre 8 y 9, así que basta probar por 2, 3, 5 y 7. Como ninguno divide, 67 es primo.
+    <br>
+    Opción D, 87: suma 8 más 7 igual a 15, divisible por 3. 87 igual a 3 por 29. No es primo.
+    <br><br>
+    <strong>Observación:</strong> para verificar si un número <em>n</em> es primo, basta probar divisibilidad por los primos menores o iguales a la raíz cuadrada de <em>n</em>. Para números menores a 100, basta con 2, 3, 5 y 7.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 3 ═══════════════ -->
+<div class="card" id="p3" data-block="p3">
+  <div class="card-tag">PROBLEMA 3 · DESCOMPOSICIÓN EN FACTORES PRIMOS</div>
+  <h3>Descomposición en factores primos de 504</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    ¿Cuál es la descomposición en factores primos del número 504?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 2 al cuadrado por 3 por 5 por 7</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 2 al cubo por 3 al cuadrado por 7</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 2 al cuadrado por 3 al cubo por 5</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 2 al cuarto por 3 por 7</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p3')" aria-controls="rta-p3" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p3" hidden>
+    <strong>Respuesta: opción B, 2 al cubo por 3 al cuadrado por 7.</strong>
+    <br><br>
+    <strong>Justificación paso a paso.</strong> Descomponemos 504 dividiendo por primos pequeños:
+    <br>
+    504 dividido entre 2 igual a 252.
+    <br>
+    252 dividido entre 2 igual a 126.
+    <br>
+    126 dividido entre 2 igual a 63.
+    <br>
+    63 ya no es par. Probamos por 3: 63 dividido entre 3 igual a 21.
+    <br>
+    21 dividido entre 3 igual a 7.
+    <br>
+    7 dividido entre 7 igual a 1. Termina.
+    <br><br>
+    Factores: 2, 2, 2, 3, 3, 7. Por lo tanto 504 igual a 2 al cubo por 3 al cuadrado por 7.
+    <br><br>
+    <strong>Verificación:</strong> 2 al cubo es 8. 3 al cuadrado es 9. 8 por 9 es 72. 72 por 7 es 504. Coincide.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 4 ═══════════════ -->
+<div class="card" id="p4" data-block="p4">
+  <div class="card-tag">PROBLEMA 4 · MCD POR DESCOMPOSICIÓN</div>
+  <h3>Máximo común divisor de 72 y 120</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    ¿Cuál es el máximo común divisor de 72 y 120?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 8</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 12</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 24</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 36</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p4')" aria-controls="rta-p4" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p4" hidden>
+    <strong>Respuesta: opción C, máximo común divisor igual a 24.</strong>
+    <br><br>
+    <strong>Justificación por descomposición:</strong>
+    <br>
+    72 igual a 2 al cubo por 3 al cuadrado.
+    <br>
+    120 igual a 2 al cubo por 3 por 5.
+    <br><br>
+    Primos comunes: 2 y 3. Menor exponente del 2: el mínimo entre 3 y 3 es 3. Menor exponente del 3: el mínimo entre 2 y 1 es 1. El 5 no es común, no entra.
+    <br>
+    Resultado: 2 al cubo por 3 igual a 8 por 3 igual a 24.
+    <br><br>
+    <strong>Verificación:</strong> 72 dividido entre 24 igual a 3 (exacto). 120 dividido entre 24 igual a 5 (exacto). Confirmado.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 5 ═══════════════ -->
+<div class="card" id="p5" data-block="p5">
+  <div class="card-tag">PROBLEMA 5 · MCD POR EUCLIDES (ÁBACO)</div>
+  <h3>Máximo común divisor de 462 y 168 con algoritmo de Euclides</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Calcula el máximo común divisor de 462 y 168 usando el algoritmo de Euclides. Si quieres, ejecuta cada división en el soroban virtual de la sesión 2.
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 14</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 21</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 42</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 84</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p5')" aria-controls="rta-p5" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p5" hidden>
+    <strong>Respuesta: opción C, máximo común divisor igual a 42.</strong>
+    <br><br>
+    <strong>Justificación por Euclides:</strong>
+    <br>
+    Paso 1: dividimos 462 entre 168. ¿Cuántas veces cabe 168 en 462? Una vez es 168, dos veces es 336, tres veces es 504, ya pasa. Cociente 2, residuo 462 menos 336 igual a 126.
+    <br>
+    Paso 2: ahora con 168 y 126. Dividimos 168 entre 126. Una vez es 126, dos veces 252, ya pasa. Cociente 1, residuo 168 menos 126 igual a 42.
+    <br>
+    Paso 3: ahora con 126 y 42. Dividimos 126 entre 42. 42 por 3 es 126. Cociente 3, residuo 0.
+    <br>
+    Como el residuo es 0, paramos. El último divisor fue 42. Máximo común divisor igual a 42.
+    <br><br>
+    <strong>Verificación:</strong> 462 dividido entre 42 igual a 11. 168 dividido entre 42 igual a 4. Ambos exactos.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 6 ═══════════════ -->
+<div class="card" id="p6" data-block="p6">
+  <div class="card-tag">PROBLEMA 6 · MCM POR DESCOMPOSICIÓN</div>
+  <h3>Mínimo común múltiplo de 15, 18 y 20</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    ¿Cuál es el mínimo común múltiplo de los tres números 15, 18 y 20?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 90</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 120</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 180</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 360</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p6')" aria-controls="rta-p6" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p6" hidden>
+    <strong>Respuesta: opción C, mínimo común múltiplo igual a 180.</strong>
+    <br><br>
+    <strong>Justificación:</strong> descomponemos cada número.
+    <br>
+    15 igual a 3 por 5.
+    <br>
+    18 igual a 2 por 3 al cuadrado.
+    <br>
+    20 igual a 2 al cuadrado por 5.
+    <br><br>
+    Tomamos cada primo con su mayor exponente.
+    <br>
+    Mayor exponente del 2: el máximo entre 0, 1 y 2 es 2. Tomamos 2 al cuadrado.
+    <br>
+    Mayor exponente del 3: el máximo entre 1, 2 y 0 es 2. Tomamos 3 al cuadrado.
+    <br>
+    Mayor exponente del 5: el máximo entre 1, 0 y 1 es 1. Tomamos 5.
+    <br><br>
+    Multiplicamos: 4 por 9 igual a 36. 36 por 5 igual a 180.
+    <br><br>
+    <strong>Verificación:</strong> 180 dividido entre 15 igual a 12 (exacto). 180 dividido entre 18 igual a 10 (exacto). 180 dividido entre 20 igual a 9 (exacto). Confirmado.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 7 ═══════════════ -->
+<div class="card" id="p7" data-block="p7">
+  <div class="card-tag">PROBLEMA 7 · APLICACIÓN DE MCD (REPARTO EXACTO)</div>
+  <h3>Cortar tela en trozos del mismo tamaño máximo</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Una persona tiene tres rollos de tela: uno de 90 metros, otro de 120 metros y otro de 150 metros. Quiere cortar los tres rollos en trozos de la misma longitud, sin que sobre ningún pedazo, y desea que cada trozo sea lo más largo posible. ¿Cuál es la longitud de cada trozo?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 15 metros</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 30 metros</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 45 metros</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 60 metros</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p7')" aria-controls="rta-p7" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p7" hidden>
+    <strong>Respuesta: opción B, 30 metros.</strong>
+    <br><br>
+    <strong>Justificación:</strong> "trozos del mismo tamaño máximo en los tres rollos" pide el máximo común divisor de 90, 120 y 150.
+    <br><br>
+    Descomposición:
+    <br>
+    90 igual a 2 por 3 al cuadrado por 5.
+    <br>
+    120 igual a 2 al cubo por 3 por 5.
+    <br>
+    150 igual a 2 por 3 por 5 al cuadrado.
+    <br><br>
+    Primos comunes a los tres: 2, 3 y 5.
+    <br>
+    Menor exponente del 2: el mínimo entre 1, 3 y 1 es 1. Tomamos 2.
+    <br>
+    Menor exponente del 3: el mínimo entre 2, 1 y 1 es 1. Tomamos 3.
+    <br>
+    Menor exponente del 5: el mínimo entre 1, 1 y 2 es 1. Tomamos 5.
+    <br><br>
+    Multiplicamos: 2 por 3 por 5 igual a 30.
+    <br><br>
+    <strong>Respuesta:</strong> 30 metros por trozo. Eso da 3 trozos del primer rollo, 4 del segundo y 5 del tercero. Total 12 trozos, todos de 30 metros.
+    <br><br>
+    <strong>Pista verbal para identificar el tipo de problema:</strong> cuando el problema dice "el mayor tamaño posible" o "la mayor cantidad posible que reparte exacto", piensa en máximo común divisor.
+  </div>
+</div>
+
+<!-- ═══════════════ PROBLEMA 8 ═══════════════ -->
+<div class="card" id="p8" data-block="p8">
+  <div class="card-tag">PROBLEMA 8 · APLICACIÓN DE MCM (SINCRONIZACIÓN)</div>
+  <h3>Tres semáforos que se reinician al mismo tiempo</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    En una avenida hay tres semáforos que en el instante de las 7:00 a.m. cambian a verde al mismo tiempo. El primero cambia a verde cada 45 segundos, el segundo cada 60 segundos y el tercero cada 75 segundos. ¿Después de cuánto tiempo, en minutos, vuelven a coincidir los tres semáforos en verde?
+  </div>
+  <div class="opciones">
+    <div class="opcion"><span class="opcion-letra">A</span> 5 minutos</div>
+    <div class="opcion"><span class="opcion-letra">B</span> 10 minutos</div>
+    <div class="opcion"><span class="opcion-letra">C</span> 15 minutos</div>
+    <div class="opcion"><span class="opcion-letra">D</span> 20 minutos</div>
+  </div>
+  <button class="respuesta-toggle" onclick="toggleRta('rta-p8')" aria-controls="rta-p8" aria-expanded="false">Mostrar respuesta</button>
+  <div class="respuesta" id="rta-p8" hidden>
+    <strong>Respuesta: opción C, 15 minutos.</strong>
+    <br><br>
+    <strong>Justificación:</strong> "primer instante en que vuelven a coincidir" pide el mínimo común múltiplo de 45, 60 y 75 segundos.
+    <br><br>
+    Descomposición:
+    <br>
+    45 igual a 3 al cuadrado por 5.
+    <br>
+    60 igual a 2 al cuadrado por 3 por 5.
+    <br>
+    75 igual a 3 por 5 al cuadrado.
+    <br><br>
+    Tomamos cada primo con su mayor exponente.
+    <br>
+    Mayor exponente del 2: el máximo entre 0, 2 y 0 es 2. Tomamos 2 al cuadrado.
+    <br>
+    Mayor exponente del 3: el máximo entre 2, 1 y 1 es 2. Tomamos 3 al cuadrado.
+    <br>
+    Mayor exponente del 5: el máximo entre 1, 1 y 2 es 2. Tomamos 5 al cuadrado.
+    <br><br>
+    Multiplicamos: 4 por 9 igual a 36. 36 por 25 igual a 900.
+    <br><br>
+    900 segundos. Convertimos a minutos: 900 dividido entre 60 igual a 15. La respuesta es 15 minutos.
+    <br><br>
+    <strong>Pista verbal:</strong> cuando el problema dice "primer instante en que coinciden", "vuelven a sincronizarse", "se reinician juntos", piensa en mínimo común múltiplo.
+    <br><br>
+    <strong>Atención al detalle:</strong> el examen de admisión a veces da los datos en una unidad y pide la respuesta en otra (segundos a minutos, por ejemplo). Siempre haz la conversión final antes de elegir opción.
+  </div>
+</div>
+
+<footer>
+  UdeA Posible · Razonamiento lógico para aspirantes con discapacidad visual<br>
+  Sesión 5 · Taller · 27 de abril de 2026<br>
+  Problemas calibrados al examen de admisión Universidad de Antioquia
+</footer>
+
+</div>
+
+<script src="tts_helper.js"></script>
+<script>
+  TTS.bindSpeedSlider('speedSlider', 'speedVal');
+  TTS.buildVoiceSelector('voiceSelect');
+  TTS.setupResume('btnResume');
+
+  function toggleRta(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var btn = document.querySelector('[aria-controls="' + id + '"]');
+    var hidden = el.hasAttribute('hidden');
+    if (hidden) {
+      el.removeAttribute('hidden');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'true');
+        btn.textContent = 'Ocultar respuesta';
+      }
+    } else {
+      el.setAttribute('hidden', '');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'false');
+        btn.textContent = 'Mostrar respuesta';
+      }
+    }
+  }
+</script>
+</body>
+</html>

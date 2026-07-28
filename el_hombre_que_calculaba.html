@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UdeA Posible — El hombre que calculaba · 3 capítulos</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;--border:#2e2e2e;--accent:#c8f060;--accent2:#f0a060;--accent3:#a0c8f0;--accent4:#d0a0f0;--text:#e8e8e0;--text2:#888880;--text3:#555550;--radius:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-size:15px;line-height:1.7;min-height:100vh;padding:2rem 1rem 4rem}
+.page{max-width:740px;margin:0 auto}
+header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+h1{font-size:22px;font-weight:600;line-height:1.3;margin-bottom:.4rem}
+.subtitle{font-size:13px;color:var(--text2)}
+h2{font-size:18px;font-weight:600;margin:2.5rem 0 .5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+h3{font-size:15px;font-weight:500;margin:1.5rem 0 .3rem;color:var(--text)}
+.cap-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid var(--border);margin-bottom:.5rem}
+.tag-c1{color:var(--accent);border-color:#1e2a0e;background:#0f1508}
+.tag-c2{color:var(--accent3);border-color:#1a2a3a;background:#0a1520}
+.tag-c3{color:var(--accent2);border-color:#3a2a10;background:#1a1208}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:.75rem;padding:1.25rem;overflow:hidden}
+.card-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.04em;margin-bottom:.5rem}
+.card h3{margin:0 0 .5rem}
+.enunciado{font-size:14px;line-height:1.9;color:#c8c8c0;margin-bottom:.75rem}
+.respuesta{margin-top:.75rem;padding:.9rem 1rem;border-radius:8px;font-size:13px;line-height:1.8;color:var(--text2);background:#0a140a;border:1px solid #1e3010}
+.respuesta strong{color:var(--accent);font-weight:500}
+.btn-play{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:8px;border:none;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;background:var(--accent);color:#0f0f0f;margin-bottom:.5rem;min-height:44px;transition:all .15s}
+.btn-play:hover{background:#d4f570}
+.btn-play.playing{background:#f06060;color:#fff}
+.speed-control{display:inline-flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);padding:8px 14px;border-radius:8px;margin-bottom:1rem}
+.speed-control label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);white-space:nowrap}
+.speed-control input[type=range]{-webkit-appearance:none;width:110px;height:6px;background:var(--border);border-radius:3px;outline:none}
+.speed-control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer}
+.speed-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:32px}
+.toc{margin-bottom:2rem}
+.toc a{display:block;color:var(--accent3);font-size:13px;text-decoration:none;padding:4px 0;border-bottom:1px solid var(--border)}
+.toc a:hover{color:var(--accent)}
+footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:12px;color:var(--text3);text-align:center;line-height:1.8}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.playing-dot{display:inline-block;width:6px;height:6px;background:#f06060;border-radius:50%;animation:pulse 1s ease-in-out infinite;margin-right:4px}
+@media(max-width:600px){
+  body{padding:1rem .75rem 3rem}
+  h1{font-size:19px}h2{font-size:16px}
+  .card{padding:1rem}
+  .enunciado{font-size:14px}
+  .btn-play{width:100%;justify-content:center}
+  .toc a{font-size:14px;padding:8px 0}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="label">UdeA Posible · Discapacidad Visual · Bitácora complementaria</div>
+  <h1>El hombre que calculaba<br>Tres capítulos para el preparatorio</h1>
+  <div class="subtitle">Malba Tahan · Narrativa matemática accesible con audio · Razonamiento lógico</div>
+</header>
+
+<div class="speed-control">
+  <label>Velocidad de voz</label>
+  <input type="range" id="speedSlider" min="0.6" max="1.2" step="0.05" value="0.82" oninput="document.getElementById('speedVal').textContent=parseFloat(this.value).toFixed(2)+'x'">
+  <span class="speed-val" id="speedVal">0.82x</span>
+</div>
+
+<nav class="toc" aria-label="Tabla de contenido">
+  <strong style="color:var(--text2);font-size:12px">Contenido</strong>
+  <a href="#cap3">Capítulo III — Los 35 camellos (fracciones, herencia)</a>
+  <a href="#cap5">Capítulo V — Las cuatro cuatros (operaciones, creatividad)</a>
+  <a href="#cap6">Capítulo VI — La cuenta del hostelero (paradoja, suma)</a>
+  <a href="index.html" style="color:var(--accent)">← Volver a todas las sesiones</a>
+</nav>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!--  CAPÍTULO III — LOS 35 CAMELLOS                                       -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<h2 id="cap3"><span class="cap-tag tag-c1">Cap. III</span> Los 35 camellos</h2>
+
+<!-- ── Narrativa ─────────────────────────────────────────────── -->
+<div class="card">
+  <div class="card-tag">NARRATIVA · LECTURA EN VOZ ALTA (5 min)</div>
+  <h3>C1: La historia — un reparto imposible</h3>
+  <button class="btn-play" onclick="playTTS()">▶ Reproducir</button>
+  <div class="enunciado">
+    Hace muchos siglos, en un camino del desierto, Beremiz Samir, el joven calculador persa, viajaba montado en un camello cuando encontró a tres hermanos discutiendo acaloradamente junto a una manada de camellos.
+    <br><br>
+    El padre de los tres hermanos había muerto y había dejado en herencia treinta y cinco camellos. En su testamento, ordenaba lo siguiente: al hijo mayor le correspondía la mitad de los camellos, al hijo del medio le correspondía una tercera parte, y al hijo menor le correspondía una novena parte.
+    <br><br>
+    El problema era grave. La mitad de treinta y cinco es diecisiete y medio. La tercera parte de treinta y cinco no es un número entero. La novena parte tampoco. Los hermanos no querían partir ningún camello en pedazos, porque un camello vivo es más valioso que dos medios camellos muertos. Discutían sin encontrar solución.
+    <br><br>
+    Beremiz escuchó el problema con calma, pensó unos instantes y dijo: "Yo voy a resolver este reparto de manera justa. Pero para hacerlo, agregaré mi propio camello a la manada."
+    <br><br>
+    Los hermanos se miraron sorprendidos. Ahora había treinta y seis camellos en total. Beremiz continuó: "Ahora la cuenta es sencilla. La mitad de treinta y seis son dieciocho. Esos son para el hermano mayor. La tercera parte de treinta y seis son doce. Esos son para el hermano del medio. La novena parte de treinta y seis son cuatro. Esos son para el hermano menor."
+    <br><br>
+    Los hermanos sumaron: dieciocho más doce más cuatro son treinta y cuatro camellos. Habían sobrado dos camellos de los treinta y seis. Beremiz sonrió: "Uno de esos camellos que sobran es el mío, que recupero. El otro me lo quedo como pago justo por haber resuelto el problema." Y así, todos quedaron contentos: cada hermano había recibido más de lo que su padre le dejaba en herencia, y Beremiz se fue con dos camellos en lugar de uno.
+  </div>
+</div>
+
+<!-- ── Problema matemático ─────────────────────────────────────── -->
+<div class="card">
+  <div class="card-tag">PROBLEMA · PAUSA PARA RAZONAR</div>
+  <h3>C2: Detente aquí — ¿qué está pasando?</h3>
+  <button class="btn-play" onclick="playTTS()">▶ Reproducir</button>
+  <div class="enunciado">
+    Antes de explicar, piensen con el grupo:
+    <br><br>
+    Pregunta uno. El padre le prometió al hijo mayor la mitad de treinta y cinco. La mitad de treinta y cinco es diecisiete y medio. Pero el hijo mayor recibió dieciocho. ¿Recibió más o menos de lo que le correspondía? ¿Por qué se fueron contentos todos los hermanos?
+    <br><br>
+    Pregunta dos. La suma de un medio, más un tercio, más un noveno. ¿Suma uno entero, o suma menos que uno? Calcúlenlo mentalmente o con el ábaco.
+    <br><br>
+    Pregunta tres. ¿Por qué Beremiz necesitó agregar un camello que después recuperó? ¿Fue un truco, o hay una razón matemática real?
+  </div>
+</div>
+
+<!-- ── Solución ────────────────────────────────────────────────── -->
+<div class="card">
+  <div class="card-tag">SOLUCIÓN · POR QUÉ FUNCIONA MATEMÁTICAMENTE</div>
+  <h3>C3: La clave está en las fracciones</h3>
+  <button class="btn-play" onclick="playTTS()">▶ Reproducir</button>
+  <div class="enunciado">
+    El secreto de Beremiz no es un truco de magia, es aritmética pura.
+    <br><br>
+    <strong>Paso uno: sumar las fracciones de la herencia.</strong> Un medio más un tercio más un noveno. Para sumar fracciones necesitamos un denominador común. El mínimo común múltiplo de dos, tres y nueve es dieciocho. Entonces: un medio es igual a nueve dieciochoavos. Un tercio es igual a seis dieciochoavos. Un noveno es igual a dos dieciochoavos. La suma total es nueve más seis más dos, igual a diecisiete dieciochoavos.
+    <br><br>
+    <strong>Paso dos: interpretar ese resultado.</strong> Diecisiete dieciochoavos es menor que uno entero. Falta un dieciochoavo para completar el todo. Esto significa que el testamento del padre no repartía los camellos por completo: dejaba sin asignar una dieciochoava parte de la herencia.
+    <br><br>
+    <strong>Paso tres: entender la jugada de Beremiz.</strong> Al prestar su camello, él no cambió las fracciones, solo hizo que treinta y seis fuera un número divisible exactamente entre dos, entre tres y entre nueve. Así pudo repartir sin fracciones rotas. Los hermanos recibieron dieciocho, doce y cuatro, que es un total de treinta y cuatro. Sobraron dos camellos: uno era el prestado, y el otro era justamente ese pedacito que el testamento no había repartido, convertido en camello entero.
+    <br><br>
+    <strong>Paso cuatro: verificar que cada hijo ganó.</strong> El mayor debía recibir la mitad de treinta y cinco, que son diecisiete con cinco décimas; recibió dieciocho. El del medio debía recibir un tercio de treinta y cinco, que son once con seis; recibió doce. El menor debía recibir un noveno de treinta y cinco, que son tres con ocho; recibió cuatro. Todos recibieron un poquito más de lo prometido, y aun así sobró un camello para Beremiz.
+  </div>
+  <div class="respuesta">
+    <strong>Moraleja matemática:</strong> cuando las fracciones de un reparto no suman uno entero, el reparto está incompleto. Beremiz no hizo trampa: aprovechó el hueco que dejó el testamento. El camello que se llevó estaba matemáticamente disponible desde el principio.<br><br>
+    <strong>Conexión con la sesión 3 y 4:</strong> este capítulo es la mejor introducción viva a fracciones con distinto denominador y a la idea de proporción. Se puede retomar cuando se trabaje mínimo común múltiplo.
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!--  CAPÍTULO V — LAS CUATRO CUATROS                                      -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<h2 id="cap5"><span class="cap-tag tag-c2">Cap. V</span> Las cuatro cuatros</h2>
+
+<!-- ── Narrativa ─────────────────────────────────────────────── -->
+<div class="card">
+  <div class="card-tag">NARRATIVA · LECTURA EN VOZ ALTA (3 min)</div>
+  <h3>C4: La historia — un reto en el camino</h3>
+  <button class="btn-play" onclick="playTTS()">▶ Reproducir</button>
+  <div class="enunciado">
+    Durante el viaje hacia Bagdad, Beremiz Samir y su compañero se detuvieron a descansar a la sombra de una palmera. Mientras bebían agua, un hombre desconocido se acercó con aire desafiante y le dijo a Beremiz:
+    <br><br>
+    "He oído que tú eres el gran calculador. Pues aquí tengo un reto para ti. Usando exactamente cuatro cuatros, y solamente cuatro cuatros, y las operaciones que conozcas, como sumar, restar, multiplicar y dividir, deberás formar todos los números enteros desde el uno hasta el diez. ¿Serás capaz?"
+    <br><br>
+    Beremiz pidió un momento para pensar. Los ojos de su compañero, que era el narrador de la historia, se abrieron con asombro. Él pensaba que era imposible formar tantos números con solo cuatro dígitos iguales. Pero Beremiz, tras unos segundos, comenzó a responder uno por uno, sin titubear.
+    <br><br>
+    Este juego, conocido como "el juego de las cuatro cuatros", se volvió uno de los pasatiempos favoritos de matemáticos de todas las épocas. No requiere papel. No requiere ver. Solo requiere imaginación y memoria de las operaciones básicas.
+  </div>
+</div>
+
+<!-- ── Soluciones del 1 al 10 ──────────────────────────────────── -->
+<div class="card">
+  <div class="card-tag">SOLUCIÓN · DEL UNO AL DIEZ EN VOZ ALTA</div>
+  <h3>C5: Las diez respuestas de Beremiz</h3>
+  <button class="btn-play" onclick="playTTS()">▶ Reproducir</button>
+  <div class="enunciado">
+    Cada expresión usa exactamente cuatro cuatros. Escuchen con atención y verifiquen mentalmente:
+    <br><br>
+    <strong>Uno:</strong> cuatro dividido cuatro, más cuatro dividido cuatro. Es decir, uno más uno. Pero cuidado, esto usa cuatro cuatros. Verifiquen: uno más uno es dos, no uno. Corrección: <strong>cuatro más cuatro, dividido entre cuatro más cuatro.</strong> Ocho dividido ocho, igual a uno.
+    <br><br>
+    <strong>Dos:</strong> cuatro dividido cuatro, más cuatro dividido cuatro. Es uno más uno, igual a dos.
+    <br><br>
+    <strong>Tres:</strong> cuatro más cuatro más cuatro, dividido entre cuatro. Doce dividido cuatro, igual a tres.
+    <br><br>
+    <strong>Cuatro:</strong> cuatro, más cuatro por la diferencia de cuatro menos cuatro. Es decir, cuatro más cuatro por cero. Cuatro por cero es cero. Cuatro más cero, igual a cuatro.
+    <br><br>
+    <strong>Cinco:</strong> cuatro por cuatro, más cuatro, todo dividido entre cuatro. Dieciséis más cuatro son veinte. Veinte dividido cuatro, igual a cinco.
+    <br><br>
+    <strong>Seis:</strong> cuatro más cuatro, más cuatro, dividido entre cuatro. Esperen, eso da tres. Corrección: <strong>cuatro más la diferencia de cuatro más cuatro, dividido entre cuatro.</strong> Es cuatro más ocho dividido cuatro. Ocho dividido cuatro es dos. Cuatro más dos, igual a seis.
+    <br><br>
+    <strong>Siete:</strong> cuatro más cuatro, menos cuatro dividido cuatro. Ocho menos uno, igual a siete.
+    <br><br>
+    <strong>Ocho:</strong> cuatro más cuatro, más cuatro menos cuatro. Ocho más cero, igual a ocho.
+    <br><br>
+    <strong>Nueve:</strong> cuatro más cuatro, más cuatro dividido cuatro. Ocho más uno, igual a nueve.
+    <br><br>
+    <strong>Diez:</strong> cuatro más cuatro por cuatro, todo menos cuatro, dividido por algo... vamos con la clásica: <strong>cuarenta y cuatro, menos cuatro, dividido entre cuatro.</strong> Cuarenta dividido cuatro, igual a diez. Esta versión usa la licencia de juntar dos cuatros para formar el número cuarenta y cuatro.
+  </div>
+  <div class="respuesta">
+    <strong>Para decir en voz alta y recordar:</strong><br>
+    1 = (4+4)÷(4+4)<br>
+    2 = 4÷4 + 4÷4<br>
+    3 = (4+4+4)÷4<br>
+    4 = 4 + 4×(4−4)<br>
+    5 = (4×4 + 4)÷4<br>
+    6 = 4 + (4+4)÷4<br>
+    7 = 4+4 − 4÷4<br>
+    8 = 4+4 + 4−4<br>
+    9 = 4+4 + 4÷4<br>
+    10 = (44 − 4)÷4<br><br>
+    <strong>¿Por qué es útil este juego?</strong> Entrena la fluidez con operaciones básicas, la jerarquía de operaciones (paréntesis primero, luego multiplicación y división, luego suma y resta), y la creatividad combinatoria. Todo sin necesidad de ver nada.
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!--  CAPÍTULO VI — LA CUENTA DEL HOSTELERO                                -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<h2 id="cap6"><span class="cap-tag tag-c3">Cap. VI</span> La cuenta del hostelero</h2>
+
+<!-- ── Narrativa ─────────────────────────────────────────────── -->
+<div class="card">
+  <div class="card-tag">NARRATIVA · LECTURA EN VOZ ALTA (4 min)</div>
+  <h3>C6: La historia — una moneda que desaparece</h3>
+  <button class="btn-play" onclick="playTTS()">▶ Reproducir</button>
+  <div class="enunciado">
+    Tres viajeros llegaron cansados a una pequeña hospedería en las afueras de la ciudad. Pidieron al hostelero una habitación para pasar la noche. El hostelero les dijo: "La habitación cuesta treinta monedas en total." Los tres viajeros aportaron diez monedas cada uno, sumaron las treinta monedas y pagaron.
+    <br><br>
+    Cuando los viajeros subieron a descansar, el hostelero recordó que había una promoción esa noche: la habitación costaba solo veinticinco monedas, no treinta. Sintiéndose honesto, llamó al mozo y le dijo: "Sube estas cinco monedas y devuélveselas a los huéspedes."
+    <br><br>
+    El mozo, sin embargo, era un pícaro. En el camino pensó: "Cinco monedas entre tres huéspedes no se reparte bien, saldrían cantidades rotas. Mejor les doy una moneda a cada uno, y me guardo dos para mí." Y así lo hizo. Llegó al cuarto, le dio una moneda a cada viajero, y se embolsó dos monedas.
+    <br><br>
+    Hasta aquí todo parece en orden. Pero alguien en la hospedería, al escuchar la historia, planteó lo siguiente:
+    <br><br>
+    "Cada viajero pagó inicialmente diez monedas y recibió una moneda de vuelta. Entonces cada viajero pagó, en realidad, nueve monedas. Tres viajeros por nueve monedas, son veintisiete monedas. El mozo se quedó con dos monedas. Veintisiete más dos son veintinueve monedas. Pero inicialmente pagaron treinta monedas. ¿Dónde está la moneda que falta?"
+    <br><br>
+    Beremiz escuchó el planteamiento con una sonrisa. "Aquí no hay ninguna moneda perdida", dijo. "Lo que hay es una cuenta mal hecha, que mezcla dineros que no deben mezclarse."
+  </div>
+</div>
+
+<!-- ── Pregunta y pausa ────────────────────────────────────────── -->
+<div class="card">
+  <div class="card-tag">PROBLEMA · PAUSA PARA RAZONAR</div>
+  <h3>C7: Detente aquí — ¿dónde está la moneda?</h3>
+  <button class="btn-play" onclick="playTTS()">▶ Reproducir</button>
+  <div class="enunciado">
+    Antes de que Beremiz explique, piensen:
+    <br><br>
+    Pregunta uno. ¿Es correcto decir que cada viajero pagó nueve monedas? Sí o no, y por qué.
+    <br><br>
+    Pregunta dos. ¿La suma "veintisiete más dos igual a veintinueve" es una suma que tiene sentido? ¿Qué representa cada parte?
+    <br><br>
+    Pregunta tres. Si ustedes fueran el contador, ¿cómo escribirían la cuenta real de las treinta monedas originales? ¿Dónde fue a parar cada moneda?
+  </div>
+</div>
+
+<!-- ── Solución ────────────────────────────────────────────────── -->
+<div class="card">
+  <div class="card-tag">SOLUCIÓN · DESMONTAR LA PARADOJA</div>
+  <h3>C8: La explicación — seguir el rastro de cada moneda</h3>
+  <button class="btn-play" onclick="playTTS()">▶ Reproducir</button>
+  <div class="enunciado">
+    No hay ninguna moneda perdida. Lo que hay es un error lógico en cómo se planteó la suma. Veamos.
+    <br><br>
+    <strong>Contabilidad correcta de las treinta monedas:</strong><br>
+    El hostelero se quedó con veinticinco monedas, que es el precio real de la habitación.<br>
+    El mozo se quedó con dos monedas, que fueron las que robó.<br>
+    Cada uno de los tres viajeros recuperó una moneda, es decir, recuperaron tres monedas en total.<br>
+    Sumemos: veinticinco más dos más tres, igual a treinta. Las treinta monedas están completas, cada una en su lugar.
+    <br><br>
+    <strong>¿Dónde está el error en la cuenta original?</strong> El error está en la frase "veintisiete más dos igual a veintinueve". Esa suma no tiene sentido porque mezcla dos cosas distintas.
+    <br><br>
+    Los nueve monedas que pagó cada viajero, multiplicadas por tres, dan veintisiete monedas. Esas veintisiete monedas incluyen las veinticinco del hostelero más las dos del mozo. Es decir, las dos monedas del mozo ya están dentro de las veintisiete.
+    <br><br>
+    Por eso es un disparate sumar otra vez las dos monedas del mozo a las veintisiete. Es contarlas dos veces. Lo correcto sería restar: veintisiete menos dos, igual a veinticinco, que son las que se quedó el hostelero. Y luego sumar las tres que recibieron los viajeros: veinticinco más tres más dos, igual a treinta.
+    <br><br>
+    <strong>La lección:</strong> cuando alguien les plantee un problema que parece una paradoja, revisen primero qué está sumando y qué está restando. Muchas veces el truco está en sumar algo que ya estaba incluido en otro número.
+  </div>
+  <div class="respuesta">
+    <strong>Regla de oro contable:</strong> el dinero se sigue con el rastro físico, no con frases pegadas. Pregunten siempre: "¿dónde está cada moneda ahora?". Si la cuenta cierra, no hay paradoja.<br><br>
+    <strong>Versión mental para recordar:</strong> las treinta monedas se dividen así: veinticinco al hostelero, dos al mozo, tres devueltas a los viajeros. Eso es todo. El resto es retórica tramposa.
+  </div>
+</div>
+
+
+<footer>
+  UdeA Posible · Preparatorio para aspirantes con discapacidad visual<br>
+  Material complementario basado en "El hombre que calculaba" de Malba Tahan<br>
+  Razonamiento Lógico · 2026
+</footer>
+
+</div>
+
+<script>
+var currentBtn = null;
+function getSpeed() { return parseFloat(document.getElementById('speedSlider').value) || 0.82; }
+function stopCurrent() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (currentBtn) {
+    currentBtn.classList.remove('playing');
+    currentBtn.innerHTML = '▶ Reproducir';
+  }
+  currentBtn = null;
+}
+function playTTS() {
+  const btn = event.target.closest('.btn-play');
+  if (currentBtn === btn) { stopCurrent(); return; }
+  stopCurrent();
+  if (!window.speechSynthesis) { alert('Abre esta pagina en Chrome o Safari para escuchar el audio.'); return; }
+
+  const card = btn.closest('.card');
+  const enunciado = card.querySelector('.enunciado').textContent.trim();
+
+  const utter = new SpeechSynthesisUtterance(enunciado);
+  utter.lang = 'es-CO';
+  utter.rate = getSpeed();
+  utter.pitch = 1.0;
+  utter.volume = 1.0;
+
+  var voices = window.speechSynthesis.getVoices();
+  var v = voices.find(function(v){ return v.lang === 'es-CO'; }) || voices.find(function(v){ return v.lang.indexOf('es') === 0; });
+  if (v) utter.voice = v;
+
+  currentBtn = btn;
+  btn.classList.add('playing');
+  btn.innerHTML = '<span class="playing-dot"></span> Detener';
+
+  utter.onend = function() { stopCurrent(); };
+  utter.onerror = function() { stopCurrent(); };
+
+  window.speechSynthesis.speak(utter);
+}
+if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = function(){};
+</script>
+</body>
+</html>

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 5 — Aritmética I (divisibilidad, M C D y M C M) · UdeA Posible</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0f0f;--surface:#1a1a1a;--surface2:#222;--border:#2e2e2e;
+  --text:#e8e8e0;--text2:#888880;--text3:#555550;
+  --accent:#80e0c0;       /* verde-aguamarina, identidad Sesión 5 */
+  --accent-soft:#0a1a16;
+  --accent-soft2:#10221c;
+  --accent-warm:#f0c060;  /* color para "cómo usar" */
+  --accent-info:#a0c8f0;  /* color para enlaces a otras herramientas */
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;font-size:15px;line-height:1.7;min-height:100vh;padding:2rem 1rem 4rem}
+.page{max-width:780px;margin:0 auto}
+
+header{margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+h1{font-size:24px;font-weight:600;line-height:1.3;margin-bottom:.4rem}
+.subtitle{font-size:14px;color:var(--text2)}
+.back{display:inline-block;color:var(--accent-info);font-size:13px;text-decoration:none;margin-bottom:1rem;font-family:'JetBrains Mono',monospace}
+.back:hover{color:var(--accent)}
+
+/* "Cómo usar" — recuadro arriba (regla #9 de la experta) */
+.como-usar{background:#1a1408;border:2px solid var(--accent-warm);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem}
+.como-usar h2{font-size:17px;color:var(--accent-warm);margin-bottom:.6rem}
+.como-usar p{font-size:14px;line-height:1.85;color:#e8d8b8;margin-bottom:.5rem}
+.como-usar p:last-child{margin-bottom:0}
+.como-usar kbd{font-family:'JetBrains Mono',monospace;font-size:12px;background:#2a200a;border:1px solid #4a3a14;border-radius:4px;padding:1px 6px;color:var(--accent-warm)}
+
+/* Controles globales */
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:1.25rem}
+.speed-control{display:inline-flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);padding:8px 14px;border-radius:8px}
+.speed-control label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);white-space:nowrap}
+.speed-control input[type=range]{-webkit-appearance:none;width:130px;height:6px;background:var(--border);border-radius:3px;outline:none}
+.speed-control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);cursor:pointer}
+.speed-control input[type=range]:focus{outline:3px solid #ffeb3b;outline-offset:4px}
+.speed-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);min-width:40px}
+.voice-select{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;padding:9px 12px;border-radius:8px;min-height:44px;max-width:280px}
+.voice-select:focus{outline:3px solid #ffeb3b;outline-offset:2px}
+.btn-resume{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:8px;border:1px solid var(--accent);background:var(--accent-soft2);color:var(--accent);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;min-height:44px}
+.btn-resume:hover{background:var(--accent);color:#0f0f0f}
+.btn-resume:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+
+/* TOC */
+.toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.75rem}
+.toc-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+.toc a{display:block;color:var(--accent-info);font-size:13px;text-decoration:none;padding:5px 0;border-bottom:1px solid #1a1a1a}
+.toc a:last-child{border-bottom:none}
+.toc a:hover, .toc a:focus{color:var(--accent);outline:none}
+
+/* Encabezados de bloques */
+h2.bloque{font-size:18px;font-weight:600;margin:2.25rem 0 .5rem;padding-top:1.25rem;border-top:1px solid var(--border)}
+h2.bloque .tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:20px;color:var(--accent);border:1px solid var(--accent-soft2);background:var(--accent-soft);margin-right:.5rem}
+
+/* Tarjetas */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:.75rem;padding:1.25rem}
+.card-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.04em;margin-bottom:.5rem}
+.card h3{font-size:15px;font-weight:500;margin:0 0 .5rem;color:var(--text)}
+.enunciado{font-size:14px;line-height:1.95;color:#c8c8c0}
+.enunciado strong{color:var(--text)}
+.enunciado em{color:var(--accent);font-style:normal}
+.respuesta{margin-top:.85rem;padding:.95rem 1.05rem;border-radius:8px;font-size:13.5px;line-height:1.85;color:var(--text2);background:var(--accent-soft);border:1px solid var(--accent-soft2)}
+.respuesta strong{color:var(--accent);font-weight:500}
+
+/* Botón de reproducción */
+.btn-play{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border-radius:8px;border:none;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;background:var(--accent);color:#0f0f0f;margin-bottom:.6rem;min-height:44px;transition:all .15s}
+.btn-play:hover{filter:brightness(1.1)}
+.btn-play.playing{background:#f06060;color:#fff}
+.btn-play:focus-visible{outline:3px solid #ffeb3b;outline-offset:2px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.playing-dot{display:inline-block;width:6px;height:6px;background:#fff;border-radius:50%;animation:pulse 1s ease-in-out infinite;margin-right:4px}
+
+/* Listas dentro del enunciado */
+.enunciado ul, .enunciado ol{margin:.5rem 0 .5rem 1.5rem}
+.enunciado li{margin-bottom:.35rem}
+
+/* Tablas verbales (descripciones, no figuras) */
+.tabla-verbal{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;margin:.75rem 0;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.85}
+
+footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:12px;color:var(--text3);text-align:center;line-height:1.8}
+
+@media(max-width:600px){
+  body{padding:1rem .75rem 3rem}
+  h1{font-size:20px}
+  .card{padding:1rem}
+  .btn-play{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<a href="index.html" class="back">← Volver al índice de sesiones</a>
+
+<header>
+  <div class="label">UdeA Posible · Sesión 5 · 27 de abril de 2026</div>
+  <h1>Aritmética I<br>Divisibilidad, máximo común divisor y mínimo común múltiplo</h1>
+  <div class="subtitle">Razonamiento lógico — Preparatorio examen de admisión Universidad de Antioquia · Aspirantes con discapacidad visual</div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     CÓMO USAR (siempre arriba — regla #9 de la experta en tiflotecnología)
+     ═══════════════════════════════════════════════════════════════════ -->
+<section class="como-usar" aria-labelledby="como-usar-titulo">
+  <h2 id="como-usar-titulo">Cómo usar esta clase</h2>
+  <p><strong>Reproducir el audio:</strong> en cada bloque hay un botón "Reproducir". Al pulsarlo, una voz lee el contenido completo del bloque. Para detenerlo, pulsa el mismo botón otra vez o la tecla <kbd>Esc</kbd>.</p>
+  <p><strong>Velocidad:</strong> ajusta la velocidad de la voz con el deslizador. La velocidad se guarda automáticamente para la próxima visita.</p>
+  <p><strong>Voz:</strong> elige la voz que prefieras del selector. Si tu equipo tiene la voz Eloquence de JAWS instalada, aparecerá en la lista. La elección queda guardada.</p>
+  <p><strong>Continuar donde quedaste:</strong> si cierras la página y vuelves, el botón <em>Continuar donde quedé</em> te lleva al último bloque que estuviste escuchando.</p>
+  <p><strong>Una sola voz a la vez:</strong> al pulsar otro botón mientras hay audio sonando, la voz anterior se detiene. Nunca se superponen.</p>
+  <p><strong>Soroban virtual:</strong> los cálculos del algoritmo de Euclides se pueden ejecutar paso a paso en el <a href="soroban_virtual.html" style="color:var(--accent);text-decoration:underline">soroban virtual</a> que ya conoces de la Sesión 2.</p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     CONTROLES GLOBALES
+     ═══════════════════════════════════════════════════════════════════ -->
+<div class="controls">
+  <div class="speed-control">
+    <label for="speedSlider">Velocidad de voz</label>
+    <input type="range" id="speedSlider" min="0.6" max="1.2" step="0.05" value="0.9" aria-label="Velocidad de voz">
+    <span class="speed-val" id="speedVal">0.90x</span>
+  </div>
+  <select id="voiceSelect" class="voice-select" aria-label="Voz de lectura"></select>
+  <button id="btnResume" class="btn-resume" aria-label="Continuar desde el último bloque que escuchaste">⤴ Continuar donde quedé</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     TABLA DE CONTENIDO
+     ═══════════════════════════════════════════════════════════════════ -->
+<nav class="toc" aria-label="Tabla de contenido de la sesión">
+  <div class="toc-title">Contenido de la sesión</div>
+  <a href="#bloque-a">A — Introducción narrativa: las cigarras de ciclo primo</a>
+  <a href="#bloque-b">B — Criterios de divisibilidad por 2, 3, 4, 5, 6, 9, 10 y 11</a>
+  <a href="#bloque-c">C — Descomposición de un número en factores primos</a>
+  <a href="#bloque-d">D — Máximo común divisor: por descomposición y por algoritmo de Euclides</a>
+  <a href="#bloque-e">E — Mínimo común múltiplo: por descomposición y por la identidad producto-igual-producto</a>
+  <a href="#bloque-f">F — Cierre y enlace al taller de problemas</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE A — INTRODUCCIÓN NARRATIVA
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-a"><span class="tag">Bloque A</span>Introducción narrativa</h2>
+
+<div class="card" id="b-a1" data-block="b-a1">
+  <div class="card-tag">NARRATIVA · ANCLAJE EN BIOLOGÍA EVOLUTIVA</div>
+  <h3>A1: Las cigarras de ciclo primo</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    En los bosques del este de Norteamérica vive un género de cigarra llamado <em>Magicicada</em>. Lo notable de estas cigarras es su ciclo de vida: pasan trece años o diecisiete años bajo tierra, en estado de ninfa, alimentándose de raíces, sin emerger nunca a la superficie. Y al cumplir el ciclo —exactamente trece o diecisiete años, según la especie— todas las cigarras de la misma camada salen al mismo tiempo, en cantidades enormes, durante unas pocas semanas. Después se reproducen, ponen huevos, mueren, y el siguiente ciclo arranca de cero.
+    <br><br>
+    Trece y diecisiete son números primos. Y los biólogos creen que esto no es casualidad.
+    <br><br>
+    La idea es la siguiente. Toda especie tiene depredadores: pájaros, avispas, otros insectos. Esos depredadores también tienen ciclos: especies que prosperan cada dos años, cada tres, cada cuatro. Cuando un ciclo de cigarra coincide con el ciclo de un depredador, la camada entera puede ser devorada antes de reproducirse.
+    <br><br>
+    Imaginen, como contrafactual, que una cigarra tuviera ciclo de doce años en lugar de trece. Doce es divisible por 2, por 3, por 4 y por 6. Eso significa que cualquier depredador con ciclo de 2, 3, 4 o 6 años coincidiría regularmente con la emergencia de las cigarras. Las camadas serían arrasadas y la especie se extinguiría.
+    <br><br>
+    En cambio, trece es primo: solo es divisible por 1 y por 13. La única forma de que un depredador coincida regularmente con su ciclo es tener exactamente un ciclo de uno o de trece años, lo cual es muy raro en la naturaleza. Lo mismo ocurre con diecisiete: solo es divisible por 1 y por 17.
+    <br><br>
+    Dicho con la herramienta que vamos a aprender hoy: el mínimo común múltiplo entre el ciclo de la cigarra y el de un depredador casi siempre es enorme cuando el ciclo de la cigarra es primo. Por ejemplo, una cigarra de 17 años y un depredador de 6 años solo coinciden cada 17 por 6, igual a 102 años. Para el depredador, eso equivale a "casi nunca".
+    <br><br>
+    <strong>¿Qué tiene que ver esto con la sesión de hoy?</strong> Tres cosas. Primero, los números primos no son una curiosidad académica: hay fenómenos biológicos enteros que dependen de ellos. Segundo, la descomposición en factores primos —que estudiaremos en el bloque C— explica por qué un número como 12 es "vulnerable" y otros como 13 o 17 son "robustos". Y tercero, el mínimo común múltiplo —que veremos en el bloque E— es la herramienta que cuantifica con qué frecuencia coinciden dos ciclos. La hipótesis de las cigarras es la sesión 5 entera contada en una historia.
+  </div>
+  <div class="respuesta">
+    <strong>Idea para llevarse:</strong> cuando un fenómeno depende de <em>no coincidir</em> con otros fenómenos, los números primos son la respuesta natural. Los problemas de divisibilidad, máximo común divisor y mínimo común múltiplo no son ejercicios abstractos: son las herramientas con las que se modelan ciclos, repartos y sincronizaciones en biología, ingeniería y vida cotidiana.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE B — CRITERIOS DE DIVISIBILIDAD
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-b"><span class="tag">Bloque B</span>Criterios de divisibilidad</h2>
+
+<div class="card" id="b-b1" data-block="b-b1">
+  <div class="card-tag">DEFINICIÓN · QUÉ ES SER DIVISIBLE</div>
+  <h3>B1: Qué significa que un número sea divisible por otro</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Decimos que un número entero <strong>a</strong> es divisible por otro número entero <strong>b</strong> cuando, al dividir <em>a</em> entre <em>b</em>, el residuo es cero. Es decir, la división es exacta.
+    <br><br>
+    Por ejemplo: 12 es divisible por 3, porque 12 dividido entre 3 da 4 con residuo cero. En cambio, 13 no es divisible por 3, porque 13 dividido entre 3 da 4 con residuo 1.
+    <br><br>
+    <strong>Vocabulario:</strong> cuando <em>a</em> es divisible por <em>b</em>, decimos también que <em>b</em> es <strong>divisor</strong> de <em>a</em>, o que <em>a</em> es <strong>múltiplo</strong> de <em>b</em>. Es la misma relación vista desde dos lados:
+    <ul>
+      <li>3 es divisor de 12.</li>
+      <li>12 es múltiplo de 3.</li>
+      <li>12 es divisible por 3.</li>
+    </ul>
+    Las tres frases dicen exactamente lo mismo.
+    <br><br>
+    Los <strong>criterios de divisibilidad</strong> son reglas rápidas para saber si un número es divisible por otro <strong>sin tener que hacer la división</strong>. Son atajos que ahorran cálculo y muy útiles en el examen UdeA.
+  </div>
+  <div class="respuesta">
+    <strong>Resumen:</strong> "<em>a</em> es divisible por <em>b</em>", "<em>b</em> divide a <em>a</em>", "<em>a</em> es múltiplo de <em>b</em>" y "el residuo de dividir <em>a</em> entre <em>b</em> es cero" son cuatro maneras de decir lo mismo.
+  </div>
+</div>
+
+<div class="card" id="b-b2" data-block="b-b2">
+  <div class="card-tag">CRITERIOS BÁSICOS · 2, 5 Y 10</div>
+  <h3>B2: Divisibilidad por 2, por 5 y por 10</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Por 2:</strong> un número es divisible por 2 cuando su última cifra es par. Es decir, cuando termina en 0, 2, 4, 6 u 8. Estos números también se llaman <em>pares</em>; los demás se llaman <em>impares</em>.
+    <br><br>
+    Ejemplos: 38 es par porque termina en 8. 47 es impar porque termina en 7. 130 es par porque termina en 0.
+    <br><br>
+    <strong>Por 5:</strong> un número es divisible por 5 cuando su última cifra es 0 o 5.
+    <br><br>
+    Ejemplos: 45 es divisible por 5 porque termina en 5. 280 es divisible por 5 porque termina en 0. 47 no lo es.
+    <br><br>
+    <strong>Por 10:</strong> un número es divisible por 10 cuando su última cifra es 0. Ojo: los divisibles por 10 son exactamente los que son divisibles por 2 y por 5 al mismo tiempo, porque 10 igual a 2 por 5.
+    <br><br>
+    Ejemplos: 130 es divisible por 10. 45 no lo es, aunque sea divisible por 5.
+  </div>
+  <div class="respuesta">
+    <strong>Para recordar verbalmente:</strong> "termina en par, divisible por 2"; "termina en cero o cinco, divisible por 5"; "termina en cero, divisible por 10".
+  </div>
+</div>
+
+<div class="card" id="b-b3" data-block="b-b3">
+  <div class="card-tag">CRITERIOS DE SUMA · 3 Y 9</div>
+  <h3>B3: Divisibilidad por 3 y por 9 (suma de cifras)</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Por 3:</strong> un número es divisible por 3 cuando la <strong>suma de sus cifras</strong> es divisible por 3.
+    <br><br>
+    Ejemplo 1: ¿123 es divisible por 3? Sumamos las cifras: 1 más 2 más 3 igual a 6. Como 6 es divisible por 3 (6 igual a 3 por 2), entonces 123 también lo es.
+    <br><br>
+    Ejemplo 2: ¿587 es divisible por 3? Sumamos: 5 más 8 más 7 igual a 20. Como 20 no es divisible por 3 (20 dividido entre 3 da 6 con residuo 2), entonces 587 tampoco.
+    <br><br>
+    <strong>Truco para sumas largas:</strong> si la suma todavía es grande, vuelve a sumar las cifras del resultado. Por ejemplo, si al sumar te queda 27, vuelve a sumar: 2 más 7 igual a 9. Como 9 es divisible por 3, entonces el número original también.
+    <br><br>
+    <strong>Por 9:</strong> exactamente la misma regla, pero exigiendo que la suma sea divisible por 9.
+    <br><br>
+    Ejemplo: ¿837 es divisible por 9? Sumamos: 8 más 3 más 7 igual a 18. Como 18 igual a 9 por 2, sí es divisible por 9. Y, como bonus, también es divisible por 3.
+    <br><br>
+    <strong>Observación importante:</strong> todo número divisible por 9 es también divisible por 3, pero al revés no: hay números divisibles por 3 que no son divisibles por 9. Por ejemplo, 6 es divisible por 3 pero no por 9.
+  </div>
+  <div class="respuesta">
+    <strong>Resumen:</strong> "para 3 y para 9, suma las cifras y mira si esa suma es divisible". Si la suma es divisible por 9, lo es por 3 también; si solo es divisible por 3, no necesariamente por 9.
+  </div>
+</div>
+
+<div class="card" id="b-b4" data-block="b-b4">
+  <div class="card-tag">CRITERIOS POR TERMINACIÓN · 4 Y 8</div>
+  <h3>B4: Divisibilidad por 4 y por 8 (últimas cifras)</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Por 4:</strong> un número es divisible por 4 cuando sus <strong>dos últimas cifras</strong> forman un número divisible por 4.
+    <br><br>
+    Ejemplo 1: ¿328 es divisible por 4? Sus dos últimas cifras forman 28. Como 28 igual a 4 por 7, sí es divisible por 4.
+    <br><br>
+    Ejemplo 2: ¿1.534 es divisible por 4? Las dos últimas cifras son 34. Como 34 dividido entre 4 da 8 con residuo 2, no es divisible por 4.
+    <br><br>
+    <strong>Por 8:</strong> un número es divisible por 8 cuando sus <strong>tres últimas cifras</strong> forman un número divisible por 8.
+    <br><br>
+    Ejemplo: ¿4.512 es divisible por 8? Las tres últimas cifras son 512. Como 512 igual a 8 por 64, sí es divisible por 8.
+    <br><br>
+    <strong>¿Por qué funcionan estos criterios?</strong> Cualquier número se descompone como "centenas y un resto de dos cifras", o "miles y un resto de tres cifras". Las centenas siempre son múltiplo de 4 (porque 100 igual a 4 por 25), y los miles siempre son múltiplo de 8 (porque 1000 igual a 8 por 125). Entonces, la divisibilidad por 4 o por 8 depende solo del resto.
+  </div>
+  <div class="respuesta">
+    <strong>Para recordar:</strong> "para 4, dos últimas cifras; para 8, tres últimas cifras".
+  </div>
+</div>
+
+<div class="card" id="b-b5" data-block="b-b5">
+  <div class="card-tag">CRITERIOS COMPUESTOS · 6</div>
+  <h3>B5: Divisibilidad por 6 (combinada de 2 y de 3)</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Como 6 igual a 2 por 3, un número es divisible por 6 cuando es divisible por 2 <strong>y</strong> por 3 al mismo tiempo. Es decir, debe cumplir las dos condiciones:
+    <ol>
+      <li>Que sea par (termine en 0, 2, 4, 6 u 8).</li>
+      <li>Que la suma de sus cifras sea divisible por 3.</li>
+    </ol>
+    Ejemplo: ¿714 es divisible por 6? Termina en 4, es par. Suma de cifras: 7 más 1 más 4 igual a 12; como 12 igual a 3 por 4, es divisible por 3. Cumple las dos: 714 es divisible por 6.
+    <br><br>
+    Ejemplo: ¿417 es divisible por 6? Termina en 7, es impar. Falla la primera condición; no es divisible por 6, sin importar la suma.
+  </div>
+  <div class="respuesta">
+    <strong>Idea general:</strong> cuando un número se descompone como producto de dos factores que no comparten divisores (como 6 igual a 2 por 3), la divisibilidad por el producto equivale a la divisibilidad por cada factor por separado.
+  </div>
+</div>
+
+<div class="card" id="b-b6" data-block="b-b6">
+  <div class="card-tag">CRITERIO DE SUMA ALTERNADA · 11</div>
+  <h3>B6: Divisibilidad por 11 (suma alternada)</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    <strong>Por 11:</strong> un número es divisible por 11 cuando la <strong>suma alternada</strong> de sus cifras (sumando una y restando la siguiente, empezando desde la derecha) da cero o un múltiplo de 11.
+    <br><br>
+    Ejemplo 1: ¿2.728 es divisible por 11? Cifras de derecha a izquierda: 8, 2, 7, 2. Suma alternada: 8 menos 2, más 7, menos 2 igual a 11. Como 11 es múltiplo de 11, sí.
+    <br><br>
+    Ejemplo 2: ¿9.581 es divisible por 11? Cifras de derecha a izquierda: 1, 8, 5, 9. Suma alternada: 1 menos 8, más 5, menos 9 igual a menos 11. Menos 11 también es múltiplo de 11. Sí lo es.
+    <br><br>
+    <strong>Forma equivalente:</strong> también puedes hacer "suma de cifras de posición par menos suma de cifras de posición impar" y el resultado debe ser cero o múltiplo de 11. Es la misma regla, organizada distinto.
+    <br><br>
+    Este criterio aparece menos en el examen UdeA, pero conviene reconocerlo porque a veces se cuela en problemas de criptoaritmética.
+  </div>
+  <div class="respuesta">
+    <strong>Truco verbal:</strong> "suma una, resta la siguiente, suma la siguiente, resta la siguiente. Si el resultado es múltiplo de 11, el número original también".
+  </div>
+</div>
+
+<div class="card" id="b-b7" data-block="b-b7">
+  <div class="card-tag">EJEMPLO INTEGRADOR · APLICAR VARIOS CRITERIOS</div>
+  <h3>B7: Ejemplo — ¿2.520 es divisible por 1, 2, 3, 4, 5, 6, 8, 9 y 10?</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Vamos a aplicar todos los criterios al número 2.520.
+    <br><br>
+    <strong>Por 1:</strong> todo número es divisible por 1. Sí.
+    <br><br>
+    <strong>Por 2:</strong> termina en 0, es par. Sí.
+    <br><br>
+    <strong>Por 3:</strong> suma de cifras: 2 más 5 más 2 más 0 igual a 9. Como 9 igual a 3 por 3, es divisible por 3. Sí.
+    <br><br>
+    <strong>Por 4:</strong> dos últimas cifras: 20. Como 20 igual a 4 por 5, sí es divisible por 4.
+    <br><br>
+    <strong>Por 5:</strong> termina en 0. Sí.
+    <br><br>
+    <strong>Por 6:</strong> es par y divisible por 3. Sí.
+    <br><br>
+    <strong>Por 8:</strong> tres últimas cifras: 520. Comprobamos: 520 dividido entre 8 da 65 exacto. Sí.
+    <br><br>
+    <strong>Por 9:</strong> suma de cifras es 9. Como 9 igual a 9 por 1, sí.
+    <br><br>
+    <strong>Por 10:</strong> termina en 0. Sí.
+    <br><br>
+    <strong>Conclusión:</strong> 2.520 es divisible por 1, 2, 3, 4, 5, 6, 8, 9 y 10. De hecho, 2.520 es el mínimo común múltiplo de los números del 1 al 9, una propiedad notable que aparece en problemas de la UdeA.
+  </div>
+  <div class="respuesta">
+    <strong>Lección:</strong> aplicar los criterios uno a uno es rápido y mental. No hace falta dividir realmente; basta inspeccionar las últimas cifras y la suma. Practica este tipo de barrido en el taller de problemas.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE C — DESCOMPOSICIÓN EN FACTORES PRIMOS
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-c"><span class="tag">Bloque C</span>Descomposición en factores primos</h2>
+
+<div class="card" id="b-c1" data-block="b-c1">
+  <div class="card-tag">DEFINICIÓN · NÚMERO PRIMO Y NÚMERO COMPUESTO</div>
+  <h3>C1: Qué es un número primo y qué es un número compuesto</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Un número entero mayor que 1 es <strong>primo</strong> cuando sus únicos divisores positivos son 1 y él mismo. No tiene más.
+    <br><br>
+    Los primeros números primos son: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47.
+    <br><br>
+    Conviene memorizar al menos los primos menores que 30, porque aparecen mucho en los exámenes de admisión: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29.
+    <br><br>
+    Un número entero mayor que 1 que <strong>no</strong> es primo se llama <strong>compuesto</strong>. Un número compuesto se puede escribir como producto de dos números menores que él. Por ejemplo: 12 igual a 3 por 4, o 12 igual a 2 por 6. Es compuesto.
+    <br><br>
+    <strong>Caso especial:</strong> el 1 no es ni primo ni compuesto, por convención. Esto evita ambigüedades en el teorema fundamental de la aritmética.
+  </div>
+  <div class="respuesta">
+    <strong>Para recordar verbalmente:</strong> "un número es primo cuando no se puede partir en otros más chicos por multiplicación; salvo en uno por sí mismo". El 2 es el único número primo par.
+  </div>
+</div>
+
+<div class="card" id="b-c2" data-block="b-c2">
+  <div class="card-tag">TEOREMA · DESCOMPOSICIÓN ÚNICA</div>
+  <h3>C2: Teorema fundamental de la aritmética</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    El teorema fundamental de la aritmética dice: <strong>todo número entero mayor que 1 se puede escribir como producto de números primos, y esa descomposición es única salvo el orden de los factores</strong>.
+    <br><br>
+    Por ejemplo: 60 igual a 2 por 2 por 3 por 5. Esa es la única forma de escribir 60 como producto de primos; podemos cambiar el orden ("2 por 3 por 2 por 5") pero los factores son exactamente esos.
+    <br><br>
+    También se puede escribir usando potencias: 60 igual a 2 al cuadrado por 3 por 5. Esta es la forma más compacta y la que usaremos para calcular máximo común divisor y mínimo común múltiplo.
+    <br><br>
+    <strong>Por qué es importante:</strong> esta descomposición es como el "ADN" del número. Cualquier propiedad de divisibilidad de 60 se lee directamente en su descomposición.
+  </div>
+  <div class="respuesta">
+    <strong>Idea clave:</strong> los números primos son los "ladrillos" del producto. Cada número compuesto es una combinación única de esos ladrillos.
+  </div>
+</div>
+
+<div class="card" id="b-c3" data-block="b-c3">
+  <div class="card-tag">TÉCNICA · CÓMO DESCOMPONER</div>
+  <h3>C3: Cómo descomponer un número en factores primos paso a paso</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    El método estándar es el siguiente: dividimos el número por el primo más pequeño que lo divida; el cociente que queda lo dividimos otra vez por el primo más pequeño que lo divida; y así sucesivamente hasta llegar a 1.
+    <br><br>
+    Ejemplo paso a paso con el número 360:
+    <div class="tabla-verbal">
+      Paso 1: 360 dividido entre 2 igual a 180.<br>
+      Paso 2: 180 dividido entre 2 igual a 90.<br>
+      Paso 3: 90 dividido entre 2 igual a 45.<br>
+      Paso 4: 45 ya no es divisible por 2 (es impar). Probamos con 3. 45 dividido entre 3 igual a 15.<br>
+      Paso 5: 15 dividido entre 3 igual a 5.<br>
+      Paso 6: 5 ya no es divisible por 3. Probamos con 5. 5 dividido entre 5 igual a 1.<br>
+      Hemos terminado, llegamos a 1.
+    </div>
+    Recogemos los divisores que usamos: 2, 2, 2, 3, 3, 5. Entonces:
+    <br><br>
+    <strong>360 igual a 2 por 2 por 2 por 3 por 3 por 5</strong>, que escrito con potencias es <strong>360 igual a 2 al cubo por 3 al cuadrado por 5</strong>.
+    <br><br>
+    <strong>Verificación:</strong> 2 al cubo es 8. 3 al cuadrado es 9. Entonces 8 por 9 igual a 72; 72 por 5 igual a 360. Coincide.
+    <br><br>
+    <strong>Conexión con el ábaco:</strong> cada división del proceso se puede ejecutar en el soroban virtual. La división por primos pequeños (2, 3, 5) es exactamente lo que practicamos en la Sesión 2.
+  </div>
+  <div class="respuesta">
+    <strong>Estrategia auditiva:</strong> mientras decompones, ve diciendo en voz alta los divisores en orden: "dos, dos, dos, tres, tres, cinco". Al final lees la lista para escribir el resultado. Eso evita perder un factor.
+    <br><br>
+    <strong>Cuándo parar:</strong> cuando el cociente sea 1. Si llegas a un primo grande, simplemente lo dividen entre sí mismo y termina.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE D — MÁXIMO COMÚN DIVISOR
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-d"><span class="tag">Bloque D</span>Máximo común divisor</h2>
+
+<div class="card" id="b-d1" data-block="b-d1">
+  <div class="card-tag">DEFINICIÓN · MCD</div>
+  <h3>D1: Qué es el máximo común divisor</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    El <strong>máximo común divisor</strong> de dos números enteros positivos <strong>a</strong> y <strong>b</strong> es el mayor número entero que divide exactamente a ambos al mismo tiempo. Se escribe MCD de a y b, o se lee "máximo común divisor de a y b".
+    <br><br>
+    Ejemplo intuitivo: ¿cuál es el máximo común divisor de 12 y 18?
+    <br>
+    Divisores de 12: 1, 2, 3, 4, 6, 12.
+    <br>
+    Divisores de 18: 1, 2, 3, 6, 9, 18.
+    <br>
+    Divisores comunes: 1, 2, 3, 6.
+    <br>
+    El mayor de los comunes es 6. Entonces, el máximo común divisor de 12 y 18 es 6.
+    <br><br>
+    <strong>Para qué sirve:</strong> el máximo común divisor responde preguntas del tipo "¿en cuántas partes iguales más grandes posibles puedo dividir ambas cantidades sin que sobre nada?". Es la herramienta para problemas de cortes, repartos exactos y simplificación de fracciones.
+    <br><br>
+    <strong>Caso particular:</strong> si dos números no comparten más divisor que el 1, decimos que son <em>primos entre sí</em> o <em>coprimos</em>. Por ejemplo, 8 y 15 son coprimos, porque su único divisor común es 1.
+  </div>
+  <div class="respuesta">
+    <strong>Para recordar:</strong> "máximo común divisor = el más grande que divide exactamente a los dos". Cuando es 1, los números son coprimos.
+  </div>
+</div>
+
+<div class="card" id="b-d2" data-block="b-d2">
+  <div class="card-tag">MÉTODO 1 · POR DESCOMPOSICIÓN EN PRIMOS</div>
+  <h3>D2: Calcular el MCD por descomposición en factores primos</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Receta para calcular el máximo común divisor de dos números <strong>a</strong> y <strong>b</strong>:
+    <ol>
+      <li>Descompón <em>a</em> y <em>b</em> en factores primos.</li>
+      <li>Identifica los primos que aparecen en <strong>ambas</strong> descomposiciones.</li>
+      <li>Para cada primo común, toma el <strong>menor exponente</strong> con el que aparece.</li>
+      <li>Multiplica los resultados. Eso es el máximo común divisor.</li>
+    </ol>
+    <strong>Ejemplo:</strong> calcular el máximo común divisor de 60 y 84.
+    <br><br>
+    Descomposición de 60: 60 igual a 2 al cuadrado por 3 por 5.
+    <br>
+    Descomposición de 84: 84 igual a 2 al cuadrado por 3 por 7.
+    <br><br>
+    Primos comunes: el 2 (aparece en ambos) y el 3 (aparece en ambos). El 5 está solo en 60, el 7 está solo en 84; ninguno se incluye.
+    <br><br>
+    Menor exponente del 2: en 60 es 2, en 84 es 2. Mínimo: 2. Entonces tomamos 2 al cuadrado.
+    <br>
+    Menor exponente del 3: en 60 es 1, en 84 es 1. Mínimo: 1. Entonces tomamos 3.
+    <br><br>
+    Multiplicamos: 2 al cuadrado por 3 igual a 4 por 3 igual a 12.
+    <br><br>
+    <strong>Resultado:</strong> el máximo común divisor de 60 y 84 es 12.
+    <br><br>
+    Verificación: 60 dividido entre 12 igual a 5 (exacto). 84 dividido entre 12 igual a 7 (exacto). Confirmado.
+  </div>
+  <div class="respuesta">
+    <strong>Frase para fijar la regla:</strong> "primos comunes con el menor exponente de cada uno, multiplicados". Si un primo no aparece en alguno de los dos, no entra.
+  </div>
+</div>
+
+<div class="card" id="b-d3" data-block="b-d3">
+  <div class="card-tag">MÉTODO 2 · ALGORITMO DE EUCLIDES (ESTRELLA EN ACCESIBILIDAD)</div>
+  <h3>D3: Calcular el MCD por algoritmo de Euclides</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    El algoritmo de Euclides es un método antiquísimo y muy elegante para calcular el máximo común divisor sin necesidad de descomponer en primos. <strong>Solo usa divisiones</strong>, lo que lo vuelve ideal para ejecutarlo en el soroban.
+    <br><br>
+    <strong>Receta:</strong>
+    <ol>
+      <li>Tomar los dos números, llamémoslos <em>a</em> (el más grande) y <em>b</em> (el más chico).</li>
+      <li>Dividir <em>a</em> entre <em>b</em>. Quedan un cociente y un residuo. Llamemos al residuo <em>r</em>.</li>
+      <li>Si <em>r</em> es cero, hemos terminado: el máximo común divisor es <em>b</em>.</li>
+      <li>Si <em>r</em> no es cero, repetimos el proceso con los nuevos números: ahora <em>a</em> pasa a ser <em>b</em>, y <em>b</em> pasa a ser <em>r</em>.</li>
+    </ol>
+    <strong>Ejemplo:</strong> calcular el máximo común divisor de 60 y 84 (el mismo de antes, para comparar resultados).
+    <div class="tabla-verbal">
+      Paso 1: el más grande es 84, el más chico es 60. Dividimos 84 entre 60. Cociente 1, residuo 24.<br>
+      Paso 2: ahora trabajamos con 60 y 24. Dividimos 60 entre 24. Cociente 2, residuo 12.<br>
+      Paso 3: ahora con 24 y 12. Dividimos 24 entre 12. Cociente 2, residuo 0.<br>
+      Como el residuo es cero, paramos. El último divisor fue 12.<br>
+      Por lo tanto, el máximo común divisor de 60 y 84 es 12.
+    </div>
+    Coincide con el resultado obtenido por descomposición.
+    <br><br>
+    <strong>Por qué funciona:</strong> intuitivamente, cualquier divisor común de <em>a</em> y <em>b</em> también divide a su residuo <em>r</em>, porque <em>a = b·cociente + r</em>. Recíprocamente, cualquier divisor común de <em>b</em> y <em>r</em> también divide a <em>a</em>. Entonces el conjunto de divisores comunes de <em>(a, b)</em> es el mismo que el de <em>(b, r)</em>. Repitiendo, los residuos se hacen cada vez más pequeños hasta llegar a cero, y el último divisor es el máximo común divisor.
+    <br><br>
+    <strong>Ventaja para accesibilidad:</strong> Euclides solo requiere divisiones. Cada paso se puede ejecutar en el soroban virtual. No hay que memorizar primos ni descomponer.
+  </div>
+  <div class="respuesta">
+    <strong>Truco verbal para llevar la cuenta:</strong> di "divido grande entre chico, me quedo con el residuo y vuelvo a empezar; cuando el residuo sea cero, el último divisor que usé es el máximo común divisor".
+    <br><br>
+    <strong>Conexión con la Sesión 2:</strong> ejecuta cada división del ejemplo en el soroban. Te recordará lo de la división por divisores pequeños y mantendrás afiladas las dos habilidades.
+  </div>
+</div>
+
+<div class="card" id="b-d4" data-block="b-d4">
+  <div class="card-tag">EJEMPLO · NÚMEROS GRANDES</div>
+  <h3>D4: Ejemplo — MCD de 252 y 105 con Euclides</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Vamos a calcular el máximo común divisor de 252 y 105 usando el algoritmo de Euclides. Practicamos cómputo mental y división con números más grandes.
+    <div class="tabla-verbal">
+      Paso 1: el grande es 252, el chico es 105. Dividimos 252 entre 105. ¿Cuántas veces cabe 105 en 252? Una vez es 105, dos veces es 210; tres veces sería 315, ya pasa. Entonces cociente 2, y el residuo es 252 menos 210 igual a 42.<br>
+      Paso 2: ahora trabajamos con 105 y 42. Dividimos 105 entre 42. Una vez es 42, dos veces 84, tres veces 126, ya pasa. Cociente 2, residuo 105 menos 84 igual a 21.<br>
+      Paso 3: ahora con 42 y 21. Dividimos 42 entre 21. Cabe exactamente dos veces. Cociente 2, residuo 0.<br>
+      Como el residuo es cero, terminamos. El último divisor fue 21.<br>
+      Por lo tanto, el máximo común divisor de 252 y 105 es 21.
+    </div>
+    <strong>Verificación rápida:</strong> 252 dividido entre 21 igual a 12 (porque 21 por 12 es 252). 105 dividido entre 21 igual a 5 (porque 21 por 5 es 105). Ambas divisiones son exactas. Confirmado.
+    <br><br>
+    <strong>Comparación con descomposición:</strong> si descompusiéramos, 252 igual a 2 al cuadrado por 3 al cuadrado por 7, y 105 igual a 3 por 5 por 7. Primos comunes: 3 y 7, ambos con exponente mínimo 1. Resultado: 3 por 7 igual a 21. Mismo número. Es bueno saber que ambos métodos confirman el resultado.
+  </div>
+  <div class="respuesta">
+    <strong>Lección:</strong> con números grandes, Euclides suele ser más rápido que descomponer, sobre todo si la descomposición tiene primos no obvios.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE E — MÍNIMO COMÚN MÚLTIPLO
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-e"><span class="tag">Bloque E</span>Mínimo común múltiplo</h2>
+
+<div class="card" id="b-e1" data-block="b-e1">
+  <div class="card-tag">DEFINICIÓN · MCM</div>
+  <h3>E1: Qué es el mínimo común múltiplo</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    El <strong>mínimo común múltiplo</strong> de dos números enteros positivos <strong>a</strong> y <strong>b</strong> es el menor número entero positivo que es múltiplo de ambos al mismo tiempo. Se escribe MCM de a y b, o se lee "mínimo común múltiplo de a y b".
+    <br><br>
+    Ejemplo intuitivo: ¿cuál es el mínimo común múltiplo de 4 y 6?
+    <br>
+    Múltiplos de 4: 4, 8, 12, 16, 20, 24, 28, 32, 36...
+    <br>
+    Múltiplos de 6: 6, 12, 18, 24, 30, 36...
+    <br>
+    Múltiplos comunes: 12, 24, 36... El menor de los comunes es 12. Entonces, el mínimo común múltiplo de 4 y 6 es 12.
+    <br><br>
+    <strong>Para qué sirve:</strong> el mínimo común múltiplo resuelve preguntas del tipo "¿cada cuánto vuelven a coincidir dos eventos periódicos?" o "¿cuál es la cantidad más pequeña que cumple ambas condiciones de divisibilidad?".
+    <br><br>
+    Ejemplo realista: en una panadería, el horno A tarda 4 horas en estar listo y el horno B tarda 6 horas. Si los dos arrancan a la misma hora, ¿cuándo coincidirán de nuevo? Cada 12 horas. El mínimo común múltiplo da la respuesta.
+  </div>
+  <div class="respuesta">
+    <strong>Para recordar:</strong> "mínimo común múltiplo = el más chico que es múltiplo de los dos al mismo tiempo".
+  </div>
+</div>
+
+<div class="card" id="b-e2" data-block="b-e2">
+  <div class="card-tag">MÉTODO 1 · POR DESCOMPOSICIÓN EN PRIMOS</div>
+  <h3>E2: Calcular el MCM por descomposición</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Receta para calcular el mínimo común múltiplo de <strong>a</strong> y <strong>b</strong>:
+    <ol>
+      <li>Descompón <em>a</em> y <em>b</em> en factores primos.</li>
+      <li>Toma todos los primos que aparecen en alguna de las dos descomposiciones (no solo los comunes).</li>
+      <li>Para cada primo, elige el <strong>mayor exponente</strong> con el que aparece.</li>
+      <li>Multiplica los resultados.</li>
+    </ol>
+    Es la regla complementaria al máximo común divisor: para máximo común divisor tomábamos primos comunes con el menor exponente; para mínimo común múltiplo tomamos todos los primos con el mayor exponente.
+    <br><br>
+    <strong>Ejemplo:</strong> calcular el mínimo común múltiplo de 60 y 84.
+    <br><br>
+    Descomposición de 60: 60 igual a 2 al cuadrado por 3 por 5.
+    <br>
+    Descomposición de 84: 84 igual a 2 al cuadrado por 3 por 7.
+    <br><br>
+    Primos involucrados: 2, 3, 5, 7.
+    <br>
+    Mayor exponente del 2: en 60 es 2, en 84 es 2. Máximo: 2. Tomamos 2 al cuadrado.
+    <br>
+    Mayor exponente del 3: en 60 es 1, en 84 es 1. Máximo: 1. Tomamos 3.
+    <br>
+    Mayor exponente del 5: solo aparece en 60, con exponente 1. Tomamos 5.
+    <br>
+    Mayor exponente del 7: solo aparece en 84, con exponente 1. Tomamos 7.
+    <br><br>
+    Multiplicamos: 4 por 3 por 5 por 7 igual a 4 por 3 igual a 12; 12 por 5 igual a 60; 60 por 7 igual a 420.
+    <br><br>
+    <strong>Resultado:</strong> el mínimo común múltiplo de 60 y 84 es 420.
+  </div>
+  <div class="respuesta">
+    <strong>Frase para fijar la regla:</strong> "todos los primos que aparezcan en alguno, con el mayor exponente, multiplicados". Para máximo común divisor: comunes y mínimo. Para mínimo común múltiplo: todos y máximo.
+  </div>
+</div>
+
+<div class="card" id="b-e3" data-block="b-e3">
+  <div class="card-tag">MÉTODO 2 · IDENTIDAD MCM POR MCD IGUAL A PRODUCTO</div>
+  <h3>E3: La identidad mágica entre MCD y MCM</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Hay una identidad muy útil que conecta el máximo común divisor y el mínimo común múltiplo:
+    <br><br>
+    <strong>Para todo par de enteros positivos a y b: máximo común divisor de a y b, multiplicado por mínimo común múltiplo de a y b, es igual a a por b.</strong>
+    <br><br>
+    En símbolos: MCD(a, b) por MCM(a, b) igual a a por b.
+    <br><br>
+    Esto significa que si ya conocemos el máximo común divisor, podemos calcular el mínimo común múltiplo con una división:
+    <br><br>
+    <strong>MCM(a, b) igual a (a por b) dividido entre MCD(a, b).</strong>
+    <br><br>
+    Verifiquemos con 60 y 84. Sabemos que el máximo común divisor es 12. Entonces el mínimo común múltiplo debe ser:
+    <br>
+    (60 por 84) dividido entre 12.
+    <br>
+    Primero, 60 por 84. Para no calcular esto entero, conviene simplificar: dividimos uno de los dos factores entre 12 antes. 84 dividido entre 12 igual a 7. Entonces el cálculo se reduce a 60 por 7 igual a 420.
+    <br><br>
+    Resultado: 420. Coincide con el método anterior.
+    <br><br>
+    <strong>Por qué funciona:</strong> al multiplicar máximo común divisor por mínimo común múltiplo, cada primo aparece con su exponente mínimo más su exponente máximo, lo que es exactamente la suma de los exponentes en a y en b. Por el teorema fundamental, esa suma corresponde al producto a por b.
+    <br><br>
+    <strong>Cuándo usar esta identidad:</strong> cuando ya tienes el máximo común divisor (por ejemplo, calculado con Euclides) y quieres el mínimo común múltiplo sin volver a descomponer. Es el método más rápido en muchos problemas de la UdeA.
+  </div>
+  <div class="respuesta">
+    <strong>Truco mental:</strong> "máximo común divisor por mínimo común múltiplo es igual al producto de los dos números". De esa fórmula despejas lo que te pidan.
+  </div>
+</div>
+
+<div class="card" id="b-e4" data-block="b-e4">
+  <div class="card-tag">EJEMPLO · SINCRONIZACIÓN DE EVENTOS PERIÓDICOS</div>
+  <h3>E4: Ejemplo — campanas que repican cada cierto tiempo</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    Tres campanas comienzan a repicar a la misma hora. La primera repica cada 12 minutos, la segunda cada 18 minutos y la tercera cada 24 minutos. ¿Después de cuánto tiempo volverán a coincidir las tres campanas?
+    <br><br>
+    <strong>Análisis:</strong> el problema pide el menor número de minutos que sea múltiplo de 12, 18 y 24 al mismo tiempo. Es decir, el mínimo común múltiplo de los tres.
+    <br><br>
+    <strong>Paso 1: descomponer cada número.</strong>
+    <br>
+    12 igual a 2 al cuadrado por 3.
+    <br>
+    18 igual a 2 por 3 al cuadrado.
+    <br>
+    24 igual a 2 al cubo por 3.
+    <br><br>
+    <strong>Paso 2: tomar cada primo con su mayor exponente.</strong>
+    <br>
+    Mayor exponente del 2: el máximo entre 2, 1 y 3 es 3. Tomamos 2 al cubo.
+    <br>
+    Mayor exponente del 3: el máximo entre 1, 2 y 1 es 2. Tomamos 3 al cuadrado.
+    <br><br>
+    <strong>Paso 3: multiplicar.</strong>
+    <br>
+    2 al cubo es 8. 3 al cuadrado es 9. 8 por 9 igual a 72.
+    <br><br>
+    <strong>Respuesta:</strong> las tres campanas vuelven a coincidir cada 72 minutos, que equivale a 1 hora con 12 minutos.
+    <br><br>
+    <strong>Verificación:</strong> 72 dividido entre 12 igual a 6 (exacto). 72 dividido entre 18 igual a 4 (exacto). 72 dividido entre 24 igual a 3 (exacto). Las tres divisiones son exactas. Coincide.
+  </div>
+  <div class="respuesta">
+    <strong>Patrón típico de admisión:</strong> los problemas de campanas, semáforos, lámparas que parpadean, autobuses que pasan, etc., se resuelven con mínimo común múltiplo cuando preguntan por el primer instante en que vuelven a coincidir. Cuando preguntan por la cantidad más grande que se reparte exacto, es máximo común divisor.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOQUE F — CIERRE
+     ═══════════════════════════════════════════════════════════════════ -->
+<h2 class="bloque" id="bloque-f"><span class="tag">Bloque F</span>Cierre y enlace al taller</h2>
+
+<div class="card" id="b-f1" data-block="b-f1">
+  <div class="card-tag">RESUMEN · QUÉ TE LLEVAS</div>
+  <h3>F1: Mapa mental verbal de la sesión</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    En esta sesión 5 abordamos cuatro herramientas:
+    <ol>
+      <li><strong>Criterios de divisibilidad:</strong> reglas mentales para reconocer si un número es divisible por 2, 3, 4, 5, 6, 8, 9, 10 u 11 sin hacer la división.</li>
+      <li><strong>Descomposición en factores primos:</strong> el "ADN" de un número, base para cálculos de máximo común divisor y mínimo común múltiplo.</li>
+      <li><strong>Máximo común divisor:</strong> dos métodos. Por descomposición (primos comunes con menor exponente) y por algoritmo de Euclides (solo divisiones, ideal para soroban).</li>
+      <li><strong>Mínimo común múltiplo:</strong> dos métodos. Por descomposición (todos los primos con mayor exponente) y por la identidad MCD por MCM igual a a por b.</li>
+    </ol>
+    <strong>Cuándo se usa cada una en problemas de admisión:</strong>
+    <ul>
+      <li>Repartos exactos / cortes en partes iguales más grandes posibles → máximo común divisor.</li>
+      <li>Sincronización de eventos periódicos / "primer momento en que coinciden" → mínimo común múltiplo.</li>
+      <li>Simplificación de fracciones → dividir numerador y denominador por su máximo común divisor.</li>
+      <li>Suma o resta de fracciones con denominadores distintos → mínimo común múltiplo de los denominadores.</li>
+    </ul>
+    <strong>Próxima parada:</strong> el taller de problemas tipo UdeA, donde aplicarás todo esto a 8 ejercicios calibrados al nivel del examen de admisión.
+  </div>
+  <div class="respuesta">
+    <strong>Frase resumen para llevarse:</strong> "divisibilidad para reconocer, descomposición para entender, máximo común divisor para repartir y mínimo común múltiplo para sincronizar".
+  </div>
+</div>
+
+<div class="card" id="b-f2" data-block="b-f2">
+  <div class="card-tag">SIGUIENTE · TALLER DE PROBLEMAS</div>
+  <h3>F2: Sigue al taller de problemas tipo examen UdeA</h3>
+  <button class="btn-play" onclick="TTS.play(event)">▶ Reproducir</button>
+  <div class="enunciado">
+    El taller incluye 8 problemas calibrados al examen de admisión Universidad de Antioquia, narrados con audio y con respuesta justificada paso a paso.
+    <br><br>
+    Trabájalos en orden; los primeros son directos (aplicación de un criterio), los del medio son problemas de palabra (campanas, repartos), y los últimos integran varios conceptos. La duración estimada del taller es 30 minutos.
+    <br><br>
+    <a href="clase5_problemas_audio.html" style="color:var(--accent);text-decoration:underline">Ir al taller de problemas tipo UdeA &rarr;</a>
+    <br><br>
+    Si necesitas refrescar las divisiones que aparecen en el algoritmo de Euclides, abre el <a href="soroban_virtual.html" style="color:var(--accent);text-decoration:underline">soroban virtual</a> en otra pestaña y ejecuta cada paso.
+  </div>
+  <div class="respuesta">
+    <strong>Recomendación pedagógica:</strong> antes de pulsar "respuesta", intenta resolver el problema mentalmente o con el ábaco. La voz te dará la pista paso a paso si lo necesitas, pero el aprendizaje queda mejor cuando primero intentas.
+  </div>
+</div>
+
+<footer>
+  UdeA Posible · Razonamiento lógico para aspirantes con discapacidad visual<br>
+  Sesión 5 · Aritmética I (divisibilidad, M C D y M C M) · 27 de abril de 2026<br>
+  Materiales accesibles con audio · Universidad de Antioquia
+</footer>
+
+</div>
+
+<script src="tts_helper.js"></script>
+<script>
+  TTS.bindSpeedSlider('speedSlider', 'speedVal');
+  TTS.buildVoiceSelector('voiceSelect');
+  TTS.setupResume('btnResume');
+</script>
+</body>
+</html>
